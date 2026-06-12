@@ -14,16 +14,396 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      company_profiles: {
+        Row: {
+          country: string | null
+          created_at: string
+          description: string | null
+          legal_name: string
+          logo_url: string | null
+          updated_at: string
+          user_id: string
+          website: string | null
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string
+          description?: string | null
+          legal_name: string
+          logo_url?: string | null
+          updated_at?: string
+          user_id: string
+          website?: string | null
+        }
+        Update: {
+          country?: string | null
+          created_at?: string
+          description?: string | null
+          legal_name?: string
+          logo_url?: string | null
+          updated_at?: string
+          user_id?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
+      contact_requests: {
+        Row: {
+          company_id: string
+          created_at: string
+          id: string
+          investor_id: string
+          message: string | null
+          project_id: string
+          status: Database["public"]["Enums"]["contact_status"]
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          id?: string
+          investor_id: string
+          message?: string | null
+          project_id: string
+          status?: Database["public"]["Enums"]["contact_status"]
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          id?: string
+          investor_id?: string
+          message?: string | null
+          project_id?: string
+          status?: Database["public"]["Enums"]["contact_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_requests_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          company_id: string
+          contact_request_id: string
+          created_at: string
+          id: string
+          investor_id: string
+          project_id: string
+        }
+        Insert: {
+          company_id: string
+          contact_request_id: string
+          created_at?: string
+          id?: string
+          investor_id: string
+          project_id: string
+        }
+        Update: {
+          company_id?: string
+          contact_request_id?: string
+          created_at?: string
+          id?: string
+          investor_id?: string
+          project_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_contact_request_id_fkey"
+            columns: ["contact_request_id"]
+            isOneToOne: true
+            referencedRelation: "contact_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversations_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      favorites: {
+        Row: {
+          created_at: string
+          id: string
+          investor_id: string
+          project_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          investor_id: string
+          project_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          investor_id?: string
+          project_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorites_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      investor_profiles: {
+        Row: {
+          countries: string[]
+          created_at: string
+          description: string | null
+          display_name: string | null
+          investment_types: Database["public"]["Enums"]["investment_type"][]
+          kind: Database["public"]["Enums"]["investor_kind"]
+          risk_level: Database["public"]["Enums"]["risk_level"]
+          sectors: string[]
+          ticket_max: number | null
+          ticket_min: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          countries?: string[]
+          created_at?: string
+          description?: string | null
+          display_name?: string | null
+          investment_types?: Database["public"]["Enums"]["investment_type"][]
+          kind?: Database["public"]["Enums"]["investor_kind"]
+          risk_level?: Database["public"]["Enums"]["risk_level"]
+          sectors?: string[]
+          ticket_max?: number | null
+          ticket_min?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          countries?: string[]
+          created_at?: string
+          description?: string | null
+          display_name?: string | null
+          investment_types?: Database["public"]["Enums"]["investment_type"][]
+          kind?: Database["public"]["Enums"]["investor_kind"]
+          risk_level?: Database["public"]["Enums"]["risk_level"]
+          sectors?: string[]
+          ticket_max?: number | null
+          ticket_min?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      match_scores: {
+        Row: {
+          computed_at: string
+          investor_id: string
+          project_id: string
+          reasons: Json
+          score: number
+        }
+        Insert: {
+          computed_at?: string
+          investor_id: string
+          project_id: string
+          reasons?: Json
+          score: number
+        }
+        Update: {
+          computed_at?: string
+          investor_id?: string
+          project_id?: string
+          reasons?: Json
+          score?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "match_scores_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          body: string
+          conversation_id: string
+          created_at: string
+          id: string
+          sender_id: string
+        }
+        Insert: {
+          body: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          sender_id: string
+        }
+        Update: {
+          body?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          locale: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+          locale?: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          locale?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          capital_required: number
+          company_id: string
+          country: string
+          cover_url: string | null
+          created_at: string
+          description: string
+          id: string
+          investment_type: Database["public"]["Enums"]["investment_type"]
+          sector: string
+          stage: Database["public"]["Enums"]["business_stage"]
+          status: Database["public"]["Enums"]["project_status"]
+          ticket_max: number | null
+          ticket_min: number | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          capital_required: number
+          company_id: string
+          country: string
+          cover_url?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          investment_type: Database["public"]["Enums"]["investment_type"]
+          sector: string
+          stage: Database["public"]["Enums"]["business_stage"]
+          status?: Database["public"]["Enums"]["project_status"]
+          ticket_max?: number | null
+          ticket_min?: number | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          capital_required?: number
+          company_id?: string
+          country?: string
+          cover_url?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          investment_type?: Database["public"]["Enums"]["investment_type"]
+          sector?: string
+          stage?: Database["public"]["Enums"]["business_stage"]
+          status?: Database["public"]["Enums"]["project_status"]
+          ticket_max?: number | null
+          ticket_min?: number | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      assign_my_role: {
+        Args: { _role: Database["public"]["Enums"]["app_role"] }
+        Returns: undefined
+      }
+      get_my_role: {
+        Args: never
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "empresa" | "inversor" | "admin"
+      business_stage: "idea" | "crecimiento" | "expansion"
+      contact_status: "pending" | "accepted" | "rejected"
+      investment_type:
+        | "equity"
+        | "prestamo"
+        | "joint_venture"
+        | "convertible"
+        | "otro"
+      investor_kind: "personal" | "corporativo"
+      project_status: "draft" | "published" | "closed"
+      risk_level: "bajo" | "medio" | "alto"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +530,20 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["empresa", "inversor", "admin"],
+      business_stage: ["idea", "crecimiento", "expansion"],
+      contact_status: ["pending", "accepted", "rejected"],
+      investment_type: [
+        "equity",
+        "prestamo",
+        "joint_venture",
+        "convertible",
+        "otro",
+      ],
+      investor_kind: ["personal", "corporativo"],
+      project_status: ["draft", "published", "closed"],
+      risk_level: ["bajo", "medio", "alto"],
+    },
   },
 } as const
