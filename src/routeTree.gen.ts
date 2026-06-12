@@ -9,38 +9,276 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as LegalRouteImport } from './routes/legal'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProyectosIdRouteImport } from './routes/proyectos.$id'
+import { Route as AuthenticatedMensajesRouteImport } from './routes/_authenticated/mensajes'
+import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedInversorIndexRouteImport } from './routes/_authenticated/inversor.index'
+import { Route as AuthenticatedEmpresaIndexRouteImport } from './routes/_authenticated/empresa.index'
+import { Route as AuthenticatedInversorSolicitudesRouteImport } from './routes/_authenticated/inversor.solicitudes'
+import { Route as AuthenticatedInversorPerfilRouteImport } from './routes/_authenticated/inversor.perfil'
+import { Route as AuthenticatedInversorFavoritosRouteImport } from './routes/_authenticated/inversor.favoritos'
+import { Route as AuthenticatedEmpresaSolicitudesRouteImport } from './routes/_authenticated/empresa.solicitudes'
+import { Route as AuthenticatedEmpresaPerfilRouteImport } from './routes/_authenticated/empresa.perfil'
+import { Route as AuthenticatedEmpresaNuevoRouteImport } from './routes/_authenticated/empresa.nuevo'
+import { Route as AuthenticatedEmpresaIdInversoresRouteImport } from './routes/_authenticated/empresa.$id.inversores'
+import { Route as AuthenticatedEmpresaIdEditarRouteImport } from './routes/_authenticated/empresa.$id.editar'
 
+const LegalRoute = LegalRouteImport.update({
+  id: '/legal',
+  path: '/legal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProyectosIdRoute = ProyectosIdRouteImport.update({
+  id: '/proyectos/$id',
+  path: '/proyectos/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedMensajesRoute = AuthenticatedMensajesRouteImport.update({
+  id: '/mensajes',
+  path: '/mensajes',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedInversorIndexRoute =
+  AuthenticatedInversorIndexRouteImport.update({
+    id: '/inversor/',
+    path: '/inversor/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEmpresaIndexRoute =
+  AuthenticatedEmpresaIndexRouteImport.update({
+    id: '/empresa/',
+    path: '/empresa/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedInversorSolicitudesRoute =
+  AuthenticatedInversorSolicitudesRouteImport.update({
+    id: '/inversor/solicitudes',
+    path: '/inversor/solicitudes',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedInversorPerfilRoute =
+  AuthenticatedInversorPerfilRouteImport.update({
+    id: '/inversor/perfil',
+    path: '/inversor/perfil',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedInversorFavoritosRoute =
+  AuthenticatedInversorFavoritosRouteImport.update({
+    id: '/inversor/favoritos',
+    path: '/inversor/favoritos',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEmpresaSolicitudesRoute =
+  AuthenticatedEmpresaSolicitudesRouteImport.update({
+    id: '/empresa/solicitudes',
+    path: '/empresa/solicitudes',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEmpresaPerfilRoute =
+  AuthenticatedEmpresaPerfilRouteImport.update({
+    id: '/empresa/perfil',
+    path: '/empresa/perfil',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEmpresaNuevoRoute =
+  AuthenticatedEmpresaNuevoRouteImport.update({
+    id: '/empresa/nuevo',
+    path: '/empresa/nuevo',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEmpresaIdInversoresRoute =
+  AuthenticatedEmpresaIdInversoresRouteImport.update({
+    id: '/empresa/$id/inversores',
+    path: '/empresa/$id/inversores',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEmpresaIdEditarRoute =
+  AuthenticatedEmpresaIdEditarRouteImport.update({
+    id: '/empresa/$id/editar',
+    path: '/empresa/$id/editar',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/legal': typeof LegalRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/app': typeof AuthenticatedAppRoute
+  '/mensajes': typeof AuthenticatedMensajesRoute
+  '/proyectos/$id': typeof ProyectosIdRoute
+  '/empresa/nuevo': typeof AuthenticatedEmpresaNuevoRoute
+  '/empresa/perfil': typeof AuthenticatedEmpresaPerfilRoute
+  '/empresa/solicitudes': typeof AuthenticatedEmpresaSolicitudesRoute
+  '/inversor/favoritos': typeof AuthenticatedInversorFavoritosRoute
+  '/inversor/perfil': typeof AuthenticatedInversorPerfilRoute
+  '/inversor/solicitudes': typeof AuthenticatedInversorSolicitudesRoute
+  '/empresa/': typeof AuthenticatedEmpresaIndexRoute
+  '/inversor/': typeof AuthenticatedInversorIndexRoute
+  '/empresa/$id/editar': typeof AuthenticatedEmpresaIdEditarRoute
+  '/empresa/$id/inversores': typeof AuthenticatedEmpresaIdInversoresRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/legal': typeof LegalRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/app': typeof AuthenticatedAppRoute
+  '/mensajes': typeof AuthenticatedMensajesRoute
+  '/proyectos/$id': typeof ProyectosIdRoute
+  '/empresa/nuevo': typeof AuthenticatedEmpresaNuevoRoute
+  '/empresa/perfil': typeof AuthenticatedEmpresaPerfilRoute
+  '/empresa/solicitudes': typeof AuthenticatedEmpresaSolicitudesRoute
+  '/inversor/favoritos': typeof AuthenticatedInversorFavoritosRoute
+  '/inversor/perfil': typeof AuthenticatedInversorPerfilRoute
+  '/inversor/solicitudes': typeof AuthenticatedInversorSolicitudesRoute
+  '/empresa': typeof AuthenticatedEmpresaIndexRoute
+  '/inversor': typeof AuthenticatedInversorIndexRoute
+  '/empresa/$id/editar': typeof AuthenticatedEmpresaIdEditarRoute
+  '/empresa/$id/inversores': typeof AuthenticatedEmpresaIdInversoresRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/legal': typeof LegalRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/app': typeof AuthenticatedAppRoute
+  '/_authenticated/mensajes': typeof AuthenticatedMensajesRoute
+  '/proyectos/$id': typeof ProyectosIdRoute
+  '/_authenticated/empresa/nuevo': typeof AuthenticatedEmpresaNuevoRoute
+  '/_authenticated/empresa/perfil': typeof AuthenticatedEmpresaPerfilRoute
+  '/_authenticated/empresa/solicitudes': typeof AuthenticatedEmpresaSolicitudesRoute
+  '/_authenticated/inversor/favoritos': typeof AuthenticatedInversorFavoritosRoute
+  '/_authenticated/inversor/perfil': typeof AuthenticatedInversorPerfilRoute
+  '/_authenticated/inversor/solicitudes': typeof AuthenticatedInversorSolicitudesRoute
+  '/_authenticated/empresa/': typeof AuthenticatedEmpresaIndexRoute
+  '/_authenticated/inversor/': typeof AuthenticatedInversorIndexRoute
+  '/_authenticated/empresa/$id/editar': typeof AuthenticatedEmpresaIdEditarRoute
+  '/_authenticated/empresa/$id/inversores': typeof AuthenticatedEmpresaIdInversoresRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/legal'
+    | '/admin'
+    | '/app'
+    | '/mensajes'
+    | '/proyectos/$id'
+    | '/empresa/nuevo'
+    | '/empresa/perfil'
+    | '/empresa/solicitudes'
+    | '/inversor/favoritos'
+    | '/inversor/perfil'
+    | '/inversor/solicitudes'
+    | '/empresa/'
+    | '/inversor/'
+    | '/empresa/$id/editar'
+    | '/empresa/$id/inversores'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/legal'
+    | '/admin'
+    | '/app'
+    | '/mensajes'
+    | '/proyectos/$id'
+    | '/empresa/nuevo'
+    | '/empresa/perfil'
+    | '/empresa/solicitudes'
+    | '/inversor/favoritos'
+    | '/inversor/perfil'
+    | '/inversor/solicitudes'
+    | '/empresa'
+    | '/inversor'
+    | '/empresa/$id/editar'
+    | '/empresa/$id/inversores'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/legal'
+    | '/_authenticated/admin'
+    | '/_authenticated/app'
+    | '/_authenticated/mensajes'
+    | '/proyectos/$id'
+    | '/_authenticated/empresa/nuevo'
+    | '/_authenticated/empresa/perfil'
+    | '/_authenticated/empresa/solicitudes'
+    | '/_authenticated/inversor/favoritos'
+    | '/_authenticated/inversor/perfil'
+    | '/_authenticated/inversor/solicitudes'
+    | '/_authenticated/empresa/'
+    | '/_authenticated/inversor/'
+    | '/_authenticated/empresa/$id/editar'
+    | '/_authenticated/empresa/$id/inversores'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  LegalRoute: typeof LegalRoute
+  ProyectosIdRoute: typeof ProyectosIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/legal': {
+      id: '/legal'
+      path: '/legal'
+      fullPath: '/legal'
+      preLoaderRoute: typeof LegalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +286,149 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/proyectos/$id': {
+      id: '/proyectos/$id'
+      path: '/proyectos/$id'
+      fullPath: '/proyectos/$id'
+      preLoaderRoute: typeof ProyectosIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/mensajes': {
+      id: '/_authenticated/mensajes'
+      path: '/mensajes'
+      fullPath: '/mensajes'
+      preLoaderRoute: typeof AuthenticatedMensajesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/app': {
+      id: '/_authenticated/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AuthenticatedAppRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/inversor/': {
+      id: '/_authenticated/inversor/'
+      path: '/inversor'
+      fullPath: '/inversor/'
+      preLoaderRoute: typeof AuthenticatedInversorIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/empresa/': {
+      id: '/_authenticated/empresa/'
+      path: '/empresa'
+      fullPath: '/empresa/'
+      preLoaderRoute: typeof AuthenticatedEmpresaIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/inversor/solicitudes': {
+      id: '/_authenticated/inversor/solicitudes'
+      path: '/inversor/solicitudes'
+      fullPath: '/inversor/solicitudes'
+      preLoaderRoute: typeof AuthenticatedInversorSolicitudesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/inversor/perfil': {
+      id: '/_authenticated/inversor/perfil'
+      path: '/inversor/perfil'
+      fullPath: '/inversor/perfil'
+      preLoaderRoute: typeof AuthenticatedInversorPerfilRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/inversor/favoritos': {
+      id: '/_authenticated/inversor/favoritos'
+      path: '/inversor/favoritos'
+      fullPath: '/inversor/favoritos'
+      preLoaderRoute: typeof AuthenticatedInversorFavoritosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/empresa/solicitudes': {
+      id: '/_authenticated/empresa/solicitudes'
+      path: '/empresa/solicitudes'
+      fullPath: '/empresa/solicitudes'
+      preLoaderRoute: typeof AuthenticatedEmpresaSolicitudesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/empresa/perfil': {
+      id: '/_authenticated/empresa/perfil'
+      path: '/empresa/perfil'
+      fullPath: '/empresa/perfil'
+      preLoaderRoute: typeof AuthenticatedEmpresaPerfilRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/empresa/nuevo': {
+      id: '/_authenticated/empresa/nuevo'
+      path: '/empresa/nuevo'
+      fullPath: '/empresa/nuevo'
+      preLoaderRoute: typeof AuthenticatedEmpresaNuevoRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/empresa/$id/inversores': {
+      id: '/_authenticated/empresa/$id/inversores'
+      path: '/empresa/$id/inversores'
+      fullPath: '/empresa/$id/inversores'
+      preLoaderRoute: typeof AuthenticatedEmpresaIdInversoresRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/empresa/$id/editar': {
+      id: '/_authenticated/empresa/$id/editar'
+      path: '/empresa/$id/editar'
+      fullPath: '/empresa/$id/editar'
+      preLoaderRoute: typeof AuthenticatedEmpresaIdEditarRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedAppRoute: typeof AuthenticatedAppRoute
+  AuthenticatedMensajesRoute: typeof AuthenticatedMensajesRoute
+  AuthenticatedEmpresaNuevoRoute: typeof AuthenticatedEmpresaNuevoRoute
+  AuthenticatedEmpresaPerfilRoute: typeof AuthenticatedEmpresaPerfilRoute
+  AuthenticatedEmpresaSolicitudesRoute: typeof AuthenticatedEmpresaSolicitudesRoute
+  AuthenticatedInversorFavoritosRoute: typeof AuthenticatedInversorFavoritosRoute
+  AuthenticatedInversorPerfilRoute: typeof AuthenticatedInversorPerfilRoute
+  AuthenticatedInversorSolicitudesRoute: typeof AuthenticatedInversorSolicitudesRoute
+  AuthenticatedEmpresaIndexRoute: typeof AuthenticatedEmpresaIndexRoute
+  AuthenticatedInversorIndexRoute: typeof AuthenticatedInversorIndexRoute
+  AuthenticatedEmpresaIdEditarRoute: typeof AuthenticatedEmpresaIdEditarRoute
+  AuthenticatedEmpresaIdInversoresRoute: typeof AuthenticatedEmpresaIdInversoresRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedAppRoute: AuthenticatedAppRoute,
+  AuthenticatedMensajesRoute: AuthenticatedMensajesRoute,
+  AuthenticatedEmpresaNuevoRoute: AuthenticatedEmpresaNuevoRoute,
+  AuthenticatedEmpresaPerfilRoute: AuthenticatedEmpresaPerfilRoute,
+  AuthenticatedEmpresaSolicitudesRoute: AuthenticatedEmpresaSolicitudesRoute,
+  AuthenticatedInversorFavoritosRoute: AuthenticatedInversorFavoritosRoute,
+  AuthenticatedInversorPerfilRoute: AuthenticatedInversorPerfilRoute,
+  AuthenticatedInversorSolicitudesRoute: AuthenticatedInversorSolicitudesRoute,
+  AuthenticatedEmpresaIndexRoute: AuthenticatedEmpresaIndexRoute,
+  AuthenticatedInversorIndexRoute: AuthenticatedInversorIndexRoute,
+  AuthenticatedEmpresaIdEditarRoute: AuthenticatedEmpresaIdEditarRoute,
+  AuthenticatedEmpresaIdInversoresRoute: AuthenticatedEmpresaIdInversoresRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  LegalRoute: LegalRoute,
+  ProyectosIdRoute: ProyectosIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
