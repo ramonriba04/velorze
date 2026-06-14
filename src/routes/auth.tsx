@@ -39,9 +39,18 @@ function AuthPage() {
 
   const afterAuth = async () => {
     try {
-      await assign({ data: { role } });
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        try {
+          await assign({ data: { role } });
+        } catch {
+          // role may already exist or be assigned by /app
+        }
+      } else if (typeof window !== "undefined") {
+        localStorage.setItem("capora_pending_role", role);
+      }
     } catch (e) {
-      // role may already exist - ignore
+      console.error("afterAuth error", e);
     }
     navigate({ to: "/app" });
   };
@@ -51,7 +60,10 @@ function AuthPage() {
     setLoading(true);
     try {
       if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
+        if (typeof window !== "undefined") {
+          localStorage.setItem("capora_pending_role", role);
+        }
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -60,15 +72,20 @@ function AuthPage() {
           },
         });
         if (error) throw error;
-        toast.success(t("common.saved"));
-        await afterAuth();
+        if (data.session) {
+          toast.success(t("common.saved"));
+          await afterAuth();
+        } else {
+          toast.success("Revisa tu correo para confirmar tu cuenta / Check your email to confirm your account");
+        }
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         navigate({ to: "/app" });
       }
     } catch (err) {
-      toast.error((err as Error).message);
+      console.error("auth error", err);
+      toast.error((err as Error).message || "Authentication error");
     } finally {
       setLoading(false);
     }
