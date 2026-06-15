@@ -52,7 +52,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Capora — Marketplace inteligente de inversión" },
-      { name: "description", content: "Conecta tu proyecto con el capital adecuado. Capora une empresas e inversores mediante recomendaciones basadas en IA." },
+      { name: "description", content: "Conecta tu proyecto con los inversores adecuados. Capora es un marketplace inteligente que ayuda a empresas e inversores a descubrir oportunidades relevantes mediante matching de compatibilidad." },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
   }),

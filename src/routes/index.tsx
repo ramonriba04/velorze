@@ -9,7 +9,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Capora — Marketplace inteligente de inversión" },
-      { name: "description", content: "Conecta empresas con inversores privados y corporativos mediante recomendaciones basadas en IA." },
+      { name: "description", content: "Conecta empresas con inversores privados y corporativos mediante matching inteligente." },
       { property: "og:title", content: "Capora" },
       { property: "og:description", content: "Marketplace inteligente que conecta empresas con inversores." },
     ],
@@ -29,7 +29,7 @@ function Landing() {
           <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
             <div className="mx-auto max-w-3xl text-center">
               <span className="inline-flex items-center gap-1 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
-                <Sparkles className="h-3 w-3" /> AI-powered matching
+                <Sparkles className="h-3 w-3" /> Smart investment matching
               </span>
               <h1 className="mt-6 text-4xl font-bold tracking-tight sm:text-6xl">
                 {t("landing.heroTitle").split(" ").slice(0, -2).join(" ")}{" "}
