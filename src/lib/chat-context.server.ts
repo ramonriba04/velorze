@@ -54,7 +54,7 @@ export async function loadChatContext(authHeader: string | null): Promise<ChatUs
 
     const { data: matches } = await supabase
       .from("match_scores")
-      .select("score, project_id, projects(title, sector, country, ticket_min, ticket_max, stage, summary)")
+      .select("score, project_id, projects(title, sector, country, ticket_min, ticket_max, stage, description)")
       .eq("investor_id", userId)
       .order("score", { ascending: false })
       .limit(8);
