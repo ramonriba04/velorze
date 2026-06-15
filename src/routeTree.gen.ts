@@ -14,7 +14,6 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProyectosIdRouteImport } from './routes/proyectos.$id'
-import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthenticatedMensajesRouteImport } from './routes/_authenticated/mensajes'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
@@ -51,11 +50,6 @@ const IndexRoute = IndexRouteImport.update({
 const ProyectosIdRoute = ProyectosIdRouteImport.update({
   id: '/proyectos/$id',
   path: '/proyectos/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiChatRoute = ApiChatRouteImport.update({
-  id: '/api/chat',
-  path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedMensajesRoute = AuthenticatedMensajesRouteImport.update({
@@ -141,7 +135,6 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRoute
   '/app': typeof AuthenticatedAppRoute
   '/mensajes': typeof AuthenticatedMensajesRoute
-  '/api/chat': typeof ApiChatRoute
   '/proyectos/$id': typeof ProyectosIdRoute
   '/empresa/nuevo': typeof AuthenticatedEmpresaNuevoRoute
   '/empresa/perfil': typeof AuthenticatedEmpresaPerfilRoute
@@ -161,7 +154,6 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminRoute
   '/app': typeof AuthenticatedAppRoute
   '/mensajes': typeof AuthenticatedMensajesRoute
-  '/api/chat': typeof ApiChatRoute
   '/proyectos/$id': typeof ProyectosIdRoute
   '/empresa/nuevo': typeof AuthenticatedEmpresaNuevoRoute
   '/empresa/perfil': typeof AuthenticatedEmpresaPerfilRoute
@@ -183,7 +175,6 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/app': typeof AuthenticatedAppRoute
   '/_authenticated/mensajes': typeof AuthenticatedMensajesRoute
-  '/api/chat': typeof ApiChatRoute
   '/proyectos/$id': typeof ProyectosIdRoute
   '/_authenticated/empresa/nuevo': typeof AuthenticatedEmpresaNuevoRoute
   '/_authenticated/empresa/perfil': typeof AuthenticatedEmpresaPerfilRoute
@@ -205,7 +196,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/app'
     | '/mensajes'
-    | '/api/chat'
     | '/proyectos/$id'
     | '/empresa/nuevo'
     | '/empresa/perfil'
@@ -225,7 +215,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/app'
     | '/mensajes'
-    | '/api/chat'
     | '/proyectos/$id'
     | '/empresa/nuevo'
     | '/empresa/perfil'
@@ -246,7 +235,6 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/app'
     | '/_authenticated/mensajes'
-    | '/api/chat'
     | '/proyectos/$id'
     | '/_authenticated/empresa/nuevo'
     | '/_authenticated/empresa/perfil'
@@ -265,7 +253,6 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   LegalRoute: typeof LegalRoute
-  ApiChatRoute: typeof ApiChatRoute
   ProyectosIdRoute: typeof ProyectosIdRoute
 }
 
@@ -304,13 +291,6 @@ declare module '@tanstack/react-router' {
       path: '/proyectos/$id'
       fullPath: '/proyectos/$id'
       preLoaderRoute: typeof ProyectosIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/chat': {
-      id: '/api/chat'
-      path: '/api/chat'
-      fullPath: '/api/chat'
-      preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/mensajes': {
@@ -447,7 +427,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   LegalRoute: LegalRoute,
-  ApiChatRoute: ApiChatRoute,
   ProyectosIdRoute: ProyectosIdRoute,
 }
 export const routeTree = rootRouteImport
