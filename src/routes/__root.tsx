@@ -6,7 +6,9 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, type ReactNode } from "react";
+
+const CaporaAssistant = lazy(() => import("@/components/chat/CaporaAssistant"));
 
 import appCss from "../styles.css?url";
 import "../lib/i18n";
