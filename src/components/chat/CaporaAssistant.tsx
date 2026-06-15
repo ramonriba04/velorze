@@ -135,8 +135,6 @@ export default function CaporaAssistant() {
           </form>
         </div>
       )}
-      {/* keep t in scope for future i18n use */}
-      <span className="hidden">{t}</span>
     </>
   );
 }
