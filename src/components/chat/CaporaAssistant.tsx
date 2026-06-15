@@ -13,7 +13,7 @@ function getText(m: UIMessage): string {
 }
 
 export default function CaporaAssistant() {
-  const { i18n, t } = useTranslation();
+  const { i18n } = useTranslation();
   const [open, setOpen] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const locale = i18n.language?.startsWith("en") ? "en" : "es";
