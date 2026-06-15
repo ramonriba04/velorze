@@ -69,7 +69,7 @@ export async function loadChatContext(authHeader: string | null): Promise<ChatUs
 
     const { data: projects } = await supabase
       .from("projects")
-      .select("id,title,sector,country,ticket_min,ticket_max,stage,status,summary")
+      .select("id,title,sector,country,ticket_min,ticket_max,stage,status,description")
       .eq("company_id", userId)
       .limit(10);
     ctx.projects = (projects ?? []) as Array<Record<string, unknown>>;
