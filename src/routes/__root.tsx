@@ -90,6 +90,9 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <Outlet />
       <Toaster />
+      <Suspense fallback={null}>
+        <CaporaAssistant />
+      </Suspense>
     </QueryClientProvider>
   );
 }
