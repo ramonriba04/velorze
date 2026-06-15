@@ -21,8 +21,8 @@
     "logout": "Cerrar sesión"
   },
   "landing": {
-    "heroTitle": "Conecta tu proyecto con el capital adecuado",
-    "heroSubtitle": "Capora es el marketplace inteligente que conecta empresas con inversores privados y corporativos mediante recomendaciones basadas en IA.",
+    "heroTitle": "Conecta tu proyecto con los inversores adecuados",
+    "heroSubtitle": "Capora es un marketplace inteligente que ayuda a empresas e inversores a descubrir oportunidades relevantes mediante matching de compatibilidad.",
     "ctaInvestor": "Soy inversor",
     "ctaCompany": "Soy empresa",
     "ctaPrimary": "Empezar gratis",
