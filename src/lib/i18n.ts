@@ -4,9 +4,9 @@ import { initReactI18next } from "react-i18next";
 import es from "./locales/es.json";
 import en from "./locales/en.json";
 
-// SSR-safe: do NOT use i18next-browser-languagedetector (it touches window/document at module scope).
-function detectInitialLanguage(): "es" | "en" {
-  if (typeof window === "undefined") return "es";
+// SSR-safe: always initialize with "es" so server and client first render match.
+// Switch to the user's preferred language after hydration to avoid mismatches.
+function detectClientLanguage(): "es" | "en" {
   try {
     const stored = window.localStorage.getItem("capora_lang");
     if (stored === "es" || stored === "en") return stored;
@@ -23,7 +23,7 @@ if (!i18n.isInitialized) {
       es: { translation: es },
       en: { translation: en },
     },
-    lng: detectInitialLanguage(),
+    lng: "es",
     fallbackLng: "es",
     supportedLngs: ["es", "en"],
     load: "languageOnly",
@@ -33,8 +33,14 @@ if (!i18n.isInitialized) {
     react: { useSuspense: false },
   });
 
-  // Persist language changes on the client
   if (typeof window !== "undefined") {
+    // Defer language switch until after hydration to keep SSR markup stable.
+    if (typeof queueMicrotask === "function") {
+      queueMicrotask(() => {
+        const lng = detectClientLanguage();
+        if (lng !== i18n.language) i18n.changeLanguage(lng);
+      });
+    }
     i18n.on("languageChanged", (lng) => {
       try {
         window.localStorage.setItem("capora_lang", lng);
