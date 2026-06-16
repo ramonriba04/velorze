@@ -12,6 +12,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ImageUpload } from "@/components/media/ImageUpload";
+import { CompletenessBadge } from "@/components/media/CompletenessBadge";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/inversor/perfil")({
@@ -23,7 +25,7 @@ function InvestorProfile() {
   const { user } = useMyRole();
   const save = useServerFn(upsertInvestorProfile);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["investor_profile", user?.id],
     enabled: !!user,
     queryFn: async () => {
@@ -49,9 +51,11 @@ function InvestorProfile() {
           investment_types: current.investment_types ?? [],
           risk_level: current.risk_level ?? "medio",
           description: current.description || null,
+          avatar_url: current.avatar_url || null,
         },
       });
       toast.success(t("common.saved"));
+      refetch();
     } catch (e) {
       toast.error((e as Error).message);
     }
@@ -61,11 +65,28 @@ function InvestorProfile() {
 
   const arr = (v: any): string[] => (Array.isArray(v) ? v : typeof v === "string" ? v.split(",").map((s) => s.trim()).filter(Boolean) : []);
 
+  const completeness = [
+    { label: t("completeness.addAvatar"), done: !!current.avatar_url },
+    { label: t("completeness.addDescription"), done: !!(current.description && current.description.length > 30) },
+    { label: t("investor.sectors"), done: (current.sectors ?? []).length > 0 },
+    { label: t("investor.countries"), done: (current.countries ?? []).length > 0 },
+  ];
+
   return (
-    <div className="mx-auto max-w-2xl px-4 py-10">
+    <div className="mx-auto max-w-2xl px-4 py-10 space-y-4">
+      <CompletenessBadge items={completeness} />
       <Card className="p-6">
         <h1 className="text-2xl font-bold">{t("investor.title")}</h1>
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
+          <ImageUpload
+            value={current.avatar_url}
+            onChange={(url) => setForm({ ...form, avatar_url: url })}
+            userId={user!.id}
+            kind="avatar"
+            shape="circle"
+            label={t("nav.profile")}
+            hint={t("media.avatarHint")}
+          />
           <div>
             <Label>{t("investor.kind")}</Label>
             <Select value={current.kind ?? "personal"} onValueChange={(v) => setForm({ ...form, kind: v })}>
@@ -132,3 +153,4 @@ function InvestorProfile() {
     </div>
   );
 }
+
