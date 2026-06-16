@@ -3,13 +3,16 @@ import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { createProject, updateProject, deleteProject } from "@/lib/projects.functions";
+import { setProjectImages } from "@/lib/project-images.functions";
 import { supabase } from "@/integrations/supabase/client";
+import { useMyRole } from "@/hooks/useAuth";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { MultiImageUpload, type ProjectImage } from "@/components/media/MultiImageUpload";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/empresa/nuevo")({
@@ -19,21 +22,27 @@ export const Route = createFileRoute("/_authenticated/empresa/nuevo")({
 export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { user } = useMyRole();
   const params = useParams({ strict: false }) as { id?: string };
   const create = useServerFn(createProject);
   const update = useServerFn(updateProject);
   const del = useServerFn(deleteProject);
+  const saveImages = useServerFn(setProjectImages);
 
   const [form, setForm] = useState<any>({
     title: "", description: "", sector: "", investment_type: "equity",
     capital_required: "", ticket_min: "", ticket_max: "", country: "",
     stage: "crecimiento", status: "published",
   });
+  const [images, setImages] = useState<ProjectImage[]>([]);
 
   useEffect(() => {
     if (mode === "edit" && params.id) {
       supabase.from("projects").select("*").eq("id", params.id).maybeSingle().then(({ data }) => {
         if (data) setForm(data);
+      });
+      supabase.from("project_images").select("url, storage_path, id").eq("project_id", params.id).order("sort_order").then(({ data }) => {
+        if (data) setImages(data as ProjectImage[]);
       });
     }
   }, [mode, params.id]);
@@ -48,11 +57,17 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
         ticket_min: form.ticket_min ? Number(form.ticket_min) : null,
         ticket_max: form.ticket_max ? Number(form.ticket_max) : null,
         country: form.country, stage: form.stage, status: form.status,
+        cover_url: images[0]?.url ?? form.cover_url ?? null,
       };
+      let projectId = params.id;
       if (mode === "create") {
-        await create({ data: payload });
+        const r = await create({ data: payload });
+        projectId = r.id;
       } else {
         await update({ data: { id: params.id!, ...payload } });
+      }
+      if (projectId) {
+        await saveImages({ data: { project_id: projectId, images: images.map((i) => ({ url: i.url, storage_path: i.storage_path ?? null })) } });
       }
       toast.success(t("common.saved"));
       navigate({ to: "/empresa" });
@@ -76,6 +91,14 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
           <div><Label>{t("project.title")}</Label><Input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
           <div><Label>{t("project.description")}</Label><Textarea required rows={5} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
+          {user && (
+            <div>
+              <Label>{t("media.gallery")}</Label>
+              <div className="mt-2">
+                <MultiImageUpload images={images} onChange={setImages} userId={user.id} />
+              </div>
+            </div>
+          )}
           <div className="grid grid-cols-2 gap-3">
             <div><Label>{t("project.sector")}</Label><Input required value={form.sector} onChange={(e) => setForm({ ...form, sector: e.target.value })} /></div>
             <div><Label>{t("project.country")}</Label><Input required value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} /></div>
@@ -118,3 +141,4 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
     </div>
   );
 }
+
