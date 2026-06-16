@@ -47,15 +47,22 @@ function CompanyDashboard() {
             <Link to="/empresa/nuevo"><Button className="mt-4">{t("project.createFirst")}</Button></Link>
           </Card>
         )}
-        {data?.map((p) => (
-          <Card key={p.id} className="p-5">
-            <h3 className="font-semibold text-lg">{p.title}</h3>
-            <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{p.description}</p>
-            <p className="text-xs text-muted-foreground mt-2">{p.sector} · {p.country} · {p.status}</p>
-            <div className="mt-3 flex gap-2">
-              <Link to="/proyectos/$id" params={{ id: p.id }}><Button size="sm" variant="outline">{t("common.view")}</Button></Link>
-              <Link to="/empresa/$id/editar" params={{ id: p.id }}><Button size="sm" variant="outline">{t("common.edit")}</Button></Link>
-              <Link to="/empresa/$id/inversores" params={{ id: p.id }}><Button size="sm">{t("nav.investors")}</Button></Link>
+        {data?.map((p: any) => (
+          <Card key={p.id} className="overflow-hidden">
+            {p.cover_url && (
+              <div className="aspect-video bg-muted">
+                <img src={p.cover_url} alt={p.title} className="h-full w-full object-cover" loading="lazy" />
+              </div>
+            )}
+            <div className="p-5">
+              <h3 className="font-semibold text-lg">{p.title}</h3>
+              <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{p.description}</p>
+              <p className="text-xs text-muted-foreground mt-2">{p.sector} · {p.country} · {p.status}</p>
+              <div className="mt-3 flex gap-2 flex-wrap">
+                <Link to="/proyectos/$id" params={{ id: p.id }}><Button size="sm" variant="outline">{t("common.view")}</Button></Link>
+                <Link to="/empresa/$id/editar" params={{ id: p.id }}><Button size="sm" variant="outline">{t("common.edit")}</Button></Link>
+                <Link to="/empresa/$id/inversores" params={{ id: p.id }}><Button size="sm">{t("nav.investors")}</Button></Link>
+              </div>
             </div>
           </Card>
         ))}

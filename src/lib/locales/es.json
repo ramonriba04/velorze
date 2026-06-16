@@ -188,6 +188,23 @@
     "body": "Capora es únicamente una plataforma de conexión entre empresas e inversores. No procesa pagos, no gestiona inversiones, no actúa como intermediario financiero y no ofrece asesoramiento financiero. Las recomendaciones generadas por el sistema son meramente informativas. Los usuarios son responsables de realizar su propia diligencia debida antes de tomar cualquier decisión de inversión."
   },
   "disclaimer": "Capora no presta asesoramiento financiero ni gestiona inversiones. Sólo conecta usuarios.",
+  "media": {
+    "upload": "Subir",
+    "replace": "Reemplazar",
+    "remove": "Quitar",
+    "add": "Añadir imagen",
+    "cover": "Portada",
+    "avatarHint": "JPG o PNG, hasta 5MB. Añadir foto aumenta tu visibilidad.",
+    "logoHint": "Logo cuadrado recomendado. JPG, PNG o SVG hasta 5MB.",
+    "projectHint": "Hasta {{max}} imágenes. La primera se usa como portada.",
+    "gallery": "Galería"
+  },
+  "completeness": {
+    "addAvatar": "Añade una foto de perfil para aumentar tu visibilidad",
+    "addLogo": "Añade un logo para generar confianza",
+    "addImages": "Añade imágenes al proyecto para mejorar el engagement",
+    "addDescription": "Añade una descripción clara"
+  },
   "footer": {
     "rights": "Todos los derechos reservados.",
     "legal": "Aviso legal",

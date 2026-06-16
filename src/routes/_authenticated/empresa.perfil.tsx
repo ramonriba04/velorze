@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { ImageUpload } from "@/components/media/ImageUpload";
+import { CompletenessBadge } from "@/components/media/CompletenessBadge";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/empresa/perfil")({
@@ -22,7 +24,7 @@ function CompanyProfilePage() {
   const { user } = useMyRole();
   const save = useServerFn(upsertCompanyProfile);
 
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ["company_profile", user?.id],
     enabled: !!user,
     queryFn: async () => {
@@ -47,16 +49,36 @@ function CompanyProfilePage() {
         },
       });
       toast.success(t("common.saved"));
+      refetch();
     } catch (e) {
       toast.error((e as Error).message);
     }
   };
 
+  const completeness = [
+    { label: t("completeness.addLogo"), done: !!current.logo_url },
+    { label: t("completeness.addDescription"), done: !!(current.description && current.description.length > 30) },
+    { label: t("company.website"), done: !!current.website },
+    { label: t("company.country"), done: !!current.country },
+  ];
+
   return (
-    <div className="mx-auto max-w-2xl px-4 py-10">
+    <div className="mx-auto max-w-2xl px-4 py-10 space-y-4">
+      {user && <CompletenessBadge items={completeness} />}
       <Card className="p-6">
         <h1 className="text-2xl font-bold">{t("company.title")}</h1>
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
+          {user && (
+            <ImageUpload
+              value={current.logo_url}
+              onChange={(url) => setForm({ ...form, logo_url: url })}
+              userId={user.id}
+              kind="logo"
+              shape="square"
+              label={t("company.title")}
+              hint={t("media.logoHint")}
+            />
+          )}
           <div><Label>{t("company.legalName")}</Label><Input required defaultValue={data?.legal_name ?? ""} onChange={(e) => setForm({ ...form, legal_name: e.target.value })} /></div>
           <div><Label>{t("company.website")}</Label><Input type="url" defaultValue={data?.website ?? ""} onChange={(e) => setForm({ ...form, website: e.target.value })} /></div>
           <div><Label>{t("company.country")}</Label><Input defaultValue={data?.country ?? ""} onChange={(e) => setForm({ ...form, country: e.target.value })} /></div>
@@ -67,3 +89,4 @@ function CompanyProfilePage() {
     </div>
   );
 }
+

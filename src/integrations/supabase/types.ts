@@ -164,6 +164,7 @@ export type Database = {
       }
       investor_profiles: {
         Row: {
+          avatar_url: string | null
           countries: string[]
           created_at: string
           description: string | null
@@ -178,6 +179,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          avatar_url?: string | null
           countries?: string[]
           created_at?: string
           description?: string | null
@@ -192,6 +194,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          avatar_url?: string | null
           countries?: string[]
           created_at?: string
           description?: string | null
@@ -297,6 +300,41 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      project_images: {
+        Row: {
+          created_at: string
+          id: string
+          project_id: string
+          sort_order: number
+          storage_path: string | null
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          project_id: string
+          sort_order?: number
+          storage_path?: string | null
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          project_id?: string
+          sort_order?: number
+          storage_path?: string | null
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_images_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       projects: {
         Row: {
