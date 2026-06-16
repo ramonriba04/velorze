@@ -23,6 +23,7 @@ const InvestorProfileSchema = z.object({
   investment_types: z.array(z.enum(["equity", "prestamo", "joint_venture", "convertible", "otro"])).max(10),
   risk_level: z.enum(["bajo", "medio", "alto"]),
   description: z.string().max(2000).optional().nullable(),
+  avatar_url: z.string().url().optional().or(z.literal("")).nullable(),
 });
 
 export const upsertInvestorProfile = createServerFn({ method: "POST" })
