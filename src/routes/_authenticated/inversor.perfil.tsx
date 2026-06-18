@@ -61,7 +61,7 @@ function InvestorProfile() {
     }
   };
 
-  if (isLoading) return <div className="p-10">{t("common.loading")}</div>;
+  if (!user || isLoading) return <div className="p-10">{t("common.loading")}</div>;
 
   const arr = (v: any): string[] => (Array.isArray(v) ? v : typeof v === "string" ? v.split(",").map((s) => s.trim()).filter(Boolean) : []);
 
@@ -73,7 +73,7 @@ function InvestorProfile() {
   ];
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-10 space-y-4">
+    <div className="mx-auto max-w-2xl px-4 py-10 pb-24 space-y-4">
       <CompletenessBadge items={completeness} />
       <Card className="p-6">
         <h1 className="text-2xl font-bold">{t("investor.title")}</h1>
@@ -147,7 +147,14 @@ function InvestorProfile() {
             <Label>{t("investor.description")}</Label>
             <Textarea rows={4} defaultValue={data?.description ?? ""} onChange={(e) => setForm({ ...form, description: e.target.value })} />
           </div>
-          <Button type="submit" className="w-full">{t("common.save")}</Button>
+          <div>
+            <Label>{t("investor.displayName")}</Label>
+            <Input defaultValue={data?.display_name ?? ""} onChange={(e) => setForm({ ...form, display_name: e.target.value })} />
+          </div>
+          <div className="flex gap-2">
+            <Button type="submit" className="flex-1">{t("common.save")}</Button>
+            <Button type="button" variant="outline" onClick={() => { setForm({}); toast.message(t("common.cancel")); }}>{t("common.cancel")}</Button>
+          </div>
         </form>
       </Card>
     </div>
