@@ -24,7 +24,7 @@ function CompanyProfilePage() {
   const { user } = useMyRole();
   const save = useServerFn(upsertCompanyProfile);
 
-  const { data, refetch } = useQuery({
+  const { data, refetch, isLoading } = useQuery({
     queryKey: ["company_profile", user?.id],
     enabled: !!user,
     queryFn: async () => {
@@ -62,28 +62,31 @@ function CompanyProfilePage() {
     { label: t("company.country"), done: !!current.country },
   ];
 
+  if (!user || isLoading) return <div className="p-10">{t("common.loading")}</div>;
+
   return (
-    <div className="mx-auto max-w-2xl px-4 py-10 space-y-4">
-      {user && <CompletenessBadge items={completeness} />}
+    <div className="mx-auto max-w-2xl px-4 py-10 pb-24 space-y-4">
+      <CompletenessBadge items={completeness} />
       <Card className="p-6">
         <h1 className="text-2xl font-bold">{t("company.title")}</h1>
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
-          {user && (
-            <ImageUpload
-              value={current.logo_url}
-              onChange={(url) => setForm({ ...form, logo_url: url })}
-              userId={user.id}
-              kind="logo"
-              shape="square"
-              label={t("company.title")}
-              hint={t("media.logoHint")}
-            />
-          )}
+          <ImageUpload
+            value={current.logo_url}
+            onChange={(url) => setForm({ ...form, logo_url: url })}
+            userId={user.id}
+            kind="logo"
+            shape="square"
+            label={t("company.title")}
+            hint={t("media.logoHint")}
+          />
           <div><Label>{t("company.legalName")}</Label><Input required defaultValue={data?.legal_name ?? ""} onChange={(e) => setForm({ ...form, legal_name: e.target.value })} /></div>
           <div><Label>{t("company.website")}</Label><Input type="url" defaultValue={data?.website ?? ""} onChange={(e) => setForm({ ...form, website: e.target.value })} /></div>
           <div><Label>{t("company.country")}</Label><Input defaultValue={data?.country ?? ""} onChange={(e) => setForm({ ...form, country: e.target.value })} /></div>
           <div><Label>{t("company.description")}</Label><Textarea rows={4} defaultValue={data?.description ?? ""} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
-          <Button type="submit" className="w-full">{t("common.save")}</Button>
+          <div className="flex gap-2">
+            <Button type="submit" className="flex-1">{t("common.save")}</Button>
+            <Button type="button" variant="outline" onClick={() => { setForm({}); toast.message(t("common.cancel")); }}>{t("common.cancel")}</Button>
+          </div>
         </form>
       </Card>
     </div>
