@@ -4,6 +4,7 @@
     "tagline": "El marketplace inteligente que conecta empresas con inversores."
   },
   "nav": {
+    "home": "Inicio",
     "how": "Cómo funciona",
     "investors": "Para inversores",
     "companies": "Para empresas",
@@ -138,6 +139,7 @@
   },
   "investor": {
     "title": "Perfil de inversor",
+    "displayName": "Nombre",
     "kind": "Tipo de inversor",
     "personal": "Personal",
     "corporativo": "Corporativo",
