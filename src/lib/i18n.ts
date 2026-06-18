@@ -17,6 +17,17 @@ function detectClientLanguage(): "es" | "en" {
   return nav.toLowerCase().startsWith("en") ? "en" : "es";
 }
 
+// Humanize a key as a last-resort fallback so users never see a raw key
+// like "landing.heroTitle" if a translation is ever missing.
+function humanizeKey(key: string): string {
+  const last = key.split(".").pop() ?? key;
+  const spaced = last
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .replace(/[_-]+/g, " ")
+    .trim();
+  return spaced.charAt(0).toUpperCase() + spaced.slice(1);
+}
+
 if (!i18n.isInitialized) {
   i18n.use(initReactI18next).init({
     resources: {
@@ -30,6 +41,7 @@ if (!i18n.isInitialized) {
     nonExplicitSupportedLngs: true,
     interpolation: { escapeValue: false },
     returnEmptyString: false,
+    parseMissingKeyHandler: (key) => humanizeKey(key),
     react: { useSuspense: false },
   });
 
