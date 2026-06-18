@@ -4,6 +4,7 @@
     "tagline": "The intelligent marketplace connecting companies with investors."
   },
   "nav": {
+    "home": "Home",
     "how": "How it works",
     "investors": "For investors",
     "companies": "For companies",
@@ -138,6 +139,7 @@
   },
   "investor": {
     "title": "Investor profile",
+    "displayName": "Display name",
     "kind": "Investor type",
     "personal": "Personal",
     "corporativo": "Corporate",
