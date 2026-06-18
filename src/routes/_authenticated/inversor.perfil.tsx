@@ -73,7 +73,7 @@ function InvestorProfile() {
   ];
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-10 space-y-4">
+    <div className="mx-auto max-w-2xl px-4 py-10 pb-24 space-y-4">
       <CompletenessBadge items={completeness} />
       <Card className="p-6">
         <h1 className="text-2xl font-bold">{t("investor.title")}</h1>
