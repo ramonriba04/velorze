@@ -28,6 +28,38 @@ export function LanguageSwitcher() {
   );
 }
 
+function HeaderProfile() {
+  const { t } = useTranslation();
+  const { user, role } = useMyRole();
+  const isCompany = role === "empresa";
+  const profileTo = isCompany ? "/empresa/perfil" : "/inversor/perfil";
+
+  const { data: prof } = useQuery({
+    queryKey: ["header_profile", user?.id, role],
+    enabled: !!user && !!role && role !== "admin",
+    queryFn: async () => {
+      if (isCompany) {
+        const { data } = await supabase.from("company_profiles")
+          .select("legal_name, logo_url").eq("user_id", user!.id).maybeSingle();
+        return { name: data?.legal_name, src: data?.logo_url, kind: "company" as const };
+      }
+      const { data } = await supabase.from("investor_profiles")
+        .select("display_name, avatar_url").eq("user_id", user!.id).maybeSingle();
+      return { name: data?.display_name, src: data?.avatar_url, kind: "user" as const };
+    },
+  });
+
+  if (!user) return null;
+  return (
+    <Link to={profileTo} aria-label={t("nav.profile")} className="flex items-center gap-2 rounded-full px-1.5 py-1 hover:bg-muted">
+      <EntityAvatar src={prof?.src} name={prof?.name ?? user.email} kind={prof?.kind ?? "user"} size={28} />
+      <span className="hidden sm:inline text-sm font-medium max-w-[120px] truncate">
+        {prof?.name ?? user.email?.split("@")[0]}
+      </span>
+    </Link>
+  );
+}
+
 export function Header() {
   const { t } = useTranslation();
   const { user, role } = useMyRole();
@@ -44,35 +76,21 @@ export function Header() {
           <div className="h-8 w-8 rounded-lg gradient-primary shadow-elegant" />
           <span className="text-lg font-semibold tracking-tight">Capora</span>
         </Link>
-        <nav className="hidden md:flex items-center gap-1">
+        <div className="flex items-center gap-1 sm:gap-2">
+          <LanguageSwitcher />
           {user ? (
             <>
-              <Link to="/app" className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground">
-                {t("nav.dashboard")}
-              </Link>
-              <Link to="/mensajes" className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground">
-                {t("nav.messages")}
-              </Link>
               {role === "admin" && (
                 <Link to="/admin" className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground">
                   {t("nav.admin")}
                 </Link>
               )}
+              <HeaderProfile />
+              <Button variant="ghost" size="sm" onClick={signOut} className="gap-1" aria-label={t("nav.logout")}>
+                <LogOut className="h-4 w-4" />
+                <span className="hidden sm:inline">{t("nav.logout")}</span>
+              </Button>
             </>
-          ) : (
-            <>
-              <a href="/#how" className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground">{t("nav.how")}</a>
-              <Link to="/legal" className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground">{t("footer.legal")}</Link>
-            </>
-          )}
-        </nav>
-        <div className="flex items-center gap-2">
-          <LanguageSwitcher />
-          {user ? (
-            <Button variant="ghost" size="sm" onClick={signOut} className="gap-1">
-              <LogOut className="h-4 w-4" />
-              <span className="hidden sm:inline">{t("nav.logout")}</span>
-            </Button>
           ) : (
             <>
               <Link to="/auth" className="hidden sm:block">
