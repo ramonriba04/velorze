@@ -160,7 +160,23 @@
   "messages": {
     "empty": "You don't have any conversations yet.",
     "writePlaceholder": "Write a message...",
-    "title": "Messages"
+    "title": "Messages",
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "chats": "Chats",
+    "pendingEmpty": "No pending requests.",
+    "acceptedEmpty": "No accepted contacts yet.",
+    "selectHint": "Select a conversation"
+  },
+  "home": {
+    "welcomeBack": "Welcome back",
+    "profileComplete": "Profile complete",
+    "noRecommendations": "No recommendations yet",
+    "noRecommendationsSub": "Complete your profile so the matching engine can suggest relevant opportunities.",
+    "completeProfileCta": "Complete profile",
+    "firstProjectTitle": "Publish your first project",
+    "firstProjectSub": "Share your opportunity with compatible investors in minutes.",
+    "pendingRequests": "Pending"
   },
   "requests": {
     "title": "Contact requests",

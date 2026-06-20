@@ -5,11 +5,13 @@ import { useTranslation } from "react-i18next";
 import { getRecommendedProjects } from "@/lib/matching.functions";
 import { toggleFavorite, createContactRequest } from "@/lib/contact.functions";
 import { supabase } from "@/integrations/supabase/client";
+import { useMyRole } from "@/hooks/useAuth";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { EntityAvatar } from "@/components/media/EntityAvatar";
-import { Heart, MapPin, TrendingUp, Send } from "lucide-react";
+import { Heart, MapPin, TrendingUp, Send, MessageCircle, Sparkles, Compass } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/inversor/")({
@@ -24,6 +26,7 @@ function scoreColor(s: number) {
 
 function InvestorDashboard() {
   const { t } = useTranslation();
+  const { user } = useMyRole();
   const fetcher = useServerFn(getRecommendedProjects);
   const favFn = useServerFn(toggleFavorite);
   const reqFn = useServerFn(createContactRequest);
@@ -34,16 +37,35 @@ function InvestorDashboard() {
     queryFn: () => fetcher(),
   });
 
-  // Fetch company logos for visible projects
+  const { data: profile } = useQuery({
+    queryKey: ["investor_profile_summary", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data } = await supabase.from("investor_profiles")
+        .select("display_name, avatar_url, description, sectors, countries").eq("user_id", user!.id).maybeSingle();
+      return data;
+    },
+  });
+
+  const { data: counts } = useQuery({
+    queryKey: ["investor_counts", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const [fav, msg] = await Promise.all([
+        supabase.from("favorites").select("*", { count: "exact", head: true }).eq("investor_id", user!.id),
+        supabase.from("conversations").select("*", { count: "exact", head: true }).eq("investor_id", user!.id),
+      ]);
+      return { favorites: fav.count ?? 0, conversations: msg.count ?? 0 };
+    },
+  });
+
   const companyIds = Array.from(new Set((data?.items ?? []).map((i: any) => i.project.company_id)));
   const { data: companies } = useQuery({
     queryKey: ["recommended_companies", companyIds.join(",")],
     enabled: companyIds.length > 0,
     queryFn: async () => {
-      const { data } = await supabase
-        .from("company_profiles")
-        .select("user_id, legal_name, logo_url")
-        .in("user_id", companyIds);
+      const { data } = await supabase.from("company_profiles")
+        .select("user_id, legal_name, logo_url").in("user_id", companyIds);
       const map: Record<string, any> = {};
       (data ?? []).forEach((c: any) => (map[c.user_id] = c));
       return map;
@@ -52,40 +74,87 @@ function InvestorDashboard() {
 
   const favMut = useMutation({
     mutationFn: (project_id: string) => favFn({ data: { project_id } }),
-    onSuccess: (r) => toast.success(r.favorited ? t("project.addedFavorite") : t("project.removedFavorite")),
+    onSuccess: (r) => { toast.success(r.favorited ? t("project.addedFavorite") : t("project.removedFavorite")); qc.invalidateQueries({ queryKey: ["investor_counts"] }); },
   });
-
   const reqMut = useMutation({
     mutationFn: (project_id: string) => reqFn({ data: { project_id } }),
     onSuccess: () => toast.success(t("project.requestSent")),
     onError: (e) => toast.error((e as Error).message),
   });
 
+  // Completion score
+  const completionItems = [
+    !!profile?.avatar_url,
+    !!(profile?.description && profile.description.length > 30),
+    (profile?.sectors ?? []).length > 0,
+    (profile?.countries ?? []).length > 0,
+    !!profile?.display_name,
+  ];
+  const completion = Math.round((completionItems.filter(Boolean).length / completionItems.length) * 100);
+  const greetingName = profile?.display_name ?? user?.email?.split("@")[0] ?? "";
+
+  const items = data?.items ?? [];
+
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-3xl font-bold">{t("project.recommended")}</h1>
-          <p className="text-sm text-muted-foreground">{t("project.recommendedSub")}</p>
-        </div>
-        <div className="flex gap-2">
-          <Link to="/inversor/perfil"><Button variant="outline" size="sm">{t("nav.profile")}</Button></Link>
-          <Link to="/inversor/favoritos"><Button variant="outline" size="sm">{t("nav.favorites")}</Button></Link>
-          <Link to="/inversor/solicitudes"><Button variant="outline" size="sm">{t("nav.requests")}</Button></Link>
+    <div className="mx-auto max-w-6xl px-4 py-8 pb-28 sm:px-6">
+      {/* Welcome */}
+      <div className="flex items-center gap-3">
+        <EntityAvatar src={profile?.avatar_url} name={greetingName} size={48} />
+        <div className="min-w-0">
+          <p className="text-xs text-muted-foreground">{t("home.welcomeBack")}</p>
+          <h1 className="text-2xl sm:text-3xl font-bold truncate">{greetingName || t("nav.profile")}</h1>
         </div>
       </div>
 
-      {data && !data.hasProfile && (
-        <Card className="mt-6 p-4 border-warning/40 bg-warning/10">
-          <p className="text-sm">{t("project.completeProfile")}</p>
-          <Link to="/inversor/perfil"><Button size="sm" className="mt-2">{t("nav.profile")}</Button></Link>
-        </Card>
-      )}
+      {/* Stats row */}
+      <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <Link to="/inversor/favoritos">
+          <Card className="p-4 hover:shadow-elegant transition-shadow">
+            <div className="flex items-center gap-2 text-muted-foreground text-xs"><Heart className="h-4 w-4" />{t("nav.favorites")}</div>
+            <p className="mt-1 text-2xl font-semibold">{counts?.favorites ?? 0}</p>
+          </Card>
+        </Link>
+        <Link to="/mensajes">
+          <Card className="p-4 hover:shadow-elegant transition-shadow">
+            <div className="flex items-center gap-2 text-muted-foreground text-xs"><MessageCircle className="h-4 w-4" />{t("nav.messages")}</div>
+            <p className="mt-1 text-2xl font-semibold">{counts?.conversations ?? 0}</p>
+          </Card>
+        </Link>
+        {completion < 100 && (
+          <Link to="/inversor/perfil" className="col-span-2 sm:col-span-1">
+            <Card className="p-4 hover:shadow-elegant transition-shadow">
+              <div className="flex items-center justify-between text-xs text-muted-foreground">
+                <span>{t("home.profileComplete")}</span>
+                <span className="font-medium text-foreground">{completion}%</span>
+              </div>
+              <Progress value={completion} className="mt-2 h-2" />
+            </Card>
+          </Link>
+        )}
+      </div>
 
-      <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {/* Recommendations */}
+      <div className="mt-10 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Sparkles className="h-5 w-5 text-primary" />
+          <h2 className="text-xl font-semibold">{t("project.recommended")}</h2>
+        </div>
+      </div>
+      <p className="text-sm text-muted-foreground">{t("project.recommendedSub")}</p>
+
+      <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {isLoading && <p className="text-muted-foreground col-span-full">{t("common.loading")}</p>}
-        {data?.items.length === 0 && <p className="text-muted-foreground col-span-full">{t("project.noProjects")}</p>}
-        {data?.items.map(({ project, match }) => {
+        {!isLoading && items.length === 0 && (
+          <Card className="md:col-span-2 lg:col-span-3 p-10 text-center border-dashed">
+            <Compass className="mx-auto h-10 w-10 text-muted-foreground" />
+            <h3 className="mt-3 font-semibold">{t("home.noRecommendations")}</h3>
+            <p className="mt-1 text-sm text-muted-foreground max-w-md mx-auto">{t("home.noRecommendationsSub")}</p>
+            <div className="mt-4 flex justify-center gap-2">
+              <Link to="/inversor/perfil"><Button variant="outline" size="sm">{t("home.completeProfileCta")}</Button></Link>
+            </div>
+          </Card>
+        )}
+        {items.map(({ project, match }) => {
           const company = companies?.[project.company_id];
           return (
             <Card key={project.id} className="overflow-hidden flex flex-col">

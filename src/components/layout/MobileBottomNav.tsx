@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, Heart, MessageCircle, User } from "lucide-react";
+import { Home, Heart, MessageCircle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useMyRole } from "@/hooks/useAuth";
 
@@ -9,19 +9,16 @@ export function MobileBottomNav() {
   const { location } = useRouterState();
 
   if (!user) return null;
-  // Hide while role is still being chosen
   if (!role) return null;
 
   const isCompany = role === "empresa";
   const homeTo = isCompany ? "/empresa" : "/inversor";
   const favTo = isCompany ? "/empresa" : "/inversor/favoritos";
-  const profileTo = isCompany ? "/empresa/perfil" : "/inversor/perfil";
 
   const items: Array<{ to: string; icon: typeof Home; label: string; match: (p: string) => boolean; hide?: boolean }> = [
     { to: homeTo, icon: Home, label: t("nav.home"), match: (p) => p === homeTo },
     { to: favTo, icon: Heart, label: t("nav.favorites"), match: (p) => p.startsWith("/inversor/favoritos"), hide: isCompany },
     { to: "/mensajes", icon: MessageCircle, label: t("nav.messages"), match: (p) => p.startsWith("/mensajes") },
-    { to: profileTo, icon: User, label: t("nav.profile"), match: (p) => p.endsWith("/perfil") },
   ];
 
   const visible = items.filter((i) => !i.hide);

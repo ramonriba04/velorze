@@ -160,7 +160,23 @@
   "messages": {
     "empty": "Aún no tienes conversaciones.",
     "writePlaceholder": "Escribe un mensaje...",
-    "title": "Mensajes"
+    "title": "Mensajes",
+    "pending": "Pendientes",
+    "accepted": "Aceptadas",
+    "chats": "Conversaciones",
+    "pendingEmpty": "No tienes solicitudes pendientes.",
+    "acceptedEmpty": "Aún no tienes contactos aceptados.",
+    "selectHint": "Selecciona una conversación"
+  },
+  "home": {
+    "welcomeBack": "Bienvenido de nuevo",
+    "profileComplete": "Perfil completado",
+    "noRecommendations": "Aún no hay recomendaciones",
+    "noRecommendationsSub": "Completa tu perfil para que el motor de matching pueda sugerirte oportunidades relevantes.",
+    "completeProfileCta": "Completar perfil",
+    "firstProjectTitle": "Publica tu primer proyecto",
+    "firstProjectSub": "Comparte tu oportunidad con inversores compatibles en minutos.",
+    "pendingRequests": "Pendientes"
   },
   "requests": {
     "title": "Solicitudes de contacto",
