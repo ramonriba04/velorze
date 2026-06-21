@@ -21,6 +21,12 @@
     "admin": "Admin",
     "logout": "Log out"
   },
+  "logout": {
+    "title": "Log out?",
+    "description": "Are you sure you want to log out?",
+    "confirm": "Log out",
+    "cancel": "Cancel"
+  },
   "landing": {
     "heroTitle": "Connect your project with the right investors",
     "heroSubtitle": "Capora is an intelligent marketplace that helps companies and investors discover relevant opportunities through compatibility matching.",
