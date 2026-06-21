@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "@tanstack/react-router";
 import { Globe, LogOut } from "lucide-react";
@@ -9,6 +10,10 @@ import { EntityAvatar } from "@/components/media/EntityAvatar";
 import {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog, DialogContent, DialogDescription, DialogFooter,
+  DialogHeader, DialogTitle, DialogTrigger,
+} from "@/components/ui/dialog";
 
 export function LanguageSwitcher() {
   const { i18n } = useTranslation();
@@ -64,7 +69,9 @@ export function Header() {
   const { t } = useTranslation();
   const { user, role } = useMyRole();
 
+  const [open, setOpen] = useState(false);
   const signOut = async () => {
+    setOpen(false);
     await supabase.auth.signOut();
     window.location.href = "/";
   };
@@ -86,10 +93,28 @@ export function Header() {
                 </Link>
               )}
               <HeaderProfile />
-              <Button variant="ghost" size="sm" onClick={signOut} className="gap-1" aria-label={t("nav.logout")}>
-                <LogOut className="h-4 w-4" />
-                <span className="hidden sm:inline">{t("nav.logout")}</span>
-              </Button>
+              <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="ghost" size="sm" className="gap-1" aria-label={t("nav.logout")}>
+                    <LogOut className="h-4 w-4" />
+                    <span className="hidden sm:inline">{t("nav.logout")}</span>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>{t("logout.title")}</DialogTitle>
+                    <DialogDescription>{t("logout.description")}</DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setOpen(false)}>
+                      {t("logout.cancel")}
+                    </Button>
+                    <Button variant="destructive" onClick={signOut}>
+                      {t("logout.confirm")}
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </>
           ) : (
             <>

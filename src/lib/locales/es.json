@@ -21,6 +21,12 @@
     "admin": "Admin",
     "logout": "Cerrar sesión"
   },
+  "logout": {
+    "title": "¿Cerrar sesión?",
+    "description": "¿Seguro que quieres cerrar sesión?",
+    "confirm": "Cerrar sesión",
+    "cancel": "Cancelar"
+  },
   "landing": {
     "heroTitle": "Conecta tu proyecto con los inversores adecuados",
     "heroSubtitle": "Capora es un marketplace inteligente que ayuda a empresas e inversores a descubrir oportunidades relevantes mediante matching de compatibilidad.",
