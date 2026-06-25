@@ -126,10 +126,10 @@ function Settings() {
               <DialogDescription>{t("settings.deleteConfirm")}</DialogDescription>
             </DialogHeader>
             <div className="space-y-2">
-              <Label htmlFor="delete-confirm">{t("settings.typeToConfirm", { word: "ELIMINAR" })}</Label>
+              <Label htmlFor="delete-confirm">{t("settings.typeToConfirm", { word: t("settings.deleteWord") })}</Label>
               <Input
                 id="delete-confirm" value={deleteText}
-                onChange={(e) => setDeleteText(e.target.value)} placeholder="ELIMINAR"
+                onChange={(e) => setDeleteText(e.target.value)} placeholder={t("settings.deleteWord")}
               />
             </div>
             <DialogFooter>
@@ -139,7 +139,7 @@ function Settings() {
               <Button
                 variant="destructive"
                 onClick={onDelete}
-                disabled={deleting || deleteText !== "ELIMINAR"}
+                disabled={deleting || deleteText !== t("settings.deleteWord")}
               >
                 {deleting ? t("common.loading") : t("settings.deleteAccount")}
               </Button>
