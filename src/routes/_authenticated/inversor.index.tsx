@@ -19,10 +19,12 @@ export const Route = createFileRoute("/_authenticated/inversor/")({
 });
 
 function scoreColor(s: number) {
-  if (s >= 75) return "bg-success text-success-foreground";
+  if (s >= 90) return "bg-success text-success-foreground";
+  if (s >= 70) return "bg-primary text-primary-foreground";
   if (s >= 50) return "bg-warning text-warning-foreground";
   return "bg-muted text-muted-foreground";
 }
+
 
 function InvestorDashboard() {
   const { t } = useTranslation();
