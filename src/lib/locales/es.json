@@ -128,6 +128,44 @@
     "typeToConfirm": "Escribe {{word}} para confirmar",
     "deleteWord": "ELIMINAR"
   },
+  "onboarding": {
+    "badge": "Primeros pasos",
+    "title": "Bienvenido a Capora",
+    "sub": "Completa estos pasos para sacar el máximo partido a la plataforma.",
+    "progress": "Tu progreso",
+    "stepLabel": "Paso {{n}}",
+    "skip": "Omitir por ahora",
+    "continue": "Continuar",
+    "finish": "Ir al panel",
+    "company": {
+      "s1Title": "Completa el perfil de tu empresa",
+      "s1Desc": "Nombre legal, país y una descripción breve.",
+      "s1Cta": "Editar perfil",
+      "s2Title": "Sube tu logo",
+      "s2Desc": "Un logo cuadrado genera confianza con los inversores.",
+      "s2Cta": "Añadir logo",
+      "s3Title": "Crea tu primer proyecto",
+      "s3Desc": "Define la oportunidad, el ticket y los detalles clave.",
+      "s3Cta": "Nuevo proyecto",
+      "s4Title": "Publícalo",
+      "s4Desc": "Cuando esté listo, publícalo para llegar a inversores compatibles.",
+      "s4Cta": "Ver mis proyectos"
+    },
+    "investor": {
+      "s1Title": "Completa tu perfil",
+      "s1Desc": "Cuéntanos quién eres y qué buscas.",
+      "s1Cta": "Editar perfil",
+      "s2Title": "Selecciona tus intereses",
+      "s2Desc": "Sectores y países en los que quieres invertir.",
+      "s2Cta": "Definir intereses",
+      "s3Title": "Define tus preferencias",
+      "s3Desc": "Tipos de inversión y rango de ticket.",
+      "s3Cta": "Configurar",
+      "s4Title": "Explora oportunidades",
+      "s4Desc": "Descubre proyectos recomendados según tu perfil.",
+      "s4Cta": "Explorar"
+    }
+  },
   "empty": {
     "projects": "Aún no hay oportunidades publicadas.",
     "projectsSub": "Vuelve pronto o completa tu perfil para recibir recomendaciones.",
