@@ -20,6 +20,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProyectosIdRouteImport } from './routes/proyectos.$id'
 import { Route as AuthRestablecerRouteImport } from './routes/auth.restablecer'
 import { Route as AuthRecuperarRouteImport } from './routes/auth.recuperar'
+import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedMensajesRouteImport } from './routes/_authenticated/mensajes'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as AuthenticatedAjustesRouteImport } from './routes/_authenticated/ajustes'
@@ -88,6 +89,11 @@ const AuthRecuperarRoute = AuthRecuperarRouteImport.update({
   id: '/recuperar',
   path: '/recuperar',
   getParentRoute: () => AuthRoute,
+} as any)
+const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedMensajesRoute = AuthenticatedMensajesRouteImport.update({
   id: '/mensajes',
@@ -182,6 +188,7 @@ export interface FileRoutesByFullPath {
   '/ajustes': typeof AuthenticatedAjustesRoute
   '/app': typeof AuthenticatedAppRoute
   '/mensajes': typeof AuthenticatedMensajesRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
   '/auth/recuperar': typeof AuthRecuperarRoute
   '/auth/restablecer': typeof AuthRestablecerRoute
   '/proyectos/$id': typeof ProyectosIdRoute
@@ -208,6 +215,7 @@ export interface FileRoutesByTo {
   '/ajustes': typeof AuthenticatedAjustesRoute
   '/app': typeof AuthenticatedAppRoute
   '/mensajes': typeof AuthenticatedMensajesRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
   '/auth/recuperar': typeof AuthRecuperarRoute
   '/auth/restablecer': typeof AuthRestablecerRoute
   '/proyectos/$id': typeof ProyectosIdRoute
@@ -236,6 +244,7 @@ export interface FileRoutesById {
   '/_authenticated/ajustes': typeof AuthenticatedAjustesRoute
   '/_authenticated/app': typeof AuthenticatedAppRoute
   '/_authenticated/mensajes': typeof AuthenticatedMensajesRoute
+  '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/auth/recuperar': typeof AuthRecuperarRoute
   '/auth/restablecer': typeof AuthRestablecerRoute
   '/proyectos/$id': typeof ProyectosIdRoute
@@ -264,6 +273,7 @@ export interface FileRouteTypes {
     | '/ajustes'
     | '/app'
     | '/mensajes'
+    | '/onboarding'
     | '/auth/recuperar'
     | '/auth/restablecer'
     | '/proyectos/$id'
@@ -290,6 +300,7 @@ export interface FileRouteTypes {
     | '/ajustes'
     | '/app'
     | '/mensajes'
+    | '/onboarding'
     | '/auth/recuperar'
     | '/auth/restablecer'
     | '/proyectos/$id'
@@ -317,6 +328,7 @@ export interface FileRouteTypes {
     | '/_authenticated/ajustes'
     | '/_authenticated/app'
     | '/_authenticated/mensajes'
+    | '/_authenticated/onboarding'
     | '/auth/recuperar'
     | '/auth/restablecer'
     | '/proyectos/$id'
@@ -422,6 +434,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/recuperar'
       preLoaderRoute: typeof AuthRecuperarRouteImport
       parentRoute: typeof AuthRoute
+    }
+    '/_authenticated/onboarding': {
+      id: '/_authenticated/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/mensajes': {
       id: '/_authenticated/mensajes'
@@ -529,6 +548,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAjustesRoute: typeof AuthenticatedAjustesRoute
   AuthenticatedAppRoute: typeof AuthenticatedAppRoute
   AuthenticatedMensajesRoute: typeof AuthenticatedMensajesRoute
+  AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedEmpresaNuevoRoute: typeof AuthenticatedEmpresaNuevoRoute
   AuthenticatedEmpresaPerfilRoute: typeof AuthenticatedEmpresaPerfilRoute
   AuthenticatedEmpresaSolicitudesRoute: typeof AuthenticatedEmpresaSolicitudesRoute
@@ -546,6 +566,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAjustesRoute: AuthenticatedAjustesRoute,
   AuthenticatedAppRoute: AuthenticatedAppRoute,
   AuthenticatedMensajesRoute: AuthenticatedMensajesRoute,
+  AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedEmpresaNuevoRoute: AuthenticatedEmpresaNuevoRoute,
   AuthenticatedEmpresaPerfilRoute: AuthenticatedEmpresaPerfilRoute,
   AuthenticatedEmpresaSolicitudesRoute: AuthenticatedEmpresaSolicitudesRoute,

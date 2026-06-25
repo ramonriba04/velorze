@@ -2,10 +2,11 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useMyRole } from "@/hooks/useAuth";
 import { useServerFn } from "@tanstack/react-start";
+import { useQuery } from "@tanstack/react-query";
 import { assignMyRole } from "@/lib/profiles.functions";
+import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Building2, TrendingUp } from "lucide-react";
 import { useState } from "react";
 
@@ -14,11 +15,21 @@ export const Route = createFileRoute("/_authenticated/app")({
 });
 
 function AppHome() {
-  const { role, loading } = useMyRole();
+  const { user, role, loading } = useMyRole();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const assign = useServerFn(assignMyRole);
   const [picking, setPicking] = useState(false);
+
+  const { data: profile, isLoading: loadingProfile } = useQuery({
+    queryKey: ["profile_onboarding", user?.id],
+    enabled: !!user && !!role && role !== "admin",
+    queryFn: async () => {
+      const { data } = await supabase.from("profiles")
+        .select("onboarding_completed_at").eq("id", user!.id).maybeSingle();
+      return data;
+    },
+  });
 
   useEffect(() => {
     if (loading || picking) return;
@@ -31,10 +42,17 @@ function AppHome() {
       });
       return;
     }
-    if (role === "empresa") navigate({ to: "/empresa" });
-    else if (role === "inversor") navigate({ to: "/inversor" });
-    else if (role === "admin") navigate({ to: "/admin" });
-  }, [role, loading, navigate, picking, assign]);
+    if (role === "admin") { navigate({ to: "/admin" }); return; }
+    if (role === "empresa" || role === "inversor") {
+      if (loadingProfile) return;
+      if (!profile?.onboarding_completed_at) {
+        navigate({ to: "/onboarding" });
+        return;
+      }
+      navigate({ to: role === "empresa" ? "/empresa" : "/inversor" });
+    }
+  }, [role, loading, navigate, picking, assign, profile, loadingProfile]);
+
 
   if (loading) return <div className="p-10 text-center text-muted-foreground">{t("common.loading")}</div>;
 
