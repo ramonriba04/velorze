@@ -102,6 +102,11 @@ export function Header() {
                   {t("nav.admin")}
                 </Link>
               )}
+              {role === "inversor" && (
+                <Link to="/proyectos" className="hidden sm:inline-flex px-3 py-2 text-sm text-muted-foreground hover:text-foreground">
+                  {t("nav.explore")}
+                </Link>
+              )}
               <NotificationsBell />
               <HeaderProfile />
               <Link to="/ajustes" aria-label={t("nav.settings")} className="hidden sm:inline-flex">
