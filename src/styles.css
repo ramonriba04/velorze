@@ -47,41 +47,42 @@
 
 :root {
   --radius: 0.75rem;
-  /* Capora — Fintech profesional, azul confianza + acento ámbar */
-  --background: oklch(0.99 0.005 240);
-  --foreground: oklch(0.18 0.04 250);
+  /* Capora — Premium fintech: blue confianza + ámbar acento */
+  --background: oklch(0.984 0.003 248);   /* #F8FAFC */
+  --foreground: oklch(0.205 0.04 265);    /* #0F172A */
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.04 250);
+  --card-foreground: oklch(0.205 0.04 265);
 
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.04 250);
+  --popover-foreground: oklch(0.205 0.04 265);
 
-  --primary: oklch(0.42 0.13 255);
+  --primary: oklch(0.546 0.214 263);          /* #2563EB */
   --primary-foreground: oklch(0.99 0.005 240);
-  --primary-glow: oklch(0.58 0.16 250);
+  --primary-glow: oklch(0.62 0.2 263);
 
   --secondary: oklch(0.96 0.012 245);
   --secondary-foreground: oklch(0.25 0.05 250);
 
-  --muted: oklch(0.96 0.008 240);
+  --muted: oklch(0.97 0.006 248);
   --muted-foreground: oklch(0.5 0.03 250);
 
-  --accent: oklch(0.78 0.14 75);
+  --accent: oklch(0.769 0.188 70);            /* #F59E0B */
   --accent-foreground: oklch(0.2 0.06 60);
 
   --destructive: oklch(0.6 0.22 27);
   --destructive-foreground: oklch(0.99 0.005 240);
 
-  --success: oklch(0.65 0.15 155);
+  --success: oklch(0.723 0.19 149);           /* #22C55E */
   --success-foreground: oklch(0.99 0.005 240);
 
-  --warning: oklch(0.78 0.14 75);
+  --warning: oklch(0.769 0.188 70);           /* #F59E0B */
   --warning-foreground: oklch(0.2 0.06 60);
 
-  --border: oklch(0.92 0.012 245);
-  --input: oklch(0.92 0.012 245);
-  --ring: oklch(0.42 0.13 255);
+  --border: oklch(0.929 0.013 256);           /* #E2E8F0 */
+  --input: oklch(0.929 0.013 256);
+  --ring: oklch(0.546 0.214 263);
+
 
   --sidebar: oklch(0.98 0.008 245);
   --sidebar-foreground: oklch(0.2 0.04 250);
