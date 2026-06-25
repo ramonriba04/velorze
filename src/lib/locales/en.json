@@ -19,7 +19,8 @@
     "projects": "Projects",
     "newProject": "New project",
     "admin": "Admin",
-    "logout": "Log out"
+    "logout": "Log out",
+    "settings": "Settings"
   },
   "logout": {
     "title": "Log out?",
@@ -110,6 +111,21 @@
   "contact": {
     "title": "Contact",
     "body": "Questions, suggestions or need help? Write to us and we'll get back to you as soon as possible."
+  },
+  "settings": {
+    "title": "Settings",
+    "sub": "Manage your account and preferences.",
+    "account": "Account",
+    "emailHint": "To change your email, contact support.",
+    "language": "Language",
+    "password": "Change password",
+    "passwordUpdated": "Password updated",
+    "dangerZone": "Danger zone",
+    "deleteAccount": "Delete account",
+    "deleteDesc": "Deleting your account will permanently erase all your data.",
+    "deleteTitle": "Delete your account?",
+    "deleteConfirm": "This action is irreversible. Your profile, projects, favorites and conversations will be removed.",
+    "typeToConfirm": "Type {{word}} to confirm"
   },
   "empty": {
     "projects": "No opportunities published yet.",
