@@ -118,9 +118,10 @@ export function Header() {
                     <Button variant="outline" onClick={() => setOpen(false)}>
                       {t("logout.cancel")}
                     </Button>
-                    <Button variant="destructive" onClick={signOut}>
+                    <Button onClick={signOut}>
                       {t("logout.confirm")}
                     </Button>
+
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
