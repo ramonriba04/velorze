@@ -128,6 +128,18 @@
     "typeToConfirm": "Type {{word}} to confirm",
     "deleteWord": "DELETE"
   },
+  "discover": {
+    "title": "Discover projects",
+    "sub": "Filter by sector, country, stage or ticket to find opportunities.",
+    "searchPlaceholder": "Search by title or description...",
+    "anySector": "Any sector",
+    "anyCountry": "Any country",
+    "any": "Any",
+    "activeFilters": "{{count}} active filters",
+    "clearAll": "Clear filters",
+    "emptyTitle": "No results",
+    "emptySub": "Try broadening or removing some filters."
+  },
   "notifications": {
     "title": "Notifications",
     "types": {
