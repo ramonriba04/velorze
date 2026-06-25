@@ -25,6 +25,7 @@ import { Route as AuthenticatedMensajesRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as AuthenticatedAjustesRouteImport } from './routes/_authenticated/ajustes'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedProyectosIndexRouteImport } from './routes/_authenticated/proyectos.index'
 import { Route as AuthenticatedInversorIndexRouteImport } from './routes/_authenticated/inversor.index'
 import { Route as AuthenticatedEmpresaIndexRouteImport } from './routes/_authenticated/empresa.index'
 import { Route as AuthenticatedInversorSolicitudesRouteImport } from './routes/_authenticated/inversor.solicitudes'
@@ -115,6 +116,12 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedProyectosIndexRoute =
+  AuthenticatedProyectosIndexRouteImport.update({
+    id: '/proyectos/',
+    path: '/proyectos/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedInversorIndexRoute =
   AuthenticatedInversorIndexRouteImport.update({
     id: '/inversor/',
@@ -200,6 +207,7 @@ export interface FileRoutesByFullPath {
   '/inversor/solicitudes': typeof AuthenticatedInversorSolicitudesRoute
   '/empresa/': typeof AuthenticatedEmpresaIndexRoute
   '/inversor/': typeof AuthenticatedInversorIndexRoute
+  '/proyectos/': typeof AuthenticatedProyectosIndexRoute
   '/empresa/$id/editar': typeof AuthenticatedEmpresaIdEditarRoute
   '/empresa/$id/inversores': typeof AuthenticatedEmpresaIdInversoresRoute
 }
@@ -227,6 +235,7 @@ export interface FileRoutesByTo {
   '/inversor/solicitudes': typeof AuthenticatedInversorSolicitudesRoute
   '/empresa': typeof AuthenticatedEmpresaIndexRoute
   '/inversor': typeof AuthenticatedInversorIndexRoute
+  '/proyectos': typeof AuthenticatedProyectosIndexRoute
   '/empresa/$id/editar': typeof AuthenticatedEmpresaIdEditarRoute
   '/empresa/$id/inversores': typeof AuthenticatedEmpresaIdInversoresRoute
 }
@@ -256,6 +265,7 @@ export interface FileRoutesById {
   '/_authenticated/inversor/solicitudes': typeof AuthenticatedInversorSolicitudesRoute
   '/_authenticated/empresa/': typeof AuthenticatedEmpresaIndexRoute
   '/_authenticated/inversor/': typeof AuthenticatedInversorIndexRoute
+  '/_authenticated/proyectos/': typeof AuthenticatedProyectosIndexRoute
   '/_authenticated/empresa/$id/editar': typeof AuthenticatedEmpresaIdEditarRoute
   '/_authenticated/empresa/$id/inversores': typeof AuthenticatedEmpresaIdInversoresRoute
 }
@@ -285,6 +295,7 @@ export interface FileRouteTypes {
     | '/inversor/solicitudes'
     | '/empresa/'
     | '/inversor/'
+    | '/proyectos/'
     | '/empresa/$id/editar'
     | '/empresa/$id/inversores'
   fileRoutesByTo: FileRoutesByTo
@@ -312,6 +323,7 @@ export interface FileRouteTypes {
     | '/inversor/solicitudes'
     | '/empresa'
     | '/inversor'
+    | '/proyectos'
     | '/empresa/$id/editar'
     | '/empresa/$id/inversores'
   id:
@@ -340,6 +352,7 @@ export interface FileRouteTypes {
     | '/_authenticated/inversor/solicitudes'
     | '/_authenticated/empresa/'
     | '/_authenticated/inversor/'
+    | '/_authenticated/proyectos/'
     | '/_authenticated/empresa/$id/editar'
     | '/_authenticated/empresa/$id/inversores'
   fileRoutesById: FileRoutesById
@@ -470,6 +483,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/proyectos/': {
+      id: '/_authenticated/proyectos/'
+      path: '/proyectos'
+      fullPath: '/proyectos/'
+      preLoaderRoute: typeof AuthenticatedProyectosIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/inversor/': {
       id: '/_authenticated/inversor/'
       path: '/inversor'
@@ -557,6 +577,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedInversorSolicitudesRoute: typeof AuthenticatedInversorSolicitudesRoute
   AuthenticatedEmpresaIndexRoute: typeof AuthenticatedEmpresaIndexRoute
   AuthenticatedInversorIndexRoute: typeof AuthenticatedInversorIndexRoute
+  AuthenticatedProyectosIndexRoute: typeof AuthenticatedProyectosIndexRoute
   AuthenticatedEmpresaIdEditarRoute: typeof AuthenticatedEmpresaIdEditarRoute
   AuthenticatedEmpresaIdInversoresRoute: typeof AuthenticatedEmpresaIdInversoresRoute
 }
@@ -575,6 +596,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedInversorSolicitudesRoute: AuthenticatedInversorSolicitudesRoute,
   AuthenticatedEmpresaIndexRoute: AuthenticatedEmpresaIndexRoute,
   AuthenticatedInversorIndexRoute: AuthenticatedInversorIndexRoute,
+  AuthenticatedProyectosIndexRoute: AuthenticatedProyectosIndexRoute,
   AuthenticatedEmpresaIdEditarRoute: AuthenticatedEmpresaIdEditarRoute,
   AuthenticatedEmpresaIdInversoresRoute: AuthenticatedEmpresaIdInversoresRoute,
 }

@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -24,7 +24,7 @@ const searchSchema = z.object({
   max: z.coerce.number().int().nonnegative().optional().catch(undefined),
 });
 
-export const Route = createFileRoute("/_authenticated/proyectos")({
+export const Route = createFileRoute("/_authenticated/proyectos/")({
   validateSearch: searchSchema,
   component: ProjectsDiscovery,
 });
@@ -37,17 +37,21 @@ function ProjectsDiscovery() {
   const search = Route.useSearch();
   const navigate = useNavigate();
 
-  const setParam = (patch: Record<string, any>) =>
-    navigate({ to: "/proyectos", search: (prev) => {
-      const next: Record<string, any> = { ...prev, ...patch };
-      Object.keys(next).forEach((k) => {
-        const v = next[k];
-        if (v === "" || v === null || v === undefined || (typeof v === "string" && v === "all")) {
-          delete next[k];
-        }
-      });
-      return next;
-    }, replace: true });
+  const setParam = (patch: Record<string, unknown>) =>
+    navigate({
+      to: "/proyectos",
+      search: (prev: Record<string, unknown>) => {
+        const next: Record<string, unknown> = { ...prev, ...patch };
+        Object.keys(next).forEach((k) => {
+          const v = next[k];
+          if (v === "" || v === null || v === undefined || (typeof v === "string" && v === "all")) {
+            delete next[k];
+          }
+        });
+        return next;
+      },
+      replace: true,
+    });
 
   const { data: items, isLoading } = useQuery({
     queryKey: ["projects_discovery", search],
@@ -175,36 +179,30 @@ function ProjectsDiscovery() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((p: any) => (
-            <Link
-              key={p.id}
-              to="/proyectos/$id"
-              params={{ id: p.id }}
-              className="group"
-            >
-              <Card className="h-full overflow-hidden transition hover:shadow-elegant">
-                {p.cover_url ? (
-                  <div className="aspect-[16/9] w-full bg-muted">
-                    <img src={p.cover_url} alt={p.title} className="h-full w-full object-cover" />
-                  </div>
-                ) : (
-                  <div className="aspect-[16/9] w-full gradient-primary opacity-80" />
-                )}
-                <div className="space-y-2 p-4">
-                  <h3 className="font-semibold leading-tight group-hover:text-primary">{p.title}</h3>
-                  <p className="line-clamp-2 text-sm text-muted-foreground">{p.description}</p>
-                  <div className="flex flex-wrap items-center gap-2 pt-1 text-xs text-muted-foreground">
-                    <Badge variant="secondary">{p.sector}</Badge>
-                    <Badge variant="outline">{t(`stage.${p.stage}`)}</Badge>
-                    <span className="inline-flex items-center gap-1">
-                      <MapPin className="h-3 w-3" /> {p.country}
-                    </span>
-                  </div>
+            <Card key={p.id} className="h-full overflow-hidden">
+              {p.cover_url ? (
+                <div className="aspect-[16/9] w-full bg-muted">
+                  <img src={p.cover_url} alt={p.title} className="h-full w-full object-cover" />
                 </div>
-              </Card>
-            </Link>
+              ) : (
+                <div className="aspect-[16/9] w-full gradient-primary opacity-80" />
+              )}
+              <div className="space-y-2 p-4">
+                <h3 className="font-semibold leading-tight">{p.title}</h3>
+                <p className="line-clamp-2 text-sm text-muted-foreground">{p.description}</p>
+                <div className="flex flex-wrap items-center gap-2 pt-1 text-xs text-muted-foreground">
+                  <Badge variant="secondary">{p.sector}</Badge>
+                  <Badge variant="outline">{t(`stage.${p.stage}`)}</Badge>
+                  <span className="inline-flex items-center gap-1">
+                    <MapPin className="h-3 w-3" /> {p.country}
+                  </span>
+                </div>
+              </div>
+            </Card>
           ))}
         </div>
       )}
     </div>
   );
 }
+
