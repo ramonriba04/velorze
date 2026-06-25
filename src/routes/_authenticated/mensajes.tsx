@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Inbox, Handshake, MessagesSquare } from "lucide-react";
+import { EmptyState } from "@/components/ui/empty-state";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/mensajes")({
@@ -70,7 +71,7 @@ function Messages() {
 
         <TabsContent value="pending" className="mt-4 space-y-3">
           {pending.length === 0 && (
-            <EmptyBlock icon={<Inbox className="h-8 w-8" />} title={t("messages.pendingEmpty")} />
+            <EmptyState icon={<Inbox />} title={t("messages.pendingEmpty")} description={t("empty.messagesSub")} />
           )}
           {pending.map((r: any) => (
             <Card key={r.id} className="p-4">
@@ -95,7 +96,7 @@ function Messages() {
 
         <TabsContent value="accepted" className="mt-4 space-y-3">
           {accepted.length === 0 && (
-            <EmptyBlock icon={<Handshake className="h-8 w-8" />} title={t("messages.acceptedEmpty")} />
+            <EmptyState icon={<Handshake />} title={t("messages.acceptedEmpty")} description={t("empty.messagesSub")} />
           )}
           {accepted.map((r: any) => (
             <Card key={r.id} className="p-4 flex items-center justify-between">
@@ -116,14 +117,6 @@ function Messages() {
   );
 }
 
-function EmptyBlock({ icon, title }: { icon: React.ReactNode; title: string }) {
-  return (
-    <Card className="p-10 text-center border-dashed">
-      <div className="mx-auto text-muted-foreground">{icon}</div>
-      <p className="mt-3 text-sm text-muted-foreground">{title}</p>
-    </Card>
-  );
-}
 
 function ChatsPanel({ userId }: { userId?: string }) {
   const { t } = useTranslation();
@@ -173,7 +166,7 @@ function ChatsPanel({ userId }: { userId?: string }) {
   };
 
   if (!convs || convs.length === 0) {
-    return <EmptyBlock icon={<MessagesSquare className="h-8 w-8" />} title={t("messages.empty")} />;
+    return <EmptyState icon={<MessagesSquare />} title={t("empty.messages")} description={t("empty.messagesSub")} />;
   }
 
   return (
