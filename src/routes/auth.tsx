@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { z } from "zod";
@@ -177,6 +177,11 @@ function AuthPage() {
             >
               {mode === "login" ? t("auth.switchToSignup") : t("auth.switchToLogin")}
             </button>
+            {mode === "login" && (
+              <Link to="/auth/recuperar" className="mt-2 block text-center text-xs text-muted-foreground hover:text-foreground">
+                {t("auth.forgotPassword")}
+              </Link>
+            )}
           </Card>
           <p className="mt-4 text-center text-xs text-muted-foreground">{t("disclaimer")}</p>
         </div>
