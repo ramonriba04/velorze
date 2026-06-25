@@ -125,7 +125,8 @@
     "deleteDesc": "Deleting your account will permanently erase all your data.",
     "deleteTitle": "Delete your account?",
     "deleteConfirm": "This action is irreversible. Your profile, projects, favorites and conversations will be removed.",
-    "typeToConfirm": "Type {{word}} to confirm"
+    "typeToConfirm": "Type {{word}} to confirm",
+    "deleteWord": "DELETE"
   },
   "empty": {
     "projects": "No opportunities published yet.",
