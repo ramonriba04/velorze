@@ -19,7 +19,8 @@
     "projects": "Proyectos",
     "newProject": "Nuevo proyecto",
     "admin": "Admin",
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "settings": "Ajustes"
   },
   "logout": {
     "title": "¿Cerrar sesión?",
@@ -110,6 +111,22 @@
   "contact": {
     "title": "Contacto",
     "body": "¿Tienes preguntas, sugerencias o necesitas ayuda? Escríbenos y te responderemos lo antes posible."
+  },
+  "settings": {
+    "title": "Ajustes",
+    "sub": "Gestiona tu cuenta y preferencias.",
+    "account": "Cuenta",
+    "emailHint": "Para cambiar tu correo, contacta con soporte.",
+    "language": "Idioma",
+    "password": "Cambiar contraseña",
+    "passwordUpdated": "Contraseña actualizada",
+    "dangerZone": "Zona de peligro",
+    "deleteAccount": "Eliminar cuenta",
+    "deleteDesc": "Eliminar tu cuenta borrará todos tus datos de forma permanente.",
+    "deleteTitle": "¿Eliminar tu cuenta?",
+    "deleteConfirm": "Esta acción es irreversible. Se eliminarán tu perfil, proyectos, favoritos y conversaciones.",
+    "typeToConfirm": "Escribe {{word}} para confirmar",
+    "deleteWord": "ELIMINAR"
   },
   "empty": {
     "projects": "Aún no hay oportunidades publicadas.",

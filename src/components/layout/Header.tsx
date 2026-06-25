@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "@tanstack/react-router";
-import { Globe, LogOut } from "lucide-react";
+import { Globe, LogOut, Settings } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useMyRole } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -102,6 +102,12 @@ export function Header() {
                 </Link>
               )}
               <HeaderProfile />
+              <Link to="/ajustes" aria-label={t("nav.settings")} className="hidden sm:inline-flex">
+                <Button variant="ghost" size="sm" className="gap-1">
+                  <Settings className="h-4 w-4" />
+                  <span className="hidden md:inline">{t("nav.settings")}</span>
+                </Button>
+              </Link>
               <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
                   <Button variant="ghost" size="sm" className="gap-1" aria-label={t("nav.logout")}>

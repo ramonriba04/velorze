@@ -22,6 +22,7 @@ import { Route as AuthRestablecerRouteImport } from './routes/auth.restablecer'
 import { Route as AuthRecuperarRouteImport } from './routes/auth.recuperar'
 import { Route as AuthenticatedMensajesRouteImport } from './routes/_authenticated/mensajes'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
+import { Route as AuthenticatedAjustesRouteImport } from './routes/_authenticated/ajustes'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedInversorIndexRouteImport } from './routes/_authenticated/inversor.index'
 import { Route as AuthenticatedEmpresaIndexRouteImport } from './routes/_authenticated/empresa.index'
@@ -96,6 +97,11 @@ const AuthenticatedMensajesRoute = AuthenticatedMensajesRouteImport.update({
 const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
   id: '/app',
   path: '/app',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAjustesRoute = AuthenticatedAjustesRouteImport.update({
+  id: '/ajustes',
+  path: '/ajustes',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
@@ -173,6 +179,7 @@ export interface FileRoutesByFullPath {
   '/privacidad': typeof PrivacidadRoute
   '/terminos': typeof TerminosRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/ajustes': typeof AuthenticatedAjustesRoute
   '/app': typeof AuthenticatedAppRoute
   '/mensajes': typeof AuthenticatedMensajesRoute
   '/auth/recuperar': typeof AuthRecuperarRoute
@@ -198,6 +205,7 @@ export interface FileRoutesByTo {
   '/privacidad': typeof PrivacidadRoute
   '/terminos': typeof TerminosRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/ajustes': typeof AuthenticatedAjustesRoute
   '/app': typeof AuthenticatedAppRoute
   '/mensajes': typeof AuthenticatedMensajesRoute
   '/auth/recuperar': typeof AuthRecuperarRoute
@@ -225,6 +233,7 @@ export interface FileRoutesById {
   '/privacidad': typeof PrivacidadRoute
   '/terminos': typeof TerminosRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/ajustes': typeof AuthenticatedAjustesRoute
   '/_authenticated/app': typeof AuthenticatedAppRoute
   '/_authenticated/mensajes': typeof AuthenticatedMensajesRoute
   '/auth/recuperar': typeof AuthRecuperarRoute
@@ -252,6 +261,7 @@ export interface FileRouteTypes {
     | '/privacidad'
     | '/terminos'
     | '/admin'
+    | '/ajustes'
     | '/app'
     | '/mensajes'
     | '/auth/recuperar'
@@ -277,6 +287,7 @@ export interface FileRouteTypes {
     | '/privacidad'
     | '/terminos'
     | '/admin'
+    | '/ajustes'
     | '/app'
     | '/mensajes'
     | '/auth/recuperar'
@@ -303,6 +314,7 @@ export interface FileRouteTypes {
     | '/privacidad'
     | '/terminos'
     | '/_authenticated/admin'
+    | '/_authenticated/ajustes'
     | '/_authenticated/app'
     | '/_authenticated/mensajes'
     | '/auth/recuperar'
@@ -425,6 +437,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/ajustes': {
+      id: '/_authenticated/ajustes'
+      path: '/ajustes'
+      fullPath: '/ajustes'
+      preLoaderRoute: typeof AuthenticatedAjustesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
@@ -507,6 +526,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedAjustesRoute: typeof AuthenticatedAjustesRoute
   AuthenticatedAppRoute: typeof AuthenticatedAppRoute
   AuthenticatedMensajesRoute: typeof AuthenticatedMensajesRoute
   AuthenticatedEmpresaNuevoRoute: typeof AuthenticatedEmpresaNuevoRoute
@@ -523,6 +543,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedAjustesRoute: AuthenticatedAjustesRoute,
   AuthenticatedAppRoute: AuthenticatedAppRoute,
   AuthenticatedMensajesRoute: AuthenticatedMensajesRoute,
   AuthenticatedEmpresaNuevoRoute: AuthenticatedEmpresaNuevoRoute,
