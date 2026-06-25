@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TerminosRouteImport } from './routes/terminos'
+import { Route as PrivacidadRouteImport } from './routes/privacidad'
 import { Route as LegalRouteImport } from './routes/legal'
+import { Route as CookiesRouteImport } from './routes/cookies'
+import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProyectosIdRouteImport } from './routes/proyectos.$id'
+import { Route as AuthRestablecerRouteImport } from './routes/auth.restablecer'
+import { Route as AuthRecuperarRouteImport } from './routes/auth.recuperar'
 import { Route as AuthenticatedMensajesRouteImport } from './routes/_authenticated/mensajes'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
@@ -28,9 +34,29 @@ import { Route as AuthenticatedEmpresaNuevoRouteImport } from './routes/_authent
 import { Route as AuthenticatedEmpresaIdInversoresRouteImport } from './routes/_authenticated/empresa.$id.inversores'
 import { Route as AuthenticatedEmpresaIdEditarRouteImport } from './routes/_authenticated/empresa.$id.editar'
 
+const TerminosRoute = TerminosRouteImport.update({
+  id: '/terminos',
+  path: '/terminos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacidadRoute = PrivacidadRouteImport.update({
+  id: '/privacidad',
+  path: '/privacidad',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LegalRoute = LegalRouteImport.update({
   id: '/legal',
   path: '/legal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CookiesRoute = CookiesRouteImport.update({
+  id: '/cookies',
+  path: '/cookies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactoRoute = ContactoRouteImport.update({
+  id: '/contacto',
+  path: '/contacto',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -51,6 +77,16 @@ const ProyectosIdRoute = ProyectosIdRouteImport.update({
   id: '/proyectos/$id',
   path: '/proyectos/$id',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRestablecerRoute = AuthRestablecerRouteImport.update({
+  id: '/restablecer',
+  path: '/restablecer',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthRecuperarRoute = AuthRecuperarRouteImport.update({
+  id: '/recuperar',
+  path: '/recuperar',
+  getParentRoute: () => AuthRoute,
 } as any)
 const AuthenticatedMensajesRoute = AuthenticatedMensajesRouteImport.update({
   id: '/mensajes',
@@ -130,11 +166,17 @@ const AuthenticatedEmpresaIdEditarRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
+  '/contacto': typeof ContactoRoute
+  '/cookies': typeof CookiesRoute
   '/legal': typeof LegalRoute
+  '/privacidad': typeof PrivacidadRoute
+  '/terminos': typeof TerminosRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/app': typeof AuthenticatedAppRoute
   '/mensajes': typeof AuthenticatedMensajesRoute
+  '/auth/recuperar': typeof AuthRecuperarRoute
+  '/auth/restablecer': typeof AuthRestablecerRoute
   '/proyectos/$id': typeof ProyectosIdRoute
   '/empresa/nuevo': typeof AuthenticatedEmpresaNuevoRoute
   '/empresa/perfil': typeof AuthenticatedEmpresaPerfilRoute
@@ -149,11 +191,17 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
+  '/contacto': typeof ContactoRoute
+  '/cookies': typeof CookiesRoute
   '/legal': typeof LegalRoute
+  '/privacidad': typeof PrivacidadRoute
+  '/terminos': typeof TerminosRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/app': typeof AuthenticatedAppRoute
   '/mensajes': typeof AuthenticatedMensajesRoute
+  '/auth/recuperar': typeof AuthRecuperarRoute
+  '/auth/restablecer': typeof AuthRestablecerRoute
   '/proyectos/$id': typeof ProyectosIdRoute
   '/empresa/nuevo': typeof AuthenticatedEmpresaNuevoRoute
   '/empresa/perfil': typeof AuthenticatedEmpresaPerfilRoute
@@ -170,11 +218,17 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
+  '/contacto': typeof ContactoRoute
+  '/cookies': typeof CookiesRoute
   '/legal': typeof LegalRoute
+  '/privacidad': typeof PrivacidadRoute
+  '/terminos': typeof TerminosRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/app': typeof AuthenticatedAppRoute
   '/_authenticated/mensajes': typeof AuthenticatedMensajesRoute
+  '/auth/recuperar': typeof AuthRecuperarRoute
+  '/auth/restablecer': typeof AuthRestablecerRoute
   '/proyectos/$id': typeof ProyectosIdRoute
   '/_authenticated/empresa/nuevo': typeof AuthenticatedEmpresaNuevoRoute
   '/_authenticated/empresa/perfil': typeof AuthenticatedEmpresaPerfilRoute
@@ -192,10 +246,16 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/contacto'
+    | '/cookies'
     | '/legal'
+    | '/privacidad'
+    | '/terminos'
     | '/admin'
     | '/app'
     | '/mensajes'
+    | '/auth/recuperar'
+    | '/auth/restablecer'
     | '/proyectos/$id'
     | '/empresa/nuevo'
     | '/empresa/perfil'
@@ -211,10 +271,16 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/contacto'
+    | '/cookies'
     | '/legal'
+    | '/privacidad'
+    | '/terminos'
     | '/admin'
     | '/app'
     | '/mensajes'
+    | '/auth/recuperar'
+    | '/auth/restablecer'
     | '/proyectos/$id'
     | '/empresa/nuevo'
     | '/empresa/perfil'
@@ -231,10 +297,16 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/contacto'
+    | '/cookies'
     | '/legal'
+    | '/privacidad'
+    | '/terminos'
     | '/_authenticated/admin'
     | '/_authenticated/app'
     | '/_authenticated/mensajes'
+    | '/auth/recuperar'
+    | '/auth/restablecer'
     | '/proyectos/$id'
     | '/_authenticated/empresa/nuevo'
     | '/_authenticated/empresa/perfil'
@@ -251,18 +323,50 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
-  AuthRoute: typeof AuthRoute
+  AuthRoute: typeof AuthRouteWithChildren
+  ContactoRoute: typeof ContactoRoute
+  CookiesRoute: typeof CookiesRoute
   LegalRoute: typeof LegalRoute
+  PrivacidadRoute: typeof PrivacidadRoute
+  TerminosRoute: typeof TerminosRoute
   ProyectosIdRoute: typeof ProyectosIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terminos': {
+      id: '/terminos'
+      path: '/terminos'
+      fullPath: '/terminos'
+      preLoaderRoute: typeof TerminosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacidad': {
+      id: '/privacidad'
+      path: '/privacidad'
+      fullPath: '/privacidad'
+      preLoaderRoute: typeof PrivacidadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/legal': {
       id: '/legal'
       path: '/legal'
       fullPath: '/legal'
       preLoaderRoute: typeof LegalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cookies': {
+      id: '/cookies'
+      path: '/cookies'
+      fullPath: '/cookies'
+      preLoaderRoute: typeof CookiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contacto': {
+      id: '/contacto'
+      path: '/contacto'
+      fullPath: '/contacto'
+      preLoaderRoute: typeof ContactoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -292,6 +396,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/proyectos/$id'
       preLoaderRoute: typeof ProyectosIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/auth/restablecer': {
+      id: '/auth/restablecer'
+      path: '/restablecer'
+      fullPath: '/auth/restablecer'
+      preLoaderRoute: typeof AuthRestablecerRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/auth/recuperar': {
+      id: '/auth/recuperar'
+      path: '/recuperar'
+      fullPath: '/auth/recuperar'
+      preLoaderRoute: typeof AuthRecuperarRouteImport
+      parentRoute: typeof AuthRoute
     }
     '/_authenticated/mensajes': {
       id: '/_authenticated/mensajes'
@@ -422,11 +540,27 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface AuthRouteChildren {
+  AuthRecuperarRoute: typeof AuthRecuperarRoute
+  AuthRestablecerRoute: typeof AuthRestablecerRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthRecuperarRoute: AuthRecuperarRoute,
+  AuthRestablecerRoute: AuthRestablecerRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
-  AuthRoute: AuthRoute,
+  AuthRoute: AuthRouteWithChildren,
+  ContactoRoute: ContactoRoute,
+  CookiesRoute: CookiesRoute,
   LegalRoute: LegalRoute,
+  PrivacidadRoute: PrivacidadRoute,
+  TerminosRoute: TerminosRoute,
   ProyectosIdRoute: ProyectosIdRoute,
 }
 export const routeTree = rootRouteImport

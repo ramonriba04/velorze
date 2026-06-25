@@ -73,7 +73,54 @@
     "roleCompanyDesc": "I want to publish projects and find investors.",
     "roleInvestor": "I'm an investor",
     "roleInvestorDesc": "I want to discover investment opportunities.",
-    "continue": "Continue"
+    "continue": "Continue",
+    "forgotPassword": "Forgot your password?"
+  },
+  "recover": {
+    "title": "Recover password",
+    "sub": "We'll send you a link to reset it.",
+    "sendLink": "Send link",
+    "sent": "Link sent",
+    "checkInbox": "Check your inbox and follow the link to set a new password.",
+    "backToLogin": "Back to log in"
+  },
+  "reset": {
+    "title": "New password",
+    "sub": "Set a new password for your account.",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "update": "Update password",
+    "success": "Password updated",
+    "mismatch": "Passwords don't match",
+    "tooShort": "Minimum 6 characters",
+    "invalid": "This link is invalid or has expired. Request a new one."
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "body": "At Capora we handle your personal data responsibly and in accordance with applicable regulations (GDPR).\n\nData we collect: name, email, profile photo, the company or investor data you choose to share, and basic technical data (language, device).\n\nUse: to power the matching service, show your profile to other users when you allow contact, improve the platform, and send service notifications.\n\nWe share data only with: infrastructure providers (hosting, authentication, storage) under contract.\n\nRights: access, rectification, deletion, objection and portability. You can exercise them from Settings or by emailing hola@capora.app.\n\nRetention: while your account is active. When you delete your account we remove your personal data within a reasonable timeframe, unless legally required to retain it."
+  },
+  "terms": {
+    "title": "Terms and Conditions",
+    "body": "Capora is a discovery platform that connects companies and investors. We do not process payments, manage investments, act as financial intermediaries or provide advice.\n\nBy using Capora you agree to: provide truthful information, respect other users, not use the platform for unlawful activities and take full responsibility for your investment decisions.\n\nWe may suspend accounts that breach these terms. Use of the service is governed by Spanish law."
+  },
+  "cookies": {
+    "title": "Cookie Policy",
+    "body": "Capora uses cookies strictly necessary for service operation (user session, language).\n\nWe do not use advertising or cross-site tracking cookies. You can block cookies from your browser, but some features may stop working."
+  },
+  "contact": {
+    "title": "Contact",
+    "body": "Questions, suggestions or need help? Write to us and we'll get back to you as soon as possible."
+  },
+  "empty": {
+    "projects": "No opportunities published yet.",
+    "projectsSub": "Check back soon or complete your profile to get recommendations.",
+    "favorites": "You haven't saved any projects yet.",
+    "favoritesSub": "Explore opportunities and save the ones you like.",
+    "messages": "You don't have any conversations yet.",
+    "messagesSub": "Once a company accepts your request, you'll chat here.",
+    "notifications": "No notifications.",
+    "notificationsSub": "We'll let you know when something important happens.",
+    "exploreCta": "Explore projects"
   },
   "common": {
     "save": "Save",
@@ -232,6 +279,9 @@
   "footer": {
     "rights": "All rights reserved.",
     "legal": "Legal notice",
-    "privacy": "Privacy"
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "cookies": "Cookies",
+    "contact": "Contact"
   }
 }

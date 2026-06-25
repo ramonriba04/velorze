@@ -73,7 +73,54 @@
     "roleCompanyDesc": "Quiero publicar proyectos y encontrar inversores.",
     "roleInvestor": "Soy inversor",
     "roleInvestorDesc": "Quiero descubrir oportunidades de inversión.",
-    "continue": "Continuar"
+    "continue": "Continuar",
+    "forgotPassword": "¿Olvidaste tu contraseña?"
+  },
+  "recover": {
+    "title": "Recuperar contraseña",
+    "sub": "Te enviaremos un enlace para restablecerla.",
+    "sendLink": "Enviar enlace",
+    "sent": "Enlace enviado",
+    "checkInbox": "Revisa tu bandeja de entrada y sigue el enlace para crear una nueva contraseña.",
+    "backToLogin": "Volver a iniciar sesión"
+  },
+  "reset": {
+    "title": "Nueva contraseña",
+    "sub": "Define una nueva contraseña para tu cuenta.",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "update": "Actualizar contraseña",
+    "success": "Contraseña actualizada",
+    "mismatch": "Las contraseñas no coinciden",
+    "tooShort": "Mínimo 6 caracteres",
+    "invalid": "El enlace no es válido o ha expirado. Solicita uno nuevo."
+  },
+  "privacy": {
+    "title": "Política de privacidad",
+    "body": "En Capora tratamos tus datos personales con responsabilidad y respeto a la normativa vigente (RGPD).\n\nDatos que recopilamos: nombre, correo electrónico, foto de perfil, datos de empresa o inversor que decides compartir, y datos técnicos básicos (idioma, dispositivo).\n\nUso: ofrecer el servicio de matching, mostrar tu perfil a otros usuarios cuando autorizas el contacto, mejorar la plataforma y enviarte notificaciones del servicio.\n\nCompartimos datos sólo con: proveedores de infraestructura (hosting, autenticación, almacenamiento) sujetos a contrato.\n\nDerechos: acceso, rectificación, supresión, oposición y portabilidad. Puedes ejercerlos desde Ajustes o escribiendo a hola@capora.app.\n\nConservación: mientras tu cuenta esté activa. Al eliminar la cuenta, borramos tus datos personales en un plazo razonable, salvo obligación legal de conservación."
+  },
+  "terms": {
+    "title": "Términos y condiciones",
+    "body": "Capora es una plataforma de descubrimiento que conecta empresas e inversores. No procesamos pagos, no gestionamos inversiones, no actuamos como intermediarios financieros y no prestamos asesoramiento.\n\nAl usar Capora aceptas: proporcionar información veraz, respetar a otros usuarios, no usar la plataforma para actividades ilícitas y asumir tu propia responsabilidad en las decisiones de inversión.\n\nPodemos suspender cuentas que incumplan estos términos. El uso del servicio se rige por la legislación española."
+  },
+  "cookies": {
+    "title": "Política de cookies",
+    "body": "Capora utiliza cookies estrictamente necesarias para el funcionamiento del servicio (sesión de usuario, idioma).\n\nNo utilizamos cookies publicitarias ni de seguimiento entre sitios. Puedes bloquear las cookies desde tu navegador, pero algunas funciones podrían dejar de funcionar."
+  },
+  "contact": {
+    "title": "Contacto",
+    "body": "¿Tienes preguntas, sugerencias o necesitas ayuda? Escríbenos y te responderemos lo antes posible."
+  },
+  "empty": {
+    "projects": "Aún no hay oportunidades publicadas.",
+    "projectsSub": "Vuelve pronto o completa tu perfil para recibir recomendaciones.",
+    "favorites": "Aún no has guardado proyectos.",
+    "favoritesSub": "Explora oportunidades y guarda las que te interesen.",
+    "messages": "Aún no tienes conversaciones.",
+    "messagesSub": "Cuando una empresa acepte tu solicitud podréis chatear aquí.",
+    "notifications": "No tienes notificaciones.",
+    "notificationsSub": "Te avisaremos cuando ocurra algo importante.",
+    "exploreCta": "Explorar proyectos"
   },
   "common": {
     "save": "Guardar",
@@ -232,6 +279,9 @@
   "footer": {
     "rights": "Todos los derechos reservados.",
     "legal": "Aviso legal",
-    "privacy": "Privacidad"
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "cookies": "Cookies",
+    "contact": "Contacto"
   }
 }

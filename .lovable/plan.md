@@ -1,113 +1,68 @@
+# Capora V1 — Launch-Ready Plan
 
-# Plan de construcción — Capora MVP
+This is a large scope. I'll deliver it in two phases so you can review progress and reprioritize. Each numbered item below is one shippable unit; I'll batch related items into single turns where it makes sense.
 
-Marketplace que conecta empresas con inversores mediante un score de compatibilidad. No gestiona dinero ni asesora.
+## Phase A — Must-have before launch
 
-## 1. Infraestructura base
+### A1. First-time onboarding wizards
+- New route `/_authenticated/onboarding` (role-aware), shown automatically after first sign-in until completed.
+- Investor steps: profile basics → sectors/countries interests → ticket range + risk → "see recommendations" handoff.
+- Company steps: legal info → logo upload → first project draft → publish CTA.
+- Progress bar, Skip on each step, persisted `onboarding_completed_at` on `profiles`.
 
-- Activar **Lovable Cloud** (Supabase gestionado): auth, base de datos, storage y server functions.
-- Autenticación: **email/contraseña + Google** (broker de Lovable).
-- i18n **ES/EN** con `react-i18next`, selector en el header, ES por defecto, persistencia en localStorage.
-- Disclaimer legal global ("Capora no presta asesoramiento financiero ni gestiona inversiones") en footer y en zonas sensibles (detalle de proyecto, matching, contacto).
+### A2. Empty states everywhere
+- Shared `<EmptyState icon title description ctaLabel ctaTo />` component.
+- Apply on: projects list, favorites, messages tabs (pending/accepted/chats), recommendations, notifications, company project list, investor requests.
 
-## 2. Modelo de datos (Supabase, con RLS)
+### A3. Search + filters on project discovery
+- New `/proyectos` public-ish discovery page (or extend investor home): full-text search on title/description/company name + filters for sector, country, stage, investment range (min/max), investment type.
+- Filters synced to URL search params (TanStack validateSearch + zod), restored on return.
 
-- `profiles` — datos comunes (user_id, full_name, avatar, locale, role).
-- `user_roles` — tabla separada con enum `app_role` (`empresa`, `inversor`, `admin`) + función `has_role()` security definer (para evitar escalado de privilegios).
-- `company_profiles` — nombre legal, web, país, descripción, logo.
-- `investor_profiles` — tipo (personal/corporativo), sectores[], rango ticket min/max, países[], tipos de inversión[], nivel de riesgo, descripción.
-- `projects` — título, descripción, sector, tipo de inversión, capital requerido, ticket min/max, país, etapa, status (`draft`/`published`/`closed`), created_at.
-- `project_documents` — adjuntos en Storage (bucket privado, signed URLs).
-- `favorites` — inversor ↔ proyecto.
-- `contact_requests` — inversor → proyecto, estado (`pending`/`accepted`/`rejected`).
-- `conversations` + `messages` — chat habilitado solo cuando hay `contact_request` aceptado.
-- `match_scores` — cache opcional de scores calculados (proyecto, inversor, score, breakdown JSON).
+### A4. In-app notifications
+- New table `notifications (user_id, type, payload jsonb, read_at, created_at)` with RLS (owner only).
+- DB triggers on `contact_requests` (insert/status change) and `messages` (insert) insert notifications for the recipient.
+- Header bell icon with unread count badge, dropdown list, "mark all as read", click navigates to the relevant entity.
 
-RLS por rol: empresa ve/edita solo sus proyectos; inversor ve proyectos publicados; admin acceso total vía `has_role`.
+### A5. Account settings page
+- `/_authenticated/ajustes`: change language, change password (Supabase `updateUser`), change display name, change email (with confirmation), delete account (links to A7).
 
-## 3. Motor de matching (reglas + pesos)
+### A6. Password recovery
+- Public `/auth/recuperar` (request) + `/auth/restablecer` (set new password, handles `type=recovery` hash).
+- "Forgot password?" link on `/auth`.
 
-Server function `computeMatchScore(project, investor)` 0–100 ponderando:
+### A7. Legal pages + footer
+- Public routes: `/privacidad`, `/terminos`, `/cookies`, `/contacto`. Static localized content using existing `legal.tsx` pattern.
+- Footer with links visible on public + authenticated layouts.
 
-- Sector (30%) — coincidencia exacta o solapamiento.
-- Rango de ticket (25%) — solape de intervalos.
-- País / región (15%).
-- Tipo de inversión (15%).
-- Nivel de riesgo derivado de etapa (10%).
-- Bonus de keywords compartidas en descripción (5%).
+### A8. Delete account
+- Server fn `deleteMyAccount` (requireSupabaseAuth): archives owned projects (`status='archived'`), deletes favorites/conversations/messages/contact_requests/profiles rows the user owns, then calls Auth Admin `deleteUser` via `supabaseAdmin`.
+- Confirmation modal requiring typing "ELIMINAR" / "DELETE".
 
-Devuelve `{ score, reasons[] }` para mostrar explicación tipo "Coincide en fintech + ticket + España". Se calcula on-demand y se cachea en `match_scores`.
+## Phase B — High-value polish
 
-## 4. Pantallas
+- **B9 Autosave**: debounced autosave on project + profile forms, "Guardado" indicator.
+- **B10 Share project**: copy-link button on project detail (public `/proyectos/$id` already exists), Web Share API on mobile.
+- **B11 Profile completeness**: already partially present — extend to investor home and add to settings.
+- **B12 Public profile pages**: `/empresa/$slug`, `/inversor/$slug` with safe-column projection only (name, logo/avatar, description, sectors/countries). Add `slug` column to profiles.
+- **B13 Help center**: `/ayuda` with accordion FAQ (matching, contact, privacy, account).
+- **B14 Mobile QA pass**: Playwright sweep at 390×844 and 412×915, fix safe-area, bottom-nav overlap, form scroll, image upload on mobile.
 
-**Públicas**
-- Landing Capora (hero, propuesta de valor, cómo funciona, CTAs por rol, disclaimer).
-- Login / Registro (con selección de rol: empresa o inversor).
-- Detalle de proyecto público (versión limitada; CTA login para contactar).
+## Technical notes
+- All new tables follow the GRANT → RLS → POLICY pattern. RLS scoped to `auth.uid()`.
+- Notifications use a SECURITY DEFINER trigger function to insert across users.
+- Onboarding state lives on `profiles.onboarding_completed_at` (nullable timestamptz) — no new table.
+- Public profile slugs: unique citext column, generated from display/legal name on first save.
+- All new UI strings added to `es.json` + `en.json`; Spanish remains default.
+- No changes to auth provider config, matching logic, or storage buckets.
 
-**Inversor** (`/_authenticated/inversor`)
-- Dashboard: feed "Proyectos recomendados para ti" ordenado por match score, con badge de score y razones.
-- Explorar proyectos con filtros (sector, país, ticket, tipo).
-- Detalle de proyecto + botón "Solicitar contacto" + favorito.
-- Mis favoritos.
-- Mis solicitudes y estados.
-- Perfil inversor (intereses).
-- Bandeja de mensajes.
+## Suggested execution order (one turn per group)
+1. A6 + A7 (password recovery + legal + footer) — small, unblocks launch checklist.
+2. A2 + shared EmptyState — small, improves every screen immediately.
+3. A5 + A8 (settings + delete account) — one migration, one route.
+4. A1 onboarding wizards — one route, two flows.
+5. A4 notifications — migration + triggers + header bell.
+6. A3 search/filters.
+7. Phase B in a single polish pass, then mobile QA.
 
-**Empresa** (`/_authenticated/empresa`)
-- Dashboard: lista de proyectos y métricas (vistas, solicitudes, matches top).
-- Crear / editar / eliminar proyecto (wizard).
-- Vista "Inversores compatibles" por proyecto.
-- Solicitudes recibidas (aceptar/rechazar).
-- Perfil empresa.
-- Bandeja de mensajes.
-
-**Admin** (`/_authenticated/admin`, gated por `has_role('admin')`)
-- Usuarios (suspender, cambiar rol).
-- Proyectos (moderar, despublicar).
-- Métricas globales básicas.
-
-**Mensajería**
-- Chat interno básico por conversación, realtime con Supabase Realtime, solo si hay contact_request aceptado.
-
-## 5. Routing (TanStack Start)
-
-- Rutas públicas top-level: `/`, `/auth`, `/proyectos/$id`, `/sobre`, `/legal`.
-- Subárbol protegido en `src/routes/_authenticated/` (gate gestionado por la integración Supabase).
-- Server functions en `src/lib/*.functions.ts` para todas las lecturas/escrituras sensibles.
-- TanStack Query para data fetching, head() por ruta con metadatos ES/EN.
-
-## 6. Diseño
-
-- Estilo fintech profesional adaptado, bilingüe.
-- Tokens en `src/styles.css` (oklch): primario azul confianza, acentos cálidos para CTAs, soporte dark mode.
-- Componentes shadcn ya disponibles. Cards de proyecto con badge de match score (gradient verde→ámbar→gris).
-- Responsive mobile-first.
-
-## 7. Orden de implementación
-
-1. Activar Lovable Cloud + configurar Google OAuth + crear i18n.
-2. Migraciones: enums, tablas, RLS, función `has_role`, triggers de creación de profile.
-3. Auth flow (registro con elección de rol, layout `_authenticated`, gate admin).
-4. CRUD de proyectos (empresa) + storage de documentos.
-5. Perfil de inversor + exploración con filtros.
-6. Motor de matching + feed recomendado + explicación.
-7. Favoritos + solicitudes de contacto (aceptar/rechazar).
-8. Chat interno realtime.
-9. Panel admin.
-10. Landing pulida, legal/disclaimers, SEO por ruta, QA bilingüe.
-
-## Detalles técnicos clave
-
-- **Roles**: tabla `user_roles` separada + `has_role()` security definer + policies que la usan. Nunca rol en `profiles`.
-- **Privacidad**: datos de contacto solo se revelan tras `contact_request` aceptado.
-- **Server functions** protegidas con `requireSupabaseAuth`; admin endpoints validan `has_role('admin')` antes de cargar `supabaseAdmin` con `await import()`.
-- **Storage**: bucket `project-docs` privado, acceso vía signed URLs generadas en server function.
-- **Validación**: Zod en cada `inputValidator`, límites de longitud en descripciones y nombres.
-- **Realtime chat**: suscripción por `conversation_id` en el cliente.
-
-## Fuera de alcance MVP
-
-Pagos, firma de NDAs, verificación KYC, due diligence automatizada, notificaciones email transaccionales (se pueden añadir luego con Resend).
-
-¿Procedo con esta implementación?
+## Question before I start
+Should I proceed straight through Phase A in the order above (≈6 turns), or do you want a different order — e.g. notifications + onboarding first because they're the most visible?

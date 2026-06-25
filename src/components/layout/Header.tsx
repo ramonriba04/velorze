@@ -150,8 +150,12 @@ export function Footer() {
         <p className="text-xs text-muted-foreground">{t("disclaimer")}</p>
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
           <span>© {new Date().getFullYear()} Capora. {t("footer.rights")}</span>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-4">
+            <Link to="/privacidad" className="hover:text-foreground">{t("footer.privacy")}</Link>
+            <Link to="/terminos" className="hover:text-foreground">{t("footer.terms")}</Link>
+            <Link to="/cookies" className="hover:text-foreground">{t("footer.cookies")}</Link>
             <Link to="/legal" className="hover:text-foreground">{t("footer.legal")}</Link>
+            <Link to="/contacto" className="hover:text-foreground">{t("footer.contact")}</Link>
           </div>
         </div>
       </div>
