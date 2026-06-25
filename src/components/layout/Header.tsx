@@ -14,6 +14,7 @@ import {
   Dialog, DialogContent, DialogDescription, DialogFooter,
   DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
+import { NotificationsBell } from "@/components/layout/NotificationsBell";
 
 export function LanguageSwitcher() {
   const { i18n } = useTranslation();
@@ -101,6 +102,7 @@ export function Header() {
                   {t("nav.admin")}
                 </Link>
               )}
+              <NotificationsBell />
               <HeaderProfile />
               <Link to="/ajustes" aria-label={t("nav.settings")} className="hidden sm:inline-flex">
                 <Button variant="ghost" size="sm" className="gap-1">

@@ -128,6 +128,16 @@
     "typeToConfirm": "Type {{word}} to confirm",
     "deleteWord": "DELETE"
   },
+  "notifications": {
+    "title": "Notifications",
+    "types": {
+      "default": "New notification",
+      "contact_request_received": "You received a new contact request",
+      "contact_request_accepted": "A company accepted your request",
+      "contact_request_rejected": "A company declined your request",
+      "message_received": "You received a new message"
+    }
+  },
   "onboarding": {
     "badge": "Getting started",
     "title": "Welcome to Capora",
