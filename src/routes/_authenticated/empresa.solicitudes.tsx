@@ -8,6 +8,8 @@ import { respondContactRequest } from "@/lib/contact.functions";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Inbox } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/empresa/solicitudes")({
@@ -42,8 +44,9 @@ function CompanyRequests() {
     <div className="mx-auto max-w-3xl px-4 py-10">
       <h1 className="text-3xl font-bold">{t("requests.title")}</h1>
       <div className="mt-6 space-y-3">
-        {data?.length === 0 && <p className="text-muted-foreground">{t("requests.empty")}</p>}
-        {data?.map((r: any) => (
+        {(!data || data.length === 0) ? (
+          <EmptyState icon={<Inbox />} title={t("requests.empty")} description={t("empty.notificationsSub")} />
+        ) : data.map((r: any) => (
           <Card key={r.id} className="p-4">
             <div className="flex items-center justify-between">
               <div>

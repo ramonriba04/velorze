@@ -153,6 +153,7 @@ function InvestorDashboard() {
             <p className="mt-1 text-sm text-muted-foreground max-w-md mx-auto">{t("home.noRecommendationsSub")}</p>
             <div className="mt-4 flex justify-center gap-2">
               <Link to="/inversor/perfil"><Button variant="outline" size="sm">{t("home.completeProfileCta")}</Button></Link>
+              <Link to="/inversor/favoritos"><Button size="sm">{t("empty.exploreCta")}</Button></Link>
             </div>
           </Card>
         )}
