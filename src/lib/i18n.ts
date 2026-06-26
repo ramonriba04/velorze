@@ -46,11 +46,7 @@ if (!i18n.isInitialized) {
   });
 
   if (typeof window !== "undefined") {
-    // Defer language switch until after hydration to keep SSR markup stable.
-    setTimeout(() => {
-      const lng = detectClientLanguage();
-      if (lng !== i18n.language) i18n.changeLanguage(lng);
-    }, 0);
+    // Language switch happens in RootComponent's useEffect after hydration.
     i18n.on("languageChanged", (lng) => {
       try {
         window.localStorage.setItem("capora_lang", lng);
