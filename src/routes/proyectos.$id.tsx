@@ -12,6 +12,7 @@ import { useMyRole } from "@/hooks/useAuth";
 import { useServerFn } from "@tanstack/react-start";
 import { createContactRequest } from "@/lib/contact.functions";
 import { toast } from "sonner";
+import { ShareButton } from "@/components/ShareButton";
 
 export const Route = createFileRoute("/proyectos/$id")({
   head: () => ({
@@ -108,7 +109,7 @@ function ProjectDetail() {
                 {data.ticket_max && <div><p className="text-muted-foreground">{t("project.ticketMax")}</p><p className="font-semibold">{Number(data.ticket_max).toLocaleString()}</p></div>}
               </div>
               <p className="mt-6 whitespace-pre-wrap">{data.description}</p>
-              <div className="mt-8 flex gap-2">
+              <div className="mt-8 flex flex-wrap gap-2">
                 {user && role === "inversor" && (
                   <Button onClick={async () => {
                     try { await reqFn({ data: { project_id: id } }); toast.success(t("project.requestSent")); }
@@ -116,6 +117,7 @@ function ProjectDetail() {
                   }}>{t("project.contactCompany")}</Button>
                 )}
                 {!user && <Link to="/auth"><Button>{t("nav.login")}</Button></Link>}
+                <ShareButton title={data.title} text={data.description?.slice(0, 140)} />
               </div>
               <p className="mt-6 text-xs text-muted-foreground border-t border-border pt-4">{t("disclaimer")}</p>
             </div>
