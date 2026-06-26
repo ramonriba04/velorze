@@ -5,6 +5,9 @@ import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { useMyRole } from "@/hooks/useAuth";
 import { deleteMyAccount } from "@/lib/account.functions";
+import { useMyPlan } from "@/hooks/usePlan";
+import { PlanBadge } from "@/components/PlanBadge";
+import { UpgradeDialog } from "@/components/UpgradeDialog";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,6 +29,7 @@ function Settings() {
   const { t, i18n } = useTranslation();
   const { user } = useMyRole();
   const removeAccount = useServerFn(deleteMyAccount);
+  const { code: planCode, plan, billingStatus } = useMyPlan();
 
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
