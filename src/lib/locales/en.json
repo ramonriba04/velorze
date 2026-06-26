@@ -359,6 +359,36 @@
     "privacy": "Privacy",
     "terms": "Terms",
     "cookies": "Cookies",
-    "contact": "Contact"
+    "contact": "Contact",
+    "help": "Help"
+  },
+  "share": {
+    "button": "Share",
+    "copied": "Link copied"
+  },
+  "autosave": {
+    "saving": "Saving…",
+    "saved": "Saved"
+  },
+  "help": {
+    "title": "Help center",
+    "sub": "Quick answers to the most common questions.",
+    "matching": {
+      "q": "How does matching work?",
+      "a": "We score each project against your investor profile (sectors, countries, ticket range, investment type). Higher scores mean better fit. Update your profile any time to refine recommendations."
+    },
+    "contact": {
+      "q": "How do I contact a company?",
+      "a": "Open a project and tap Contact company. The company can accept or reject your request. Once accepted, a private chat opens for both of you."
+    },
+    "privacy": {
+      "q": "Who can see my data?",
+      "a": "Your contact details are private until you send a contact request. Companies only see what your profile exposes (display name, interests). See our Privacy policy for full details."
+    },
+    "account": {
+      "q": "How do I change my email or delete my account?",
+      "a": "Go to Settings. From there you can update your language, change your password, and delete your account permanently."
+    }
   }
 }
+
