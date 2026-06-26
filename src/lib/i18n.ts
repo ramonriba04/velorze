@@ -5,8 +5,8 @@ import es from "./locales/es.json";
 import en from "./locales/en.json";
 
 // SSR-safe: always initialize with "es" so server and client first render match.
-// Switch to the user's preferred language after hydration to avoid mismatches.
-function detectClientLanguage(): "es" | "en" {
+// Language detection happens in RootComponent after hydration to avoid mismatches.
+export function detectClientLanguage(): "es" | "en" {
   try {
     const stored = window.localStorage.getItem("capora_lang");
     if (stored === "es" || stored === "en") return stored;
