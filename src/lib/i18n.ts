@@ -5,8 +5,8 @@ import es from "./locales/es.json";
 import en from "./locales/en.json";
 
 // SSR-safe: always initialize with "es" so server and client first render match.
-// Switch to the user's preferred language after hydration to avoid mismatches.
-function detectClientLanguage(): "es" | "en" {
+// Language detection happens in RootComponent after hydration to avoid mismatches.
+export function detectClientLanguage(): "es" | "en" {
   try {
     const stored = window.localStorage.getItem("capora_lang");
     if (stored === "es" || stored === "en") return stored;
@@ -46,11 +46,7 @@ if (!i18n.isInitialized) {
   });
 
   if (typeof window !== "undefined") {
-    // Defer language switch until after hydration to keep SSR markup stable.
-    setTimeout(() => {
-      const lng = detectClientLanguage();
-      if (lng !== i18n.language) i18n.changeLanguage(lng);
-    }, 0);
+    // Language switch happens in RootComponent's useEffect after hydration.
     i18n.on("languageChanged", (lng) => {
       try {
         window.localStorage.setItem("capora_lang", lng);

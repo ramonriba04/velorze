@@ -5,6 +5,9 @@ import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { useMyRole } from "@/hooks/useAuth";
 import { deleteMyAccount } from "@/lib/account.functions";
+import { useMyPlan } from "@/hooks/usePlan";
+import { PlanBadge } from "@/components/PlanBadge";
+import { UpgradeDialog } from "@/components/UpgradeDialog";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,6 +29,7 @@ function Settings() {
   const { t, i18n } = useTranslation();
   const { user } = useMyRole();
   const removeAccount = useServerFn(deleteMyAccount);
+  const { code: planCode, plan, billingStatus } = useMyPlan();
 
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -70,6 +74,25 @@ function Settings() {
         <h1 className="text-2xl font-semibold tracking-tight">{t("settings.title")}</h1>
         <p className="text-sm text-muted-foreground">{t("settings.sub")}</p>
       </header>
+
+      <Card className="space-y-3 p-6">
+        <div className="flex items-center justify-between gap-2">
+          <h2 className="text-lg font-semibold">{t("plans.currentPlan")}</h2>
+          <PlanBadge code={planCode} />
+        </div>
+        <p className="text-sm text-muted-foreground">
+          {t(`plans.descriptions.${planCode}`)}
+        </p>
+        <p className="text-xs text-muted-foreground">
+          {t("plans.billingStatus")}: <span className="font-medium text-foreground">{t(`plans.status.${billingStatus}`)}</span>
+          {plan.price_cents > 0 && (
+            <> · {new Intl.NumberFormat(undefined, { style: "currency", currency: plan.currency }).format(plan.price_cents / 100)}/mo</>
+          )}
+        </p>
+        <div className="pt-1">
+          <UpgradeDialog />
+        </div>
+      </Card>
 
       <Card className="space-y-4 p-6">
         <h2 className="text-lg font-semibold">{t("settings.account")}</h2>

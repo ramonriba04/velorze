@@ -389,6 +389,54 @@
       "q": "¿Cómo cambio mi correo o elimino mi cuenta?",
       "a": "Ve a Ajustes. Desde ahí puedes cambiar el idioma, actualizar la contraseña y eliminar tu cuenta de forma permanente."
     }
+  },
+  "plans": {
+    "currentPlan": "Tu plan actual",
+    "upgrade": "Mejorar plan",
+    "comingSoon": "Próximamente",
+    "current": "Actual",
+    "priceFree": "Gratis",
+    "billingStatus": "Estado de facturación",
+    "activeProjects": "Proyectos activos",
+    "capReached": "Has alcanzado el límite de tu plan. Mejora para publicar más proyectos.",
+    "analytics": "Analíticas",
+    "locked": "Bloqueado",
+    "dialogTitle": "Elige el plan que mejor te encaje",
+    "dialogSub": "Más visibilidad, más proyectos activos y analíticas avanzadas.",
+    "disclaimer": "El cobro aún no está activo. Te avisaremos cuando podamos activar los planes de pago.",
+    "descriptions": {
+      "free": "Acceso completo al matching y a la mensajería. 1 proyecto activo y estadísticas básicas.",
+      "pro": "Hasta 5 proyectos activos, analíticas avanzadas, proyecto destacado y visibilidad prioritaria.",
+      "business": "Proyectos ilimitados, miembros de equipo, exportaciones del panel y soporte prioritario."
+    },
+    "status": {
+      "inactive": "Inactivo",
+      "trialing": "En periodo de prueba",
+      "active": "Activo",
+      "past_due": "Pago pendiente",
+      "canceled": "Cancelado"
+    },
+    "metric": {
+      "views": "Vistas",
+      "favorites": "Favoritos",
+      "requests": "Solicitudes",
+      "conversion": "Conversión"
+    },
+    "f": {
+      "basic_stats": "Estadísticas básicas",
+      "matching": "Matching completo",
+      "discover": "Filtros de descubrimiento",
+      "up_to_5": "Hasta 5 proyectos activos",
+      "advanced_analytics": "Analíticas avanzadas",
+      "featured": "1 proyecto destacado",
+      "priority": "Visibilidad prioritaria",
+      "unlimited_projects": "Proyectos ilimitados",
+      "team": "Miembros de equipo",
+      "exports": "Exportaciones del panel",
+      "support": "Soporte prioritario",
+      "no_advanced": "Sin analíticas avanzadas"
+    }
   }
 }
+
 

@@ -389,6 +389,54 @@
       "q": "How do I change my email or delete my account?",
       "a": "Go to Settings. From there you can update your language, change your password, and delete your account permanently."
     }
+  },
+  "plans": {
+    "currentPlan": "Your current plan",
+    "upgrade": "Upgrade plan",
+    "comingSoon": "Coming soon",
+    "current": "Current",
+    "priceFree": "Free",
+    "billingStatus": "Billing status",
+    "activeProjects": "Active projects",
+    "capReached": "You've reached your plan limit. Upgrade to publish more projects.",
+    "analytics": "Analytics",
+    "locked": "Locked",
+    "dialogTitle": "Choose the plan that fits you",
+    "dialogSub": "More visibility, more active projects and advanced analytics.",
+    "disclaimer": "Billing is not active yet. We'll let you know when paid plans go live.",
+    "descriptions": {
+      "free": "Full matching and messaging. 1 active project and basic stats.",
+      "pro": "Up to 5 active projects, advanced analytics, 1 featured project and priority visibility.",
+      "business": "Unlimited projects, team members, dashboard exports and priority support."
+    },
+    "status": {
+      "inactive": "Inactive",
+      "trialing": "Trial",
+      "active": "Active",
+      "past_due": "Past due",
+      "canceled": "Canceled"
+    },
+    "metric": {
+      "views": "Views",
+      "favorites": "Favorites",
+      "requests": "Requests",
+      "conversion": "Conversion"
+    },
+    "f": {
+      "basic_stats": "Basic stats",
+      "matching": "Full matching",
+      "discover": "Discovery filters",
+      "up_to_5": "Up to 5 active projects",
+      "advanced_analytics": "Advanced analytics",
+      "featured": "1 featured project",
+      "priority": "Priority visibility",
+      "unlimited_projects": "Unlimited projects",
+      "team": "Team members",
+      "exports": "Dashboard exports",
+      "support": "Priority support",
+      "no_advanced": "No advanced analytics"
+    }
   }
 }
+
 
