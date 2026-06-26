@@ -7,7 +7,10 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { EntityAvatar } from "@/components/media/EntityAvatar";
-import { Plus, MessageCircle, Briefcase, Rocket } from "lucide-react";
+import { Plus, MessageCircle, Briefcase, Rocket, BarChart3, Eye, Heart, Send, Lock } from "lucide-react";
+import { useMyPlan, useCompanyUsage } from "@/hooks/usePlan";
+import { PlanBadge } from "@/components/PlanBadge";
+import { UpgradeDialog } from "@/components/UpgradeDialog";
 
 export const Route = createFileRoute("/_authenticated/empresa/")({
   component: CompanyDashboard,
@@ -16,6 +19,8 @@ export const Route = createFileRoute("/_authenticated/empresa/")({
 function CompanyDashboard() {
   const { t } = useTranslation();
   const { user } = useMyRole();
+  const { code: planCode, limits, features } = useMyPlan();
+  const { data: usage } = useCompanyUsage();
 
   const { data: profile } = useQuery({
     queryKey: ["company_profile_summary", user?.id],
