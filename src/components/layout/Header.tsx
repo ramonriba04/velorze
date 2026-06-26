@@ -171,6 +171,7 @@ export function Footer() {
             <Link to="/terminos" className="hover:text-foreground">{t("footer.terms")}</Link>
             <Link to="/cookies" className="hover:text-foreground">{t("footer.cookies")}</Link>
             <Link to="/legal" className="hover:text-foreground">{t("footer.legal")}</Link>
+            <Link to="/ayuda" className="hover:text-foreground">{t("footer.help")}</Link>
             <Link to="/contacto" className="hover:text-foreground">{t("footer.contact")}</Link>
           </div>
         </div>
