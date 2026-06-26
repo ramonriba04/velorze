@@ -75,6 +75,25 @@ function Settings() {
         <p className="text-sm text-muted-foreground">{t("settings.sub")}</p>
       </header>
 
+      <Card className="space-y-3 p-6">
+        <div className="flex items-center justify-between gap-2">
+          <h2 className="text-lg font-semibold">{t("plans.currentPlan")}</h2>
+          <PlanBadge code={planCode} />
+        </div>
+        <p className="text-sm text-muted-foreground">
+          {t(`plans.descriptions.${planCode}`)}
+        </p>
+        <p className="text-xs text-muted-foreground">
+          {t("plans.billingStatus")}: <span className="font-medium text-foreground">{t(`plans.status.${billingStatus}`)}</span>
+          {plan.price_cents > 0 && (
+            <> · {new Intl.NumberFormat(undefined, { style: "currency", currency: plan.currency }).format(plan.price_cents / 100)}/mo</>
+          )}
+        </p>
+        <div className="pt-1">
+          <UpgradeDialog />
+        </div>
+      </Card>
+
       <Card className="space-y-4 p-6">
         <h2 className="text-lg font-semibold">{t("settings.account")}</h2>
         <div className="space-y-1">
