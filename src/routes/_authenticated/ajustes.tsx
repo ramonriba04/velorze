@@ -175,9 +175,20 @@ function Settings() {
         </Dialog>
       </Card>
 
+      <Card className="space-y-3 p-6">
+        <h2 className="text-lg font-semibold">{t("footer.legal")}</h2>
+        <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
+          <Link to="/privacidad" className="text-primary hover:underline">{t("footer.privacy")}</Link>
+          <Link to="/terminos" className="text-primary hover:underline">{t("footer.terms")}</Link>
+          <Link to="/cookies" className="text-primary hover:underline">{t("footer.cookies")}</Link>
+          <Link to="/contacto" className="text-primary hover:underline">{t("footer.contact")}</Link>
+        </div>
+      </Card>
+
       <div className="text-sm">
         <Link to="/" className="text-muted-foreground hover:text-foreground">← {t("common.back")}</Link>
       </div>
+
     </div>
   );
 }
