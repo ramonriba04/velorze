@@ -1,20 +1,21 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "@tanstack/react-router";
-import { Globe, LogOut, Settings } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Globe, LogOut, Settings, User as UserIcon, ChevronDown } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useMyRole } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { EntityAvatar } from "@/components/media/EntityAvatar";
 import {
-  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem,
+  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter,
-  DialogHeader, DialogTitle, DialogTrigger,
+  DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
 import { NotificationsBell } from "@/components/layout/NotificationsBell";
+
 
 export function LanguageSwitcher() {
   const { i18n } = useTranslation();
