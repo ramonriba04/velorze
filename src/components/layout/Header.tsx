@@ -38,9 +38,10 @@ export function LanguageSwitcher() {
   );
 }
 
-function HeaderProfile() {
+function HeaderProfile({ onLogout }: { onLogout: () => void }) {
   const { t } = useTranslation();
   const { user, role } = useMyRole();
+  const navigate = useNavigate();
   const isCompany = role === "empresa";
   const profileTo = isCompany ? "/empresa/perfil" : "/inversor/perfil";
 
@@ -61,12 +62,33 @@ function HeaderProfile() {
 
   if (!user) return null;
   return (
-    <Link to={profileTo} aria-label={t("nav.profile")} className="flex items-center gap-2 rounded-full px-1.5 py-1 hover:bg-muted">
-      <EntityAvatar src={prof?.src} name={prof?.name ?? user.email} kind={prof?.kind ?? "user"} size={28} />
-      <span className="hidden sm:inline text-sm font-medium max-w-[120px] truncate">
-        {prof?.name ?? user.email?.split("@")[0]}
-      </span>
-    </Link>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          aria-label={t("nav.profile")}
+          className="flex items-center gap-1.5 rounded-full px-1.5 py-1 hover:bg-muted"
+        >
+          <EntityAvatar src={prof?.src} name={prof?.name ?? user.email} kind={prof?.kind ?? "user"} size={28} />
+          <span className="hidden sm:inline text-sm font-medium max-w-[120px] truncate">
+            {prof?.name ?? user.email?.split("@")[0]}
+          </span>
+          <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-48">
+        <DropdownMenuItem onSelect={() => navigate({ to: profileTo })}>
+          <UserIcon className="mr-2 h-4 w-4" /> {t("nav.profile")}
+        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => navigate({ to: "/ajustes" })}>
+          <Settings className="mr-2 h-4 w-4" /> {t("nav.settings")}
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onSelect={onLogout} className="text-destructive focus:text-destructive">
+          <LogOut className="mr-2 h-4 w-4" /> {t("nav.logout")}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 
@@ -112,20 +134,8 @@ export function Header() {
                 </Link>
               )}
               <NotificationsBell />
-              <HeaderProfile />
-              <Link to="/ajustes" aria-label={t("nav.settings")} className="hidden sm:inline-flex">
-                <Button variant="ghost" size="sm" className="gap-1">
-                  <Settings className="h-4 w-4" />
-                  <span className="hidden md:inline">{t("nav.settings")}</span>
-                </Button>
-              </Link>
+              <HeaderProfile onLogout={() => setOpen(true)} />
               <Dialog open={open} onOpenChange={setOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="ghost" size="sm" className="gap-1" aria-label={t("nav.logout")}>
-                    <LogOut className="h-4 w-4" />
-                    <span className="hidden sm:inline">{t("nav.logout")}</span>
-                  </Button>
-                </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>{t("logout.title")}</DialogTitle>
@@ -138,7 +148,6 @@ export function Header() {
                     <Button onClick={signOut}>
                       {t("logout.confirm")}
                     </Button>
-
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
@@ -158,6 +167,7 @@ export function Header() {
     </header>
   );
 }
+
 
 export function Footer() {
   const { t } = useTranslation();
