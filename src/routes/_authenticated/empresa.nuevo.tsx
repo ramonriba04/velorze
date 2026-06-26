@@ -35,17 +35,53 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
     stage: "crecimiento", status: "published",
   });
   const [images, setImages] = useState<ProjectImage[]>([]);
+  const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">("idle");
+  const [loaded, setLoaded] = useState(mode === "create");
 
   useEffect(() => {
     if (mode === "edit" && params.id) {
       supabase.from("projects").select("*").eq("id", params.id).maybeSingle().then(({ data }) => {
         if (data) setForm(data);
+        setLoaded(true);
       });
       supabase.from("project_images").select("url, storage_path, id").eq("project_id", params.id).order("sort_order").then(({ data }) => {
         if (data) setImages(data as ProjectImage[]);
       });
     }
   }, [mode, params.id]);
+
+  // Debounced autosave (edit mode only, after initial load)
+  useEffect(() => {
+    if (mode !== "edit" || !params.id || !loaded) return;
+    if (!form.title || !form.description) return;
+    setSaveState("saving");
+    const handle = setTimeout(async () => {
+      try {
+        await update({
+          data: {
+            id: params.id!,
+            title: form.title,
+            description: form.description,
+            sector: form.sector,
+            investment_type: form.investment_type,
+            capital_required: Number(form.capital_required) || 0,
+            ticket_min: form.ticket_min ? Number(form.ticket_min) : null,
+            ticket_max: form.ticket_max ? Number(form.ticket_max) : null,
+            country: form.country,
+            stage: form.stage,
+            status: form.status,
+            cover_url: images[0]?.url ?? form.cover_url ?? null,
+          },
+        });
+        setSaveState("saved");
+      } catch {
+        setSaveState("idle");
+      }
+    }, 1200);
+    return () => clearTimeout(handle);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form, images, loaded, mode, params.id]);
+
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
