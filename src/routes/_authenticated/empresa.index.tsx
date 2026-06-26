@@ -69,13 +69,38 @@ function CompanyDashboard() {
       <div className="flex items-center gap-3">
         <EntityAvatar src={profile?.logo_url} name={name} kind="company" size={48} />
         <div className="min-w-0 flex-1">
-          <p className="text-xs text-muted-foreground">{t("home.welcomeBack")}</p>
+          <p className="text-xs text-muted-foreground flex items-center gap-2">
+            {t("home.welcomeBack")} <PlanBadge code={planCode} />
+          </p>
           <h1 className="text-2xl sm:text-3xl font-bold truncate">{name || t("nav.profile")}</h1>
         </div>
         <Link to="/empresa/nuevo" className="hidden sm:block">
           <Button className="gap-1 shadow-elegant"><Plus className="h-4 w-4" />{t("nav.newProject")}</Button>
         </Link>
       </div>
+
+      {/* Plan usage row */}
+      <Card className="mt-6 p-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-xs text-muted-foreground">{t("plans.activeProjects")}</p>
+            <p className="mt-0.5 text-lg font-semibold">
+              {usage?.active ?? 0}
+              <span className="text-muted-foreground"> / {limits.max_active_projects ?? "∞"}</span>
+            </p>
+          </div>
+          {limits.max_active_projects !== null && (
+            <Progress
+              value={Math.min(100, ((usage?.active ?? 0) / Math.max(1, limits.max_active_projects)) * 100)}
+              className="h-2 flex-1 min-w-[140px]"
+            />
+          )}
+          {planCode !== "business" && <UpgradeDialog />}
+        </div>
+        {limits.max_active_projects !== null && (usage?.active ?? 0) >= limits.max_active_projects && (
+          <p className="mt-2 text-xs text-warning">{t("plans.capReached")}</p>
+        )}
+      </Card>
 
       <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-3">
         <Card className="p-4">
@@ -100,6 +125,38 @@ function CompanyDashboard() {
           </Link>
         )}
       </div>
+
+      {/* Analytics */}
+      <div className="mt-10 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <BarChart3 className="h-5 w-5 text-primary" />
+          <h2 className="text-xl font-semibold">{t("plans.analytics")}</h2>
+          {!features.advanced_analytics && <PlanBadge code="free" />}
+        </div>
+        {!features.advanced_analytics && <UpgradeDialog />}
+      </div>
+      <div className="mt-4 grid gap-3 grid-cols-2 lg:grid-cols-4">
+        <Card className="p-4">
+          <div className="flex items-center gap-2 text-muted-foreground text-xs"><Send className="h-4 w-4" />{t("plans.metric.requests")}</div>
+          <p className="mt-1 text-2xl font-semibold">{usage?.requests ?? 0}</p>
+        </Card>
+        <Card className="p-4">
+          <div className="flex items-center gap-2 text-muted-foreground text-xs"><Heart className="h-4 w-4" />{t("plans.metric.favorites")}</div>
+          <p className="mt-1 text-2xl font-semibold">{usage?.favorites ?? 0}</p>
+        </Card>
+        <Card className={`p-4 relative ${features.advanced_analytics ? "" : "opacity-70"}`}>
+          <div className="flex items-center gap-2 text-muted-foreground text-xs">
+            {features.advanced_analytics ? <Eye className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
+            {t("plans.metric.views")}
+          </div>
+          <p className="mt-1 text-2xl font-semibold">{features.advanced_analytics ? "—" : t("plans.locked")}</p>
+        </Card>
+        <Card className="p-4">
+          <div className="flex items-center gap-2 text-muted-foreground text-xs"><BarChart3 className="h-4 w-4" />{t("plans.metric.conversion")}</div>
+          <p className="mt-1 text-2xl font-semibold">{usage?.conversion ?? 0}%</p>
+        </Card>
+      </div>
+
 
       <div className="mt-10 flex items-center justify-between">
         <h2 className="text-xl font-semibold">{t("nav.projects")}</h2>
