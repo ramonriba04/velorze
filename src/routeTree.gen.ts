@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TerminosRouteImport } from './routes/terminos'
 import { Route as PrivacidadRouteImport } from './routes/privacidad'
+import { Route as PlanesRouteImport } from './routes/planes'
 import { Route as LegalRouteImport } from './routes/legal'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as ContactoRouteImport } from './routes/contacto'
@@ -46,6 +47,11 @@ const TerminosRoute = TerminosRouteImport.update({
 const PrivacidadRoute = PrivacidadRouteImport.update({
   id: '/privacidad',
   path: '/privacidad',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlanesRoute = PlanesRouteImport.update({
+  id: '/planes',
+  path: '/planes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LegalRoute = LegalRouteImport.update({
@@ -196,6 +202,7 @@ export interface FileRoutesByFullPath {
   '/contacto': typeof ContactoRoute
   '/cookies': typeof CookiesRoute
   '/legal': typeof LegalRoute
+  '/planes': typeof PlanesRoute
   '/privacidad': typeof PrivacidadRoute
   '/terminos': typeof TerminosRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -225,6 +232,7 @@ export interface FileRoutesByTo {
   '/contacto': typeof ContactoRoute
   '/cookies': typeof CookiesRoute
   '/legal': typeof LegalRoute
+  '/planes': typeof PlanesRoute
   '/privacidad': typeof PrivacidadRoute
   '/terminos': typeof TerminosRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -256,6 +264,7 @@ export interface FileRoutesById {
   '/contacto': typeof ContactoRoute
   '/cookies': typeof CookiesRoute
   '/legal': typeof LegalRoute
+  '/planes': typeof PlanesRoute
   '/privacidad': typeof PrivacidadRoute
   '/terminos': typeof TerminosRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
@@ -287,6 +296,7 @@ export interface FileRouteTypes {
     | '/contacto'
     | '/cookies'
     | '/legal'
+    | '/planes'
     | '/privacidad'
     | '/terminos'
     | '/admin'
@@ -316,6 +326,7 @@ export interface FileRouteTypes {
     | '/contacto'
     | '/cookies'
     | '/legal'
+    | '/planes'
     | '/privacidad'
     | '/terminos'
     | '/admin'
@@ -346,6 +357,7 @@ export interface FileRouteTypes {
     | '/contacto'
     | '/cookies'
     | '/legal'
+    | '/planes'
     | '/privacidad'
     | '/terminos'
     | '/_authenticated/admin'
@@ -377,6 +389,7 @@ export interface RootRouteChildren {
   ContactoRoute: typeof ContactoRoute
   CookiesRoute: typeof CookiesRoute
   LegalRoute: typeof LegalRoute
+  PlanesRoute: typeof PlanesRoute
   PrivacidadRoute: typeof PrivacidadRoute
   TerminosRoute: typeof TerminosRoute
   ProyectosIdRoute: typeof ProyectosIdRoute
@@ -396,6 +409,13 @@ declare module '@tanstack/react-router' {
       path: '/privacidad'
       fullPath: '/privacidad'
       preLoaderRoute: typeof PrivacidadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/planes': {
+      id: '/planes'
+      path: '/planes'
+      fullPath: '/planes'
+      preLoaderRoute: typeof PlanesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/legal': {
@@ -644,6 +664,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactoRoute: ContactoRoute,
   CookiesRoute: CookiesRoute,
   LegalRoute: LegalRoute,
+  PlanesRoute: PlanesRoute,
   PrivacidadRoute: PrivacidadRoute,
   TerminosRoute: TerminosRoute,
   ProyectosIdRoute: ProyectosIdRoute,

@@ -436,6 +436,41 @@
       "support": "Soporte prioritario",
       "no_advanced": "Sin analíticas avanzadas"
     }
+  },
+  "upgrade": {
+    "title": "Mejora próximamente",
+    "desc1": "Capora introducirá planes en una próxima versión.",
+    "desc2": "Por ahora todas las funciones siguen disponibles en Free.",
+    "gotIt": "Entendido",
+    "viewPlans": "Ver planes"
+  },
+  "planes": {
+    "title": "Planes Capora",
+    "sub": "Elige el plan que mejor se adapte a tu proyecto. Visibilidad, analíticas y herramientas para crecer.",
+    "freeNotice": "Todos los usuarios siguen en Free. Los planes de pago llegarán pronto.",
+    "priceTba": "Precio próximamente",
+    "feat": {
+      "free": {
+        "1": "1 proyecto activo",
+        "2": "Matching completo",
+        "3": "Recibir solicitudes de contacto",
+        "4": "Página de perfil",
+        "5": "Estadísticas básicas"
+      },
+      "pro": {
+        "1": "Hasta 5 proyectos activos",
+        "2": "1 proyecto destacado",
+        "3": "Analíticas avanzadas",
+        "4": "Visibilidad prioritaria"
+      },
+      "business": {
+        "1": "Proyectos activos ilimitados",
+        "2": "Miembros de equipo",
+        "3": "Múltiples proyectos destacados",
+        "4": "Exportación del panel",
+        "5": "Soporte prioritario"
+      }
+    }
   }
 }
 

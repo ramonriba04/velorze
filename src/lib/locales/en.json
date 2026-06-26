@@ -436,6 +436,41 @@
       "support": "Priority support",
       "no_advanced": "No advanced analytics"
     }
+  },
+  "upgrade": {
+    "title": "Upgrade coming soon",
+    "desc1": "Capora will introduce plans in a future release.",
+    "desc2": "For now all features remain available under Free.",
+    "gotIt": "Got it",
+    "viewPlans": "View plans"
+  },
+  "planes": {
+    "title": "Capora plans",
+    "sub": "Pick the plan that fits your project. Visibility, analytics and tools to grow.",
+    "freeNotice": "All users are on Free for now. Paid plans are on the way.",
+    "priceTba": "Price coming soon",
+    "feat": {
+      "free": {
+        "1": "1 active project",
+        "2": "Full matching",
+        "3": "Receive contact requests",
+        "4": "Profile page",
+        "5": "Basic statistics"
+      },
+      "pro": {
+        "1": "Up to 5 active projects",
+        "2": "1 featured project",
+        "3": "Advanced analytics",
+        "4": "Priority visibility"
+      },
+      "business": {
+        "1": "Unlimited active projects",
+        "2": "Team members",
+        "3": "Multiple featured projects",
+        "4": "Dashboard export",
+        "5": "Priority support"
+      }
+    }
   }
 }
 
