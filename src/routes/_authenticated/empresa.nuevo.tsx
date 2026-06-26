@@ -123,7 +123,14 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
       <Card className="p-6">
-        <h1 className="text-2xl font-bold">{mode === "create" ? t("nav.newProject") : t("common.edit")}</h1>
+        <div className="flex items-center justify-between gap-3">
+          <h1 className="text-2xl font-bold">{mode === "create" ? t("nav.newProject") : t("common.edit")}</h1>
+          {mode === "edit" && (
+            <span className="text-xs text-muted-foreground" aria-live="polite">
+              {saveState === "saving" ? t("autosave.saving") : saveState === "saved" ? t("autosave.saved") : ""}
+            </span>
+          )}
+        </div>
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
           <div><Label>{t("project.title")}</Label><Input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
           <div><Label>{t("project.description")}</Label><Textarea required rows={5} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
