@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "@tanstack/react-router";
 import { Globe, LogOut, Settings } from "lucide-react";
@@ -18,12 +18,15 @@ import { NotificationsBell } from "@/components/layout/NotificationsBell";
 
 export function LanguageSwitcher() {
   const { i18n } = useTranslation();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const label = mounted ? (i18n.resolvedLanguage?.toUpperCase() ?? "ES") : "ES";
   const set = (lng: "es" | "en") => i18n.changeLanguage(lng);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm" className="gap-1">
-          <Globe className="h-4 w-4" /> {i18n.resolvedLanguage?.toUpperCase() ?? "ES"}
+          <Globe className="h-4 w-4" /> <span suppressHydrationWarning>{label}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -168,6 +171,7 @@ export function Footer() {
             <Link to="/terminos" className="hover:text-foreground">{t("footer.terms")}</Link>
             <Link to="/cookies" className="hover:text-foreground">{t("footer.cookies")}</Link>
             <Link to="/legal" className="hover:text-foreground">{t("footer.legal")}</Link>
+            <Link to="/ayuda" className="hover:text-foreground">{t("footer.help")}</Link>
             <Link to="/contacto" className="hover:text-foreground">{t("footer.contact")}</Link>
           </div>
         </div>

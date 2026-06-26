@@ -14,6 +14,7 @@ import { Route as PrivacidadRouteImport } from './routes/privacidad'
 import { Route as LegalRouteImport } from './routes/legal'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as ContactoRouteImport } from './routes/contacto'
+import { Route as AyudaRouteImport } from './routes/ayuda'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -60,6 +61,11 @@ const CookiesRoute = CookiesRouteImport.update({
 const ContactoRoute = ContactoRouteImport.update({
   id: '/contacto',
   path: '/contacto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AyudaRoute = AyudaRouteImport.update({
+  id: '/ayuda',
+  path: '/ayuda',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -186,6 +192,7 @@ const AuthenticatedEmpresaIdEditarRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
+  '/ayuda': typeof AyudaRoute
   '/contacto': typeof ContactoRoute
   '/cookies': typeof CookiesRoute
   '/legal': typeof LegalRoute
@@ -214,6 +221,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
+  '/ayuda': typeof AyudaRoute
   '/contacto': typeof ContactoRoute
   '/cookies': typeof CookiesRoute
   '/legal': typeof LegalRoute
@@ -244,6 +252,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
+  '/ayuda': typeof AyudaRoute
   '/contacto': typeof ContactoRoute
   '/cookies': typeof CookiesRoute
   '/legal': typeof LegalRoute
@@ -274,6 +283,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/ayuda'
     | '/contacto'
     | '/cookies'
     | '/legal'
@@ -302,6 +312,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/ayuda'
     | '/contacto'
     | '/cookies'
     | '/legal'
@@ -331,6 +342,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/ayuda'
     | '/contacto'
     | '/cookies'
     | '/legal'
@@ -361,6 +373,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRouteWithChildren
+  AyudaRoute: typeof AyudaRoute
   ContactoRoute: typeof ContactoRoute
   CookiesRoute: typeof CookiesRoute
   LegalRoute: typeof LegalRoute
@@ -404,6 +417,13 @@ declare module '@tanstack/react-router' {
       path: '/contacto'
       fullPath: '/contacto'
       preLoaderRoute: typeof ContactoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ayuda': {
+      id: '/ayuda'
+      path: '/ayuda'
+      fullPath: '/ayuda'
+      preLoaderRoute: typeof AyudaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -620,6 +640,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRouteWithChildren,
+  AyudaRoute: AyudaRoute,
   ContactoRoute: ContactoRoute,
   CookiesRoute: CookiesRoute,
   LegalRoute: LegalRoute,

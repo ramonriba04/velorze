@@ -359,6 +359,36 @@
     "privacy": "Privacidad",
     "terms": "Términos",
     "cookies": "Cookies",
-    "contact": "Contacto"
+    "contact": "Contacto",
+    "help": "Ayuda"
+  },
+  "share": {
+    "button": "Compartir",
+    "copied": "Enlace copiado"
+  },
+  "autosave": {
+    "saving": "Guardando…",
+    "saved": "Guardado"
+  },
+  "help": {
+    "title": "Centro de ayuda",
+    "sub": "Respuestas rápidas a las dudas más habituales.",
+    "matching": {
+      "q": "¿Cómo funciona el matching?",
+      "a": "Puntuamos cada proyecto según tu perfil de inversor (sectores, países, rango de ticket, tipo de inversión). Cuanto mayor sea la puntuación, mejor encaja. Actualiza tu perfil cuando quieras para afinar las recomendaciones."
+    },
+    "contact": {
+      "q": "¿Cómo contacto con una empresa?",
+      "a": "Abre un proyecto y pulsa Contactar empresa. La empresa puede aceptar o rechazar tu solicitud. Si la acepta, se abre un chat privado entre ambos."
+    },
+    "privacy": {
+      "q": "¿Quién puede ver mis datos?",
+      "a": "Tus datos de contacto son privados hasta que envíes una solicitud. Las empresas solo ven lo que expones en tu perfil (nombre, intereses). Consulta la Política de privacidad para más detalles."
+    },
+    "account": {
+      "q": "¿Cómo cambio mi correo o elimino mi cuenta?",
+      "a": "Ve a Ajustes. Desde ahí puedes cambiar el idioma, actualizar la contraseña y eliminar tu cuenta de forma permanente."
+    }
   }
 }
+
