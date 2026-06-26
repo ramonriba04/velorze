@@ -89,9 +89,13 @@ function Settings() {
             <> · {new Intl.NumberFormat(undefined, { style: "currency", currency: plan.currency }).format(plan.price_cents / 100)}/mo</>
           )}
         </p>
-        <div className="pt-1">
+        <div className="flex flex-wrap gap-2 pt-1">
+          <Link to="/planes">
+            <Button variant="outline" size="sm">{t("upgrade.viewPlans")}</Button>
+          </Link>
           <UpgradeDialog />
         </div>
+
       </Card>
 
       <Card className="space-y-4 p-6">
