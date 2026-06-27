@@ -560,6 +560,10 @@ export type Database = {
         Args: { _role: Database["public"]["Enums"]["app_role"] }
         Returns: undefined
       }
+      get_company_contact_email: {
+        Args: { _company_id: string }
+        Returns: string
+      }
       get_my_plan_code: { Args: never; Returns: string }
       get_my_role: {
         Args: never
