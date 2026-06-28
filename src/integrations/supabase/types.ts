@@ -26,6 +26,7 @@ export type Database = {
           logo_url: string | null
           updated_at: string
           user_id: string
+          verification_status: string
           website: string | null
         }
         Insert: {
@@ -39,6 +40,7 @@ export type Database = {
           logo_url?: string | null
           updated_at?: string
           user_id: string
+          verification_status?: string
           website?: string | null
         }
         Update: {
@@ -52,6 +54,7 @@ export type Database = {
           logo_url?: string | null
           updated_at?: string
           user_id?: string
+          verification_status?: string
           website?: string | null
         }
         Relationships: []
@@ -489,6 +492,39 @@ export type Database = {
         }
         Relationships: []
       }
+      user_consents: {
+        Row: {
+          accepted_at: string
+          cookies_version: string
+          id: string
+          ip: string | null
+          privacy_version: string
+          terms_version: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          accepted_at?: string
+          cookies_version: string
+          id?: string
+          ip?: string | null
+          privacy_version: string
+          terms_version: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          accepted_at?: string
+          cookies_version?: string
+          id?: string
+          ip?: string | null
+          privacy_version?: string
+          terms_version?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_plan: {
         Row: {
           billing_status: string
@@ -557,6 +593,89 @@ export type Database = {
         }
         Relationships: []
       }
+      verification_audit: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          id: string
+          reason: string | null
+          request_id: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          reason?: string | null
+          request_id: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          reason?: string | null
+          request_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "verification_audit_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "verification_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      verification_requests: {
+        Row: {
+          country: string
+          created_at: string
+          doc_path: string | null
+          id: string
+          kind: string
+          legal_name: string
+          reason: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          submitted_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          country: string
+          created_at?: string
+          doc_path?: string | null
+          id?: string
+          kind: string
+          legal_name: string
+          reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          submitted_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          country?: string
+          created_at?: string
+          doc_path?: string | null
+          id?: string
+          kind?: string
+          legal_name?: string
+          reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          submitted_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -596,6 +715,7 @@ export type Database = {
         Args: { _user_id: string }
         Returns: number
       }
+      my_verification_status: { Args: never; Returns: string }
     }
     Enums: {
       app_role: "empresa" | "inversor" | "admin"

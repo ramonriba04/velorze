@@ -22,6 +22,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProyectosIdRouteImport } from './routes/proyectos.$id'
 import { Route as AuthRestablecerRouteImport } from './routes/auth.restablecer'
 import { Route as AuthRecuperarRouteImport } from './routes/auth.recuperar'
+import { Route as AuthenticatedVerificacionRouteImport } from './routes/_authenticated/verificacion'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedMensajesRouteImport } from './routes/_authenticated/mensajes'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
@@ -103,6 +104,12 @@ const AuthRecuperarRoute = AuthRecuperarRouteImport.update({
   path: '/recuperar',
   getParentRoute: () => AuthRoute,
 } as any)
+const AuthenticatedVerificacionRoute =
+  AuthenticatedVerificacionRouteImport.update({
+    id: '/verificacion',
+    path: '/verificacion',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
@@ -210,6 +217,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AuthenticatedAppRoute
   '/mensajes': typeof AuthenticatedMensajesRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/verificacion': typeof AuthenticatedVerificacionRoute
   '/auth/recuperar': typeof AuthRecuperarRoute
   '/auth/restablecer': typeof AuthRestablecerRoute
   '/proyectos/$id': typeof ProyectosIdRoute
@@ -240,6 +248,7 @@ export interface FileRoutesByTo {
   '/app': typeof AuthenticatedAppRoute
   '/mensajes': typeof AuthenticatedMensajesRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/verificacion': typeof AuthenticatedVerificacionRoute
   '/auth/recuperar': typeof AuthRecuperarRoute
   '/auth/restablecer': typeof AuthRestablecerRoute
   '/proyectos/$id': typeof ProyectosIdRoute
@@ -272,6 +281,7 @@ export interface FileRoutesById {
   '/_authenticated/app': typeof AuthenticatedAppRoute
   '/_authenticated/mensajes': typeof AuthenticatedMensajesRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
+  '/_authenticated/verificacion': typeof AuthenticatedVerificacionRoute
   '/auth/recuperar': typeof AuthRecuperarRoute
   '/auth/restablecer': typeof AuthRestablecerRoute
   '/proyectos/$id': typeof ProyectosIdRoute
@@ -304,6 +314,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/mensajes'
     | '/onboarding'
+    | '/verificacion'
     | '/auth/recuperar'
     | '/auth/restablecer'
     | '/proyectos/$id'
@@ -334,6 +345,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/mensajes'
     | '/onboarding'
+    | '/verificacion'
     | '/auth/recuperar'
     | '/auth/restablecer'
     | '/proyectos/$id'
@@ -365,6 +377,7 @@ export interface FileRouteTypes {
     | '/_authenticated/app'
     | '/_authenticated/mensajes'
     | '/_authenticated/onboarding'
+    | '/_authenticated/verificacion'
     | '/auth/recuperar'
     | '/auth/restablecer'
     | '/proyectos/$id'
@@ -488,6 +501,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRecuperarRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_authenticated/verificacion': {
+      id: '/_authenticated/verificacion'
+      path: '/verificacion'
+      fullPath: '/verificacion'
+      preLoaderRoute: typeof AuthenticatedVerificacionRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/onboarding': {
       id: '/_authenticated/onboarding'
       path: '/onboarding'
@@ -609,6 +629,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAppRoute: typeof AuthenticatedAppRoute
   AuthenticatedMensajesRoute: typeof AuthenticatedMensajesRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
+  AuthenticatedVerificacionRoute: typeof AuthenticatedVerificacionRoute
   AuthenticatedEmpresaNuevoRoute: typeof AuthenticatedEmpresaNuevoRoute
   AuthenticatedEmpresaPerfilRoute: typeof AuthenticatedEmpresaPerfilRoute
   AuthenticatedEmpresaSolicitudesRoute: typeof AuthenticatedEmpresaSolicitudesRoute
@@ -628,6 +649,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAppRoute: AuthenticatedAppRoute,
   AuthenticatedMensajesRoute: AuthenticatedMensajesRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
+  AuthenticatedVerificacionRoute: AuthenticatedVerificacionRoute,
   AuthenticatedEmpresaNuevoRoute: AuthenticatedEmpresaNuevoRoute,
   AuthenticatedEmpresaPerfilRoute: AuthenticatedEmpresaPerfilRoute,
   AuthenticatedEmpresaSolicitudesRoute: AuthenticatedEmpresaSolicitudesRoute,
@@ -672,13 +694,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

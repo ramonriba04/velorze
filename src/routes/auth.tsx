@@ -5,7 +5,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
-import { assignMyRole } from "@/lib/profiles.functions";
+import { assignMyRole, recordConsent } from "@/lib/profiles.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { Header, Footer } from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
@@ -41,19 +41,22 @@ function AuthPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const assign = useServerFn(assignMyRole);
+  const consent = useServerFn(recordConsent);
   const [mode, setMode] = useState<"login" | "signup">(search.mode ?? "login");
   const [role, setRole] = useState<"empresa" | "inversor">(search.role ?? "inversor");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPw, setConfirmPw] = useState("");
   const [fullName, setFullName] = useState("");
+  const [acceptedLegal, setAcceptedLegal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [needsVerification, setNeedsVerification] = useState<string | null>(null);
   const [loginUnverifiedEmail, setLoginUnverifiedEmail] = useState<string | null>(null);
 
   const pwValid = isPasswordValid(password);
   const pwMatch = password.length > 0 && password === confirmPw;
-  const signupReady = !!email && !!fullName && pwValid && pwMatch;
+  const signupReady = !!email && !!fullName && pwValid && pwMatch && acceptedLegal;
+
 
   const afterAuth = async () => {
     try {
@@ -103,6 +106,10 @@ function AuthPage() {
           toast.error(t("auth.pw.mismatch"));
           return;
         }
+        if (!acceptedLegal) {
+          toast.error(t("consent.required"));
+          return;
+        }
         if (typeof window !== "undefined") {
           localStorage.setItem("capora_pending_role", role);
         }
@@ -115,12 +122,25 @@ function AuthPage() {
           },
         });
         if (error) throw error;
+        // Record legal consent (best-effort; logged for audit)
+        try {
+          await consent({
+            data: {
+              terms_version: "2026-06-28",
+              privacy_version: "2026-06-28",
+              cookies_version: "2026-06-28",
+              user_agent: typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 500) : null,
+            },
+          });
+        } catch (e) {
+          console.warn("consent log failed", e);
+        }
         if (data.session) {
-          // Auto-confirm enabled (shouldn't happen now); go straight in.
           await afterAuth();
         } else {
           setNeedsVerification(email);
         }
+
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) {
@@ -293,7 +313,28 @@ function AuthPage() {
                   </button>
                 </div>
               )}
+              {mode === "signup" && (
+                <label className="flex items-start gap-2 text-xs text-muted-foreground">
+                  <input
+                    type="checkbox"
+                    checked={acceptedLegal}
+                    onChange={(e) => setAcceptedLegal(e.target.checked)}
+                    className="mt-0.5 h-4 w-4 shrink-0"
+                    required
+                  />
+                  <span>
+                    {t("consent.label.before")}{" "}
+                    <Link to="/terminos" className="underline">{t("consent.label.terms")}</Link>
+                    {t("consent.label.sep1")}
+                    <Link to="/privacidad" className="underline">{t("consent.label.privacy")}</Link>
+                    {t("consent.label.sep2")}
+                    <Link to="/cookies" className="underline">{t("consent.label.cookies")}</Link>
+                    {t("consent.label.after")}
+                  </span>
+                </label>
+              )}
               <Button
+
                 type="submit"
                 disabled={loading || (mode === "signup" && !signupReady)}
                 className="w-full"

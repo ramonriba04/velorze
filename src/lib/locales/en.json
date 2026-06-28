@@ -180,12 +180,13 @@
   },
   "terms": {
     "title": "Terms and Conditions",
-    "body": "Capora is a discovery platform that connects companies and investors. We do not process payments, manage investments, act as financial intermediaries or provide advice.\n\nBy using Capora you agree to: provide truthful information, respect other users, not use the platform for unlawful activities and take full responsibility for your investment decisions.\n\nWe may suspend accounts that breach these terms. Use of the service is governed by Spanish law."
+    "body": "Capora is a discovery and matching platform that connects projects with investors. We do not process payments, manage investments, act as financial intermediaries or provide advice of any kind.\n\nBy creating an account you accept these Terms of Use, the Privacy Policy and the Cookie Policy. We keep a record of your acceptance (date, IP and version) for compliance purposes.\n\nProject publishers must complete a verification process. Capora reserves the right to approve or reject verifications at its discretion.\n\nYou agree to: provide truthful information, respect other users, not use the platform for unlawful activities, and take full responsibility for your investment decisions.\n\nLimitation of liability — Capora does NOT guarantee: (i) the accuracy of identities, (ii) the financial solvency of publishers, (iii) the success of any project, (iv) the outcome of any investment, or (v) user behaviour. Capora does not provide financial, legal or tax advice.\n\nWe may suspend accounts that breach these terms. Use of the service is governed by Spanish law."
   },
   "cookies": {
     "title": "Cookie Policy",
-    "body": "Capora uses cookies strictly necessary for service operation (user session, language).\n\nWe do not use advertising or cross-site tracking cookies. You can block cookies from your browser, but some features may stop working."
+    "body": "Capora uses cookies strictly necessary for service operation (session, language, security). These are always loaded.\n\nAnalytics and marketing cookies are only activated with your explicit consent, which you can grant, decline or customise from the cookie banner. Your choice is stored on this device and you can change it any time by clearing cookies in your browser.\n\nWe do not load analytics or cross-site tracking before your consent."
   },
+
   "contact": {
     "title": "Contact",
     "body": "Questions, suggestions or need help? Write to us and we'll get back to you as soon as possible."
@@ -676,5 +677,59 @@
         "5": "Priority support"
       }
     }
+  },
+  "consent": {
+    "required": "You must accept the terms to continue.",
+    "label": {
+      "before": "I have read and accept the ",
+      "terms": "Terms of Use",
+      "sep1": ", ",
+      "privacy": "Privacy Policy",
+      "sep2": " and ",
+      "cookies": "Cookie Policy",
+      "after": "."
+    }
+  },
+  "cookieBanner": {
+    "title": "Cookies & privacy",
+    "body": "We use essential cookies so the platform works. With your consent, we may also use measurement cookies.",
+    "learn": "Learn more",
+    "acceptAll": "Accept all",
+    "rejectAll": "Reject non-essential",
+    "configure": "Configure",
+    "savePrefs": "Save preferences",
+    "essential": "Essential",
+    "essentialDesc": "Required to sign in and keep your session active.",
+    "analytics": "Analytics",
+    "analyticsDesc": "Help us understand how the platform is used.",
+    "marketing": "Marketing",
+    "marketingDesc": "We don't use them today; we'll ask before enabling them.",
+    "always": "Always on"
+  },
+  "verification": {
+    "title": "Account verification",
+    "subCompany": "Verify your company to publish opportunities.",
+    "subIndividual": "Verify your identity to publish projects.",
+    "bannerTitle": "Verification required",
+    "bannerBody": "Only verified users can publish opportunities. In the meantime, you can save your project as a draft.",
+    "cta": "Verify now",
+    "publishBlocked": "Verify your account to publish. We'll keep it as a draft.",
+    "legalCompanyName": "Legal company name",
+    "fullLegalName": "Full legal name",
+    "country": "Country",
+    "companyDoc": "Company registry document or certificate of incorporation",
+    "idDoc": "Identity document",
+    "docHint": "PDF or image. Deleted after review.",
+    "docRequired": "Upload a document to continue.",
+    "submit": "Submit for review",
+    "submitted": "Request submitted. We'll review it shortly.",
+    "alreadyVerified": "Your account is already verified.",
+    "pendingNote": "Your request is being reviewed. We'll notify you as soon as there is a decision.",
+    "rejected": "Request rejected",
+    "privacyNote": "We handle your document confidentially. It is deleted after the team's decision.",
+    "statusUnverified": "Unverified",
+    "statusPending": "In review",
+    "statusVerified": "Verified",
+    "statusRejected": "Rejected"
   }
 }

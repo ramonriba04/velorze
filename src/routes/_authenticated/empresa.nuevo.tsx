@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, useParams } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useParams, Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import { useServerFn } from "@tanstack/react-start";
@@ -54,10 +54,11 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
   useEffect(() => {
     if (!user) return;
     supabase.from("company_profiles")
-      .select("legal_name, country, description, contact_email, logo_url, website")
+      .select("legal_name, country, description, contact_email, logo_url, website, verification_status, entity_type")
       .eq("user_id", user.id).maybeSingle()
       .then(({ data }) => setCompanyProfile(data));
   }, [user]);
+
 
   useEffect(() => {
     if (mode === "edit" && params.id) {
@@ -119,6 +120,9 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
   };
   const hasErrors = Object.values(errors).some(Boolean);
 
+  const verificationStatus: string = (companyProfile?.verification_status as string) ?? "unverified";
+  const verified = verificationStatus === "verified";
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (hasErrors) {
@@ -128,6 +132,12 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
     // Block publish when company profile is incomplete — show modal instead.
     if (form.status === "published" && !completeness.complete) {
       setBlockedOpen(true);
+      return;
+    }
+    // Block publish when account is not verified — save as draft instead.
+    if (form.status === "published" && !verified) {
+      toast.error(t("verification.publishBlocked"));
+      setForm({ ...form, status: "draft" });
       return;
     }
     try {
@@ -157,9 +167,14 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
         setBlockedOpen(true);
         return;
       }
+      if (/verification_required/i.test(msg)) {
+        toast.error(t("verification.publishBlocked"));
+        return;
+      }
       toast.error(msg);
     }
   };
+
 
 
   const onDelete = async () => {
@@ -172,6 +187,19 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10 space-y-4">
+      {!verified && (
+        <Card className="p-4 border-amber-300/60 bg-amber-50 dark:border-amber-700/60 dark:bg-amber-950/30">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="text-sm font-semibold">{t("verification.bannerTitle")}</h2>
+              <p className="mt-0.5 text-xs text-muted-foreground">{t("verification.bannerBody")}</p>
+            </div>
+            <Link to="/verificacion">
+              <Button size="sm" variant="outline">{t("verification.cta")}</Button>
+            </Link>
+          </div>
+        </Card>
+      )}
       {!completeness.complete && (
         <ProfileCompletenessCard
           pct={completeness.pct}
@@ -181,6 +209,7 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
           ctaCopy={t("completeness.company.cta")}
         />
       )}
+
       <Card className="p-6">
         <div className="flex items-center justify-between gap-3">
           <h1 className="text-2xl font-bold">{mode === "create" ? t("nav.newProject") : t("common.edit")}</h1>

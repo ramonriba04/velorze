@@ -1,6 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequest } from "@tanstack/react-start/server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
+
 
 const RoleSchema = z.object({ role: z.enum(["empresa", "inversor"]) });
 
@@ -95,3 +97,95 @@ export const getMyCompleteness = createServerFn({ method: "GET" })
       investorComplete: !!investorComplete,
     };
   });
+
+// ---------------- Trust & Verification ----------------
+
+const ConsentSchema = z.object({
+  terms_version: z.string().min(1).max(20),
+  privacy_version: z.string().min(1).max(20),
+  cookies_version: z.string().min(1).max(20),
+  user_agent: z.string().max(500).optional().nullable(),
+});
+
+export const recordConsent = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => ConsentSchema.parse(input))
+  .handler(async ({ data, context }) => {
+    let ip: string | null = null;
+    try {
+      const req = getRequest();
+      ip =
+        req?.headers.get("cf-connecting-ip") ||
+        req?.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+        req?.headers.get("x-real-ip") ||
+        null;
+    } catch {
+      // request not available
+    }
+    const { error } = await context.supabase.from("user_consents" as never).insert({
+      user_id: context.userId,
+      terms_version: data.terms_version,
+      privacy_version: data.privacy_version,
+      cookies_version: data.cookies_version,
+      ip,
+      user_agent: data.user_agent ?? null,
+    } as never);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+const VerificationSchema = z.object({
+  kind: z.enum(["company", "individual"]),
+  legal_name: z.string().trim().min(2).max(120),
+  country: z.string().trim().min(2).max(80),
+  doc_path: z.string().trim().min(1).max(500),
+});
+
+export const submitVerification = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => VerificationSchema.parse(input))
+  .handler(async ({ data, context }) => {
+    // Insert request
+    const { error: insErr } = await context.supabase.from("verification_requests" as never).insert({
+      user_id: context.userId,
+      kind: data.kind,
+      legal_name: data.legal_name,
+      country: data.country,
+      doc_path: data.doc_path,
+      status: "pending",
+    } as never);
+    if (insErr) throw new Error(insErr.message);
+
+    // Reflect status on company_profiles (upsert minimal row if missing)
+    const { error: upErr } = await context.supabase
+      .from("company_profiles")
+      .update({ verification_status: "pending" } as never)
+      .eq("user_id", context.userId);
+    if (upErr) throw new Error(upErr.message);
+
+    return { ok: true };
+  });
+
+export const getMyVerification = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data: profile } = await context.supabase
+      .from("company_profiles")
+      .select("verification_status,entity_type")
+      .eq("user_id", context.userId)
+      .maybeSingle();
+    const { data: latest } = await context.supabase
+      .from("verification_requests" as never)
+      .select("id,status,kind,legal_name,country,reason,submitted_at,reviewed_at")
+      .eq("user_id", context.userId)
+      .order("submitted_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    return {
+      status: ((profile as { verification_status?: string } | null)?.verification_status ?? "unverified") as
+        | "unverified" | "pending" | "verified" | "rejected",
+      entity_type: (profile as { entity_type?: string } | null)?.entity_type ?? null,
+      latest: latest ?? null,
+    };
+  });
+

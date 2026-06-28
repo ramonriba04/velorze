@@ -14,6 +14,8 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
 import { Toaster } from "@/components/ui/sonner";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
+import { CookieBanner } from "@/components/CookieBanner";
+
 
 const SITE_URL = "https://capora-ai-connect.lovable.app";
 const OG_IMAGE = `${SITE_URL}/__l5e/assets-v1/a56efdb2-a5ec-4e38-86c0-563dfbd9bd43/og-capora.jpg`;
@@ -119,7 +121,9 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <Outlet />
       <MobileBottomNav />
+      <CookieBanner />
       <Toaster />
+
     </QueryClientProvider>
   );
 }

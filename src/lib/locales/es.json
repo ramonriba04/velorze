@@ -180,12 +180,13 @@
   },
   "terms": {
     "title": "Términos y condiciones",
-    "body": "Capora es una plataforma de descubrimiento que conecta empresas e inversores. No procesamos pagos, no gestionamos inversiones, no actuamos como intermediarios financieros y no prestamos asesoramiento.\n\nAl usar Capora aceptas: proporcionar información veraz, respetar a otros usuarios, no usar la plataforma para actividades ilícitas y asumir tu propia responsabilidad en las decisiones de inversión.\n\nPodemos suspender cuentas que incumplan estos términos. El uso del servicio se rige por la legislación española."
+    "body": "Capora es una plataforma de descubrimiento y matching que conecta proyectos con inversores. No procesamos pagos, no gestionamos inversiones, no actuamos como intermediarios financieros y no prestamos asesoramiento de ningún tipo.\n\nAl crear una cuenta aceptas estos Términos de uso, la Política de privacidad y la Política de cookies. Guardamos un registro de tu aceptación (fecha, IP y versión) con fines de cumplimiento.\n\nLos publicadores de proyectos deben superar un proceso de verificación. Capora se reserva el derecho a aprobar o rechazar verificaciones a su discreción.\n\nAceptas: proporcionar información veraz, respetar a otros usuarios, no usar la plataforma para actividades ilícitas y asumir tu propia responsabilidad en las decisiones de inversión.\n\nLímite de responsabilidad — Capora NO garantiza: (i) la exactitud de las identidades, (ii) la solvencia financiera de los publicadores, (iii) el éxito de ningún proyecto, (iv) los resultados de ninguna inversión, ni (v) la conducta de los usuarios. Capora no presta asesoramiento financiero, legal ni fiscal.\n\nPodemos suspender cuentas que incumplan estos términos. El uso del servicio se rige por la legislación española."
   },
   "cookies": {
     "title": "Política de cookies",
-    "body": "Capora utiliza cookies estrictamente necesarias para el funcionamiento del servicio (sesión de usuario, idioma).\n\nNo utilizamos cookies publicitarias ni de seguimiento entre sitios. Puedes bloquear las cookies desde tu navegador, pero algunas funciones podrían dejar de funcionar."
+    "body": "Capora utiliza cookies estrictamente necesarias para el funcionamiento del servicio (sesión, idioma, seguridad). Estas se cargan siempre.\n\nLas cookies de medición y marketing solo se activan con tu consentimiento explícito, que puedes dar, rechazar o personalizar desde el banner de cookies. Tu elección se guarda en este dispositivo y puedes cambiarla en cualquier momento borrando las cookies del navegador.\n\nNo cargamos analítica ni rastreo entre sitios antes de tu consentimiento."
   },
+
   "contact": {
     "title": "Contacto",
     "body": "¿Tienes preguntas, sugerencias o necesitas ayuda? Escríbenos y te responderemos lo antes posible."
@@ -676,5 +677,59 @@
         "5": "Soporte prioritario"
       }
     }
+  },
+  "consent": {
+    "required": "Debes aceptar los términos para continuar.",
+    "label": {
+      "before": "He leído y acepto los ",
+      "terms": "Términos de uso",
+      "sep1": ", la ",
+      "privacy": "Política de privacidad",
+      "sep2": " y la ",
+      "cookies": "Política de cookies",
+      "after": "."
+    }
+  },
+  "cookieBanner": {
+    "title": "Cookies y privacidad",
+    "body": "Usamos cookies esenciales para que la plataforma funcione. Con tu consentimiento, también podemos usar cookies de medición.",
+    "learn": "Más información",
+    "acceptAll": "Aceptar todas",
+    "rejectAll": "Rechazar no esenciales",
+    "configure": "Configurar",
+    "savePrefs": "Guardar preferencias",
+    "essential": "Esenciales",
+    "essentialDesc": "Necesarias para iniciar sesión y mantener tu sesión activa.",
+    "analytics": "Medición",
+    "analyticsDesc": "Nos ayudan a entender el uso de la plataforma.",
+    "marketing": "Marketing",
+    "marketingDesc": "No las usamos hoy; pediremos consentimiento antes de activarlas.",
+    "always": "Siempre activas"
+  },
+  "verification": {
+    "title": "Verificación de cuenta",
+    "subCompany": "Verifica tu empresa para poder publicar oportunidades.",
+    "subIndividual": "Verifica tu identidad para poder publicar proyectos.",
+    "bannerTitle": "Verificación requerida",
+    "bannerBody": "Solo los usuarios verificados pueden publicar oportunidades. Mientras tanto, puedes guardar tu proyecto como borrador.",
+    "cta": "Verificar ahora",
+    "publishBlocked": "Verifica tu cuenta para poder publicar. Lo guardaremos como borrador.",
+    "legalCompanyName": "Nombre legal de la empresa",
+    "fullLegalName": "Nombre legal completo",
+    "country": "País",
+    "companyDoc": "Documento de registro mercantil o certificado de constitución",
+    "idDoc": "Documento de identidad",
+    "docHint": "PDF o imagen. Se eliminará tras la revisión.",
+    "docRequired": "Sube un documento para continuar.",
+    "submit": "Enviar para revisión",
+    "submitted": "Solicitud enviada. La revisaremos en breve.",
+    "alreadyVerified": "Tu cuenta ya está verificada.",
+    "pendingNote": "Tu solicitud está en revisión. Te avisaremos en cuanto haya una decisión.",
+    "rejected": "Solicitud rechazada",
+    "privacyNote": "Tratamos tu documento con confidencialidad. Se elimina tras la decisión del equipo.",
+    "statusUnverified": "Sin verificar",
+    "statusPending": "En revisión",
+    "statusVerified": "Verificada",
+    "statusRejected": "Rechazada"
   }
 }
