@@ -519,7 +519,7 @@
     "verifiedBadge": "Verified publisher",
     "verifiedTitle": "Identity reviewed by the Capora team"
   },
-  "_legal_placeholder": {
+  "legal": {
 
   "legal": {
     "title": "Legal notice",
