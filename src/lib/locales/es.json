@@ -324,7 +324,7 @@
     "status": "Estado",
     "createdAt": "Publicado",
     "noProjects": "Aún no hay proyectos publicados.",
-    "createFirst": "Crea tu primer proyecto",
+    "createFirst": "Crear oportunidad",
     "viewProject": "Ver proyecto",
     "contactCompany": "Contactar empresa",
     "alreadyRequested": "Solicitud enviada",
@@ -471,7 +471,7 @@
     "completeProfileCta": "Completar perfil",
     "noMatchesYetTitle": "Todavía no encontramos oportunidades compatibles",
     "noMatchesYetSub": "Volveremos a buscar a medida que se publiquen nuevos proyectos.",
-    "firstProjectTitle": "Publica tu primer proyecto",
+    "firstProjectTitle": "Todavía no has publicado ninguna oportunidad",
     "firstProjectSub": "Comparte tu oportunidad con inversores compatibles en minutos.",
     "pendingRequests": "Pendientes"
   },
@@ -502,7 +502,7 @@
     "title": "Aviso legal",
     "body": "Capora es únicamente una plataforma de conexión entre empresas e inversores. No procesa pagos, no gestiona inversiones, no actúa como intermediario financiero y no ofrece asesoramiento financiero. Las recomendaciones generadas por el sistema son meramente informativas. Los usuarios son responsables de realizar su propia diligencia debida antes de tomar cualquier decisión de inversión."
   },
-  "disclaimer": "Capora no presta asesoramiento financiero ni gestiona inversiones. Sólo conecta usuarios.",
+  "disclaimer": "Marketplace inteligente para conectar proyectos e inversores.",
   "media": {
     "upload": "Subir",
     "replace": "Reemplazar",
