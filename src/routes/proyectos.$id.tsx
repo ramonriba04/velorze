@@ -107,13 +107,17 @@ function ProjectDetail() {
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <p className="text-sm font-medium truncate">{data.company?.legal_name ?? ""}</p>
-                    {data.company?.verification_status === "verified" && (
+                    {(["basic","trusted","manual"] as const).includes(
+                      (data.company?.trust_level ?? "unverified") as "basic"|"trusted"|"manual",
+                    ) && (
                       <span
                         className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-200"
                         title={t("trust.verifiedTitle")}
                       >
                         <ShieldCheck className="h-3 w-3" />
-                        {t("trust.verifiedBadge")}
+                        {data.company?.trust_level === "trusted" || data.company?.trust_level === "manual"
+                          ? t("verification.trustTrusted")
+                          : t("trust.verifiedBadge")}
                       </span>
                     )}
                   </div>
