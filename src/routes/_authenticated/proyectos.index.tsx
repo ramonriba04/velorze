@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { EmptyState } from "@/components/ui/empty-state";
 import { computeMatch, type MatchableInvestor } from "@/lib/matching";
+import { EntityTypeBadge } from "@/components/EntityTypeBadge";
 
 const searchSchema = z.object({
   q: z.string().optional().catch(undefined),
@@ -85,6 +86,19 @@ function ProjectsDiscovery() {
       const { data, error } = await query.order("created_at", { ascending: false }).limit(60);
       if (error) throw new Error(error.message);
       return data ?? [];
+    },
+  });
+
+  const ownerIds = Array.from(new Set((items ?? []).map((p: any) => p.company_id)));
+  const { data: owners } = useQuery({
+    queryKey: ["projects_owners_entity", ownerIds.join(",")],
+    enabled: ownerIds.length > 0,
+    queryFn: async () => {
+      const { data } = await supabase.from("company_profiles")
+        .select("user_id, entity_type").in("user_id", ownerIds);
+      const map: Record<string, string> = {};
+      (data ?? []).forEach((c: any) => { map[c.user_id] = c.entity_type ?? "empresa"; });
+      return map;
     },
   });
 
