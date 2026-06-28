@@ -72,7 +72,7 @@ function InvestorDashboard() {
     enabled: companyIds.length > 0,
     queryFn: async () => {
       const { data } = await supabase.from("company_profiles")
-        .select("user_id, legal_name, logo_url").in("user_id", companyIds);
+        .select("user_id, legal_name, logo_url, entity_type").in("user_id", companyIds);
       const map: Record<string, any> = {};
       (data ?? []).forEach((c: any) => (map[c.user_id] = c));
       return map;
