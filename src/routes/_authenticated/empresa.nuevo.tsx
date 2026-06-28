@@ -12,7 +12,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SingleSearchSelect } from "@/components/ui/multi-select";
 import { MultiImageUpload, type ProjectImage } from "@/components/media/MultiImageUpload";
+import {
+  SECTORS,
+  INVESTMENT_TYPE_OPTIONS,
+  BUSINESS_STAGE_OPTIONS,
+  COUNTRIES,
+  INVESTMENT_RANGES,
+} from "@/lib/taxonomy";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/empresa/nuevo")({
@@ -142,17 +150,41 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
               </div>
             </div>
           )}
-          <div className="grid grid-cols-2 gap-3">
-            <div><Label>{t("project.sector")}</Label><Input required value={form.sector} onChange={(e) => setForm({ ...form, sector: e.target.value })} /></div>
-            <div><Label>{t("project.country")}</Label><Input required value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} /></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <Label>{t("project.sector")}</Label>
+              <SingleSearchSelect
+                options={SECTORS.map((s) => ({ value: s, label: t(`sector.${s}`) }))}
+                value={form.sector ?? ""}
+                onChange={(v) => setForm({ ...form, sector: v })}
+                placeholder={t("picker.selectOne")}
+                searchPlaceholder={t("picker.search")}
+                emptyText={t("picker.noResults")}
+                allowOther
+                otherLabel={t("picker.other")}
+              />
+            </div>
+            <div>
+              <Label>{t("project.country")}</Label>
+              <SingleSearchSelect
+                options={COUNTRIES.map((c) => ({ value: c, label: c }))}
+                value={form.country ?? ""}
+                onChange={(v) => setForm({ ...form, country: v })}
+                placeholder={t("picker.selectOne")}
+                searchPlaceholder={t("picker.search")}
+                emptyText={t("picker.noResults")}
+                allowOther
+                otherLabel={t("picker.other")}
+              />
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
               <Label>{t("project.investmentType")}</Label>
               <Select value={form.investment_type} onValueChange={(v) => setForm({ ...form, investment_type: v })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  {["equity","prestamo","joint_venture","convertible","otro"].map((v) => (
+                  {INVESTMENT_TYPE_OPTIONS.map((v) => (
                     <SelectItem key={v} value={v}>{t(`investmentType.${v}`)}</SelectItem>
                   ))}
                 </SelectContent>
@@ -163,14 +195,37 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
               <Select value={form.stage} onValueChange={(v) => setForm({ ...form, stage: v })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  {["idea","crecimiento","expansion"].map((v) => (
+                  {BUSINESS_STAGE_OPTIONS.map((v) => (
                     <SelectItem key={v} value={v}>{t(`stage.${v}`)}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-3">
+          <div>
+            <Label>{t("project.capital")} — {t("range.label")}</Label>
+            <Select
+              value={(() => {
+                const cap = Number(form.capital_required) || 0;
+                const match = INVESTMENT_RANGES.find((r) => cap >= r.min && (r.max == null || cap <= r.max));
+                return match?.key ?? "custom";
+              })()}
+              onValueChange={(key) => {
+                if (key === "custom") return;
+                const r = INVESTMENT_RANGES.find((x) => x.key === key);
+                if (r) setForm({ ...form, capital_required: String(r.min || r.max || 0) });
+              }}
+            >
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                {INVESTMENT_RANGES.map((r) => (
+                  <SelectItem key={r.key} value={r.key}>{t(`range.${r.key}`)}</SelectItem>
+                ))}
+                <SelectItem value="custom">{t("range.custom")}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div><Label>{t("project.capital")}</Label><Input required type="number" value={form.capital_required} onChange={(e) => setForm({ ...form, capital_required: e.target.value })} /></div>
             <div><Label>{t("project.ticketMin")}</Label><Input type="number" value={form.ticket_min ?? ""} onChange={(e) => setForm({ ...form, ticket_min: e.target.value })} /></div>
             <div><Label>{t("project.ticketMax")}</Label><Input type="number" value={form.ticket_max ?? ""} onChange={(e) => setForm({ ...form, ticket_max: e.target.value })} /></div>

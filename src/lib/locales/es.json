@@ -251,15 +251,72 @@
   },
   "stage": {
     "idea": "Idea",
+    "mvp": "MVP",
+    "early_revenue": "Primeros ingresos",
+    "growth": "Crecimiento",
     "crecimiento": "Crecimiento",
-    "expansion": "Expansión"
+    "expansion": "Expansión",
+    "mature": "Maduro"
   },
   "investmentType": {
     "equity": "Equity",
-    "prestamo": "Préstamo",
-    "joint_venture": "Joint venture",
+    "debt": "Deuda",
     "convertible": "Convertible",
+    "revenue_share": "Revenue share",
+    "crowdfunding": "Crowdfunding",
+    "angel": "Business angel",
+    "venture": "Venture capital",
+    "private_equity": "Private equity",
+    "strategic": "Inversión estratégica",
+    "joint_venture": "Joint venture",
+    "prestamo": "Préstamo",
     "otro": "Otro"
+  },
+  "sector": {
+    "technology": "Tecnología",
+    "fintech": "Fintech",
+    "healthcare": "Salud",
+    "real_estate": "Inmobiliario",
+    "energy": "Energía",
+    "industry": "Industria",
+    "ai": "IA",
+    "saas": "SaaS",
+    "biotech": "Biotech",
+    "education": "Educación",
+    "consumer": "Consumo",
+    "crypto": "Cripto",
+    "gaming": "Gaming",
+    "mobility": "Movilidad",
+    "climate": "Clima"
+  },
+  "companyType": {
+    "label": "Tipo de empresa",
+    "startup": "Startup",
+    "sme": "PYME",
+    "corporate": "Corporación",
+    "holding": "Holding",
+    "venture_studio": "Venture studio",
+    "accelerator": "Aceleradora"
+  },
+  "range": {
+    "label": "Rango de inversión",
+    "0_10k": "0 – 10k",
+    "10k_50k": "10k – 50k",
+    "50k_100k": "50k – 100k",
+    "100k_500k": "100k – 500k",
+    "500k_1m": "500k – 1M",
+    "1m_plus": "1M+",
+    "custom": "Personalizado"
+  },
+  "picker": {
+    "selectSectors": "Selecciona sectores",
+    "selectTypes": "Selecciona tipos",
+    "selectCountries": "Selecciona países",
+    "selectOne": "Selecciona una opción",
+    "search": "Buscar...",
+    "noResults": "Sin resultados",
+    "other": "Otro",
+    "addCustom": "Añadir valor personalizado"
   },
   "risk": {
     "bajo": "Bajo",
@@ -274,9 +331,9 @@
     "personal": "Personal",
     "corporativo": "Corporativo",
     "sectors": "Sectores de interés",
-    "sectorsHint": "Separados por comas",
+    "sectorsHint": "Selecciona uno o varios",
     "countries": "Países de interés",
-    "countriesHint": "Separados por comas",
+    "countriesHint": "Busca y selecciona",
     "types": "Tipos de inversión preferidos",
     "description": "Descripción de tus intereses"
   },
@@ -285,6 +342,8 @@
     "legalName": "Nombre legal",
     "website": "Sitio web",
     "country": "País",
+    "type": "Tipo de empresa",
+    "sector": "Sector",
     "description": "Descripción"
   },
   "messages": {

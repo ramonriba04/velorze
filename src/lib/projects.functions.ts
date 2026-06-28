@@ -2,16 +2,22 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
 
+const INVESTMENT_TYPES = [
+  "equity","debt","convertible","revenue_share","crowdfunding","angel","venture",
+  "private_equity","strategic","joint_venture","prestamo","otro",
+] as const;
+const STAGES = ["idea","mvp","early_revenue","growth","expansion","mature","crecimiento"] as const;
+
 const ProjectSchema = z.object({
   title: z.string().min(3).max(200),
   description: z.string().min(20).max(5000),
   sector: z.string().min(2).max(80),
-  investment_type: z.enum(["equity", "prestamo", "joint_venture", "convertible", "otro"]),
+  investment_type: z.enum(INVESTMENT_TYPES),
   capital_required: z.number().positive(),
   ticket_min: z.number().nonnegative().optional().nullable(),
   ticket_max: z.number().nonnegative().optional().nullable(),
   country: z.string().min(2).max(80),
-  stage: z.enum(["idea", "crecimiento", "expansion"]),
+  stage: z.enum(STAGES),
   status: z.enum(["draft", "published", "closed"]).default("published"),
   cover_url: z.string().url().optional().nullable().or(z.literal("")),
 });

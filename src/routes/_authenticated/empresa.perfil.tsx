@@ -11,9 +11,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { SingleSearchSelect } from "@/components/ui/multi-select";
 import { ImageUpload } from "@/components/media/ImageUpload";
 import { CompletenessBadge } from "@/components/media/CompletenessBadge";
 import { toast } from "sonner";
+import { COUNTRIES, COMPANY_TYPES } from "@/lib/taxonomy";
 
 export const Route = createFileRoute("/_authenticated/empresa/perfil")({
   component: CompanyProfilePage,
@@ -36,6 +38,9 @@ function CompanyProfilePage() {
   const [form, setForm] = useState<any>({});
   const current = { ...(data ?? {}), ...form };
 
+  const countryOptions = COUNTRIES.map((c) => ({ value: c, label: c }));
+  const typeOptions = COMPANY_TYPES.map((c) => ({ value: c, label: t(`companyType.${c}`) }));
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -44,6 +49,7 @@ function CompanyProfilePage() {
           legal_name: current.legal_name ?? "",
           website: current.website || null,
           country: current.country || null,
+          company_type: current.company_type || null,
           description: current.description || null,
           logo_url: current.logo_url || null,
         },
@@ -81,7 +87,32 @@ function CompanyProfilePage() {
           />
           <div><Label>{t("company.legalName")}</Label><Input required defaultValue={data?.legal_name ?? ""} onChange={(e) => setForm({ ...form, legal_name: e.target.value })} /></div>
           <div><Label>{t("company.website")}</Label><Input type="url" defaultValue={data?.website ?? ""} onChange={(e) => setForm({ ...form, website: e.target.value })} /></div>
-          <div><Label>{t("company.country")}</Label><Input defaultValue={data?.country ?? ""} onChange={(e) => setForm({ ...form, country: e.target.value })} /></div>
+          <div>
+            <Label>{t("company.type")}</Label>
+            <SingleSearchSelect
+              options={typeOptions}
+              value={current.company_type ?? ""}
+              onChange={(v) => setForm({ ...form, company_type: v })}
+              placeholder={t("picker.selectOne")}
+              searchPlaceholder={t("picker.search")}
+              emptyText={t("picker.noResults")}
+              allowOther
+              otherLabel={t("picker.other")}
+            />
+          </div>
+          <div>
+            <Label>{t("company.country")}</Label>
+            <SingleSearchSelect
+              options={countryOptions}
+              value={current.country ?? ""}
+              onChange={(v) => setForm({ ...form, country: v })}
+              placeholder={t("picker.selectOne")}
+              searchPlaceholder={t("picker.search")}
+              emptyText={t("picker.noResults")}
+              allowOther
+              otherLabel={t("picker.other")}
+            />
+          </div>
           <div><Label>{t("company.description")}</Label><Textarea rows={4} defaultValue={data?.description ?? ""} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
           <div className="flex gap-2">
             <Button type="submit" className="flex-1">{t("common.save")}</Button>
@@ -92,4 +123,3 @@ function CompanyProfilePage() {
     </div>
   );
 }
-

@@ -13,14 +13,19 @@ export const assignMyRole = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+const INVESTMENT_TYPES = [
+  "equity","debt","convertible","revenue_share","crowdfunding","angel","venture",
+  "private_equity","strategic","joint_venture","prestamo","otro",
+] as const;
+
 const InvestorProfileSchema = z.object({
   kind: z.enum(["personal", "corporativo"]),
   display_name: z.string().max(120).optional().nullable(),
-  sectors: z.array(z.string().max(40)).max(20),
+  sectors: z.array(z.string().max(50)).max(30),
   ticket_min: z.number().nonnegative().optional().nullable(),
   ticket_max: z.number().nonnegative().optional().nullable(),
-  countries: z.array(z.string().max(40)).max(20),
-  investment_types: z.array(z.enum(["equity", "prestamo", "joint_venture", "convertible", "otro"])).max(10),
+  countries: z.array(z.string().max(50)).max(40),
+  investment_types: z.array(z.enum(INVESTMENT_TYPES)).max(15),
   risk_level: z.enum(["bajo", "medio", "alto"]),
   description: z.string().max(2000).optional().nullable(),
   avatar_url: z.string().url().optional().or(z.literal("")).nullable(),
@@ -40,6 +45,7 @@ const CompanyProfileSchema = z.object({
   legal_name: z.string().min(2).max(200),
   website: z.string().url().max(200).optional().or(z.literal("")).nullable(),
   country: z.string().max(80).optional().nullable(),
+  company_type: z.string().max(50).optional().nullable(),
   description: z.string().max(2000).optional().nullable(),
   logo_url: z.string().url().optional().or(z.literal("")).nullable(),
 });
