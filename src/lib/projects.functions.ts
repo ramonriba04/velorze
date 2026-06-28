@@ -11,7 +11,7 @@ const STAGES = ["idea","mvp","early_revenue","growth","expansion","mature","crec
 const trimmedStr = (min: number, max: number) =>
   z.string().transform((s) => s.trim().replace(/\s{2,}/g, " ")).pipe(z.string().min(min).max(max));
 
-const ProjectSchema = z.object({
+const ProjectBase = z.object({
   title: trimmedStr(5, 120),
   description: trimmedStr(20, 1000),
   sector: trimmedStr(2, 50),
@@ -23,10 +23,13 @@ const ProjectSchema = z.object({
   stage: z.enum(STAGES),
   status: z.enum(["draft", "published", "closed"]).default("published"),
   cover_url: z.string().url().optional().nullable().or(z.literal("")),
-}).refine(
-  (d) => d.ticket_min == null || d.ticket_max == null || d.ticket_max >= d.ticket_min,
-  { message: "ticket_max must be >= ticket_min", path: ["ticket_max"] },
-);
+});
+const ticketCheck = (d: { ticket_min?: number | null; ticket_max?: number | null }) =>
+  d.ticket_min == null || d.ticket_max == null || d.ticket_max >= d.ticket_min;
+const ProjectSchema = ProjectBase.refine(ticketCheck, {
+  message: "ticket_max must be >= ticket_min",
+  path: ["ticket_max"],
+});
 
 
 export const createProject = createServerFn({ method: "POST" })
@@ -42,7 +45,11 @@ export const createProject = createServerFn({ method: "POST" })
     return { id: row.id };
   });
 
-const UpdateSchema = ProjectSchema.partial().extend({ id: z.string().uuid() });
+const UpdateSchema = ProjectBase.partial().extend({ id: z.string().uuid() }).refine(ticketCheck, {
+  message: "ticket_max must be >= ticket_min",
+  path: ["ticket_max"],
+});
+
 
 export const updateProject = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
