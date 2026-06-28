@@ -37,6 +37,27 @@ function Settings() {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteText, setDeleteText] = useState("");
   const [deleting, setDeleting] = useState(false);
+  const [newEmail, setNewEmail] = useState("");
+  const [emailLoading, setEmailLoading] = useState(false);
+
+  const updateEmail = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newEmail || newEmail === user?.email) return;
+    setEmailLoading(true);
+    try {
+      const { error } = await supabase.auth.updateUser(
+        { email: newEmail },
+        { emailRedirectTo: `${window.location.origin}/app` },
+      );
+      if (error) throw error;
+      toast.success(t("settings.emailChangeSent"));
+      setNewEmail("");
+    } catch (err: any) {
+      toast.error(err.message ?? t("common.error"));
+    } finally {
+      setEmailLoading(false);
+    }
+  };
 
   const updatePassword = async (e: React.FormEvent) => {
     e.preventDefault();
