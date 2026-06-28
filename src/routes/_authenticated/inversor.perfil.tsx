@@ -229,6 +229,7 @@ function InvestorProfile() {
           <div>
             <Label>{t("investor.displayName")}</Label>
             <Input value={current.display_name ?? ""} onChange={(e) => setForm({ ...form, display_name: e.target.value })} />
+            {nameTooShort && <p className="mt-1 text-xs text-destructive">{t("validate.nameShort")}</p>}
           </div>
           <div className="flex gap-2">
             <Button type="submit" className="flex-1">{t("common.save")}</Button>
