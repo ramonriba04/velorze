@@ -676,5 +676,59 @@
         "5": "Soporte prioritario"
       }
     }
+  },
+  "consent": {
+    "required": "Debes aceptar los términos para continuar.",
+    "label": {
+      "before": "He leído y acepto los ",
+      "terms": "Términos de uso",
+      "sep1": ", la ",
+      "privacy": "Política de privacidad",
+      "sep2": " y la ",
+      "cookies": "Política de cookies",
+      "after": "."
+    }
+  },
+  "cookieBanner": {
+    "title": "Cookies y privacidad",
+    "body": "Usamos cookies esenciales para que la plataforma funcione. Con tu consentimiento, también podemos usar cookies de medición.",
+    "learn": "Más información",
+    "acceptAll": "Aceptar todas",
+    "rejectAll": "Rechazar no esenciales",
+    "configure": "Configurar",
+    "savePrefs": "Guardar preferencias",
+    "essential": "Esenciales",
+    "essentialDesc": "Necesarias para iniciar sesión y mantener tu sesión activa.",
+    "analytics": "Medición",
+    "analyticsDesc": "Nos ayudan a entender el uso de la plataforma.",
+    "marketing": "Marketing",
+    "marketingDesc": "No las usamos hoy; pediremos consentimiento antes de activarlas.",
+    "always": "Siempre activas"
+  },
+  "verification": {
+    "title": "Verificación de cuenta",
+    "subCompany": "Verifica tu empresa para poder publicar oportunidades.",
+    "subIndividual": "Verifica tu identidad para poder publicar proyectos.",
+    "bannerTitle": "Verificación requerida",
+    "bannerBody": "Solo los usuarios verificados pueden publicar oportunidades. Mientras tanto, puedes guardar tu proyecto como borrador.",
+    "cta": "Verificar ahora",
+    "publishBlocked": "Verifica tu cuenta para poder publicar. Lo guardaremos como borrador.",
+    "legalCompanyName": "Nombre legal de la empresa",
+    "fullLegalName": "Nombre legal completo",
+    "country": "País",
+    "companyDoc": "Documento de registro mercantil o certificado de constitución",
+    "idDoc": "Documento de identidad",
+    "docHint": "PDF o imagen. Se eliminará tras la revisión.",
+    "docRequired": "Sube un documento para continuar.",
+    "submit": "Enviar para revisión",
+    "submitted": "Solicitud enviada. La revisaremos en breve.",
+    "alreadyVerified": "Tu cuenta ya está verificada.",
+    "pendingNote": "Tu solicitud está en revisión. Te avisaremos en cuanto haya una decisión.",
+    "rejected": "Solicitud rechazada",
+    "privacyNote": "Tratamos tu documento con confidencialidad. Se elimina tras la decisión del equipo.",
+    "statusUnverified": "Sin verificar",
+    "statusPending": "En revisión",
+    "statusVerified": "Verificada",
+    "statusRejected": "Rechazada"
   }
 }
