@@ -563,6 +563,11 @@ export type Database = {
         Args: { _role: Database["public"]["Enums"]["app_role"] }
         Returns: undefined
       }
+      company_profile_complete: { Args: { _user_id: string }; Returns: boolean }
+      company_profile_completeness: {
+        Args: { _user_id: string }
+        Returns: number
+      }
       get_company_contact_email: {
         Args: { _company_id: string }
         Returns: string
@@ -579,6 +584,14 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      investor_profile_complete: {
+        Args: { _user_id: string }
+        Returns: boolean
+      }
+      investor_profile_completeness: {
+        Args: { _user_id: string }
+        Returns: number
       }
     }
     Enums: {
