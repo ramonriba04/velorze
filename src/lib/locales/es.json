@@ -451,9 +451,11 @@
   "home": {
     "welcomeBack": "Bienvenido de nuevo",
     "profileComplete": "Perfil completado",
-    "noRecommendations": "Aún no hay recomendaciones",
-    "noRecommendationsSub": "Completa tu perfil para que el motor de matching pueda sugerirte oportunidades relevantes.",
+    "noRecommendations": "Completa tu perfil para desbloquear recomendaciones",
+    "noRecommendationsSub": "Necesitamos tus sectores, ticket y geografía para sugerirte oportunidades compatibles.",
     "completeProfileCta": "Completar perfil",
+    "noMatchesYetTitle": "Todavía no encontramos oportunidades compatibles",
+    "noMatchesYetSub": "Volveremos a buscar a medida que se publiquen nuevos proyectos.",
     "firstProjectTitle": "Publica tu primer proyecto",
     "firstProjectSub": "Comparte tu oportunidad con inversores compatibles en minutos.",
     "pendingRequests": "Pendientes"
