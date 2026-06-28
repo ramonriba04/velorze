@@ -495,10 +495,31 @@
     "title": "Panel de administración",
     "users": "Usuarios",
     "projects": "Proyectos",
+    "verifications": "Verificaciones",
     "suspend": "Suspender",
     "publish": "Publicar",
-    "unpublish": "Despublicar"
+    "unpublish": "Despublicar",
+    "approve": "Aprobar",
+    "reject": "Rechazar",
+    "approved": "Publicador verificado",
+    "rejected": "Verificación rechazada",
+    "viewDoc": "Ver documento",
+    "docDeleted": "Documento eliminado",
+    "reasonLabel": "Motivo",
+    "reasonPlaceholder": "Motivo del rechazo (obligatorio)",
+    "noVerifications": "No hay nada que revisar aquí.",
+    "filter": {
+      "pending": "Pendientes",
+      "verified": "Verificadas",
+      "rejected": "Rechazadas",
+      "all": "Todas"
+    }
   },
+  "trust": {
+    "verifiedBadge": "Publicador verificado",
+    "verifiedTitle": "Identidad revisada por el equipo de Capora"
+  },
+
   "legal": {
     "title": "Aviso legal",
     "body": "Capora es únicamente una plataforma de conexión entre empresas e inversores. No procesa pagos, no gestiona inversiones, no actúa como intermediario financiero y no ofrece asesoramiento financiero. Las recomendaciones generadas por el sistema son meramente informativas. Los usuarios son responsables de realizar su propia diligencia debida antes de tomar cualquier decisión de inversión."
