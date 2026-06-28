@@ -138,32 +138,72 @@ const VerificationSchema = z.object({
   kind: z.enum(["company", "individual"]),
   legal_name: z.string().trim().min(2).max(120),
   country: z.string().trim().min(2).max(80),
-  doc_path: z.string().trim().min(1).max(500),
+  contact_email: emailField,
+  website: z.string().trim().url().max(300).optional().or(z.literal("")).nullable(),
+  linkedin: z.string().trim().url().max(300).optional().or(z.literal("")).nullable(),
+  tax_id: z.string().trim().max(40).optional().or(z.literal("")).nullable(),
+  // Optional fallback document (only when admin/edge cases require it)
+  doc_path: z.string().trim().min(1).max(500).optional().nullable(),
+  request_manual: z.boolean().optional().default(false),
 });
+
+const FREE_EMAIL_DOMAINS = new Set([
+  "gmail.com","googlemail.com","outlook.com","hotmail.com","live.com","msn.com",
+  "yahoo.com","yahoo.es","yahoo.co.uk","icloud.com","me.com","mac.com",
+  "aol.com","proton.me","protonmail.com","pm.me","gmx.com","gmx.es",
+  "mail.com","zoho.com","yandex.com","yandex.ru","tutanota.com",
+]);
+function isCorporateEmail(email: string | null | undefined) {
+  if (!email) return false;
+  const m = email.match(/^[^@\s]+@([^@\s]+\.[^@\s]+)$/);
+  if (!m) return false;
+  return !FREE_EMAIL_DOMAINS.has(m[1].toLowerCase());
+}
 
 export const submitVerification = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => VerificationSchema.parse(input))
   .handler(async ({ data, context }) => {
-    // Insert request
+    // 1. Update company_profiles with provided trust signals.
+    //    The DB trigger recomputes trust_level on write.
+    const profileUpdate: Record<string, unknown> = {
+      legal_name: data.legal_name,
+      country: data.country,
+      contact_email: data.contact_email,
+    };
+    if (data.website) profileUpdate.website = data.website;
+    if (data.linkedin) profileUpdate.linkedin = data.linkedin;
+    if (data.tax_id) profileUpdate.tax_id = data.tax_id;
+
+    // Auto-decide: if no manual review requested AND no doc → instant verification
+    // (trust_level computed by trigger). Otherwise mark pending for admin.
+    const needsManual = !!data.doc_path || !!data.request_manual;
+    profileUpdate.verification_status = needsManual ? "pending" : "verified";
+
+    const { error: upErr } = await context.supabase
+      .from("company_profiles")
+      .update(profileUpdate as never)
+      .eq("user_id", context.userId);
+    if (upErr) throw new Error(upErr.message);
+
+    // 2. Audit row in verification_requests (always written for traceability)
     const { error: insErr } = await context.supabase.from("verification_requests" as never).insert({
       user_id: context.userId,
       kind: data.kind,
       legal_name: data.legal_name,
       country: data.country,
-      doc_path: data.doc_path,
-      status: "pending",
+      contact_email: data.contact_email,
+      website: data.website ?? null,
+      linkedin: data.linkedin ?? null,
+      tax_id: data.tax_id ?? null,
+      doc_path: data.doc_path ?? null,
+      status: needsManual ? "pending" : "verified",
+      reviewed_at: needsManual ? null : new Date().toISOString(),
+      trust_level: isCorporateEmail(data.contact_email) || data.website ? "trusted" : "basic",
     } as never);
     if (insErr) throw new Error(insErr.message);
 
-    // Reflect status on company_profiles (upsert minimal row if missing)
-    const { error: upErr } = await context.supabase
-      .from("company_profiles")
-      .update({ verification_status: "pending" } as never)
-      .eq("user_id", context.userId);
-    if (upErr) throw new Error(upErr.message);
-
-    return { ok: true };
+    return { ok: true, auto: !needsManual };
   });
 
 export const getMyVerification = createServerFn({ method: "GET" })
@@ -171,12 +211,12 @@ export const getMyVerification = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { data: profile } = await context.supabase
       .from("company_profiles")
-      .select("verification_status,entity_type")
+      .select("verification_status,entity_type,trust_level,legal_name,country,contact_email,website,linkedin,tax_id")
       .eq("user_id", context.userId)
       .maybeSingle();
     const { data: latest } = await context.supabase
       .from("verification_requests" as never)
-      .select("id,status,kind,legal_name,country,reason,submitted_at,reviewed_at")
+      .select("id,status,kind,legal_name,country,reason,submitted_at,reviewed_at,trust_level")
       .eq("user_id", context.userId)
       .order("submitted_at", { ascending: false })
       .limit(1)
