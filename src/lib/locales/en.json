@@ -677,5 +677,59 @@
         "5": "Priority support"
       }
     }
+  },
+  "consent": {
+    "required": "You must accept the terms to continue.",
+    "label": {
+      "before": "I have read and accept the ",
+      "terms": "Terms of Use",
+      "sep1": ", ",
+      "privacy": "Privacy Policy",
+      "sep2": " and ",
+      "cookies": "Cookie Policy",
+      "after": "."
+    }
+  },
+  "cookieBanner": {
+    "title": "Cookies & privacy",
+    "body": "We use essential cookies so the platform works. With your consent, we may also use measurement cookies.",
+    "learn": "Learn more",
+    "acceptAll": "Accept all",
+    "rejectAll": "Reject non-essential",
+    "configure": "Configure",
+    "savePrefs": "Save preferences",
+    "essential": "Essential",
+    "essentialDesc": "Required to sign in and keep your session active.",
+    "analytics": "Analytics",
+    "analyticsDesc": "Help us understand how the platform is used.",
+    "marketing": "Marketing",
+    "marketingDesc": "We don't use them today; we'll ask before enabling them.",
+    "always": "Always on"
+  },
+  "verification": {
+    "title": "Account verification",
+    "subCompany": "Verify your company to publish opportunities.",
+    "subIndividual": "Verify your identity to publish projects.",
+    "bannerTitle": "Verification required",
+    "bannerBody": "Only verified users can publish opportunities. In the meantime, you can save your project as a draft.",
+    "cta": "Verify now",
+    "publishBlocked": "Verify your account to publish. We'll keep it as a draft.",
+    "legalCompanyName": "Legal company name",
+    "fullLegalName": "Full legal name",
+    "country": "Country",
+    "companyDoc": "Company registry document or certificate of incorporation",
+    "idDoc": "Identity document",
+    "docHint": "PDF or image. Deleted after review.",
+    "docRequired": "Upload a document to continue.",
+    "submit": "Submit for review",
+    "submitted": "Request submitted. We'll review it shortly.",
+    "alreadyVerified": "Your account is already verified.",
+    "pendingNote": "Your request is being reviewed. We'll notify you as soon as there is a decision.",
+    "rejected": "Request rejected",
+    "privacyNote": "We handle your document confidentially. It is deleted after the team's decision.",
+    "statusUnverified": "Unverified",
+    "statusPending": "In review",
+    "statusVerified": "Verified",
+    "statusRejected": "Rejected"
   }
 }
