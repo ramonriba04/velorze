@@ -187,6 +187,19 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10 space-y-4">
+      {!verified && (
+        <Card className="p-4 border-amber-300/60 bg-amber-50 dark:border-amber-700/60 dark:bg-amber-950/30">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="text-sm font-semibold">{t("verification.bannerTitle")}</h2>
+              <p className="mt-0.5 text-xs text-muted-foreground">{t("verification.bannerBody")}</p>
+            </div>
+            <Link to="/verificacion">
+              <Button size="sm" variant="outline">{t("verification.cta")}</Button>
+            </Link>
+          </div>
+        </Card>
+      )}
       {!completeness.complete && (
         <ProfileCompletenessCard
           pct={completeness.pct}
@@ -196,6 +209,7 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
           ctaCopy={t("completeness.company.cta")}
         />
       )}
+
       <Card className="p-6">
         <div className="flex items-center justify-between gap-3">
           <h1 className="text-2xl font-bold">{mode === "create" ? t("nav.newProject") : t("common.edit")}</h1>
