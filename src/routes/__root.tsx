@@ -121,7 +121,9 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <Outlet />
       <MobileBottomNav />
+      <CookieBanner />
       <Toaster />
+
     </QueryClientProvider>
   );
 }
