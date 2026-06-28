@@ -268,7 +268,10 @@ function ProjectsDiscovery() {
                   <div className="aspect-[16/9] w-full gradient-primary opacity-80" />
                 )}
                 <div className="space-y-2 p-4">
-                  <h3 className="font-semibold leading-tight">{p.title}</h3>
+                  <div className="flex items-center justify-between gap-2">
+                    <h3 className="font-semibold leading-tight">{p.title}</h3>
+                    <EntityTypeBadge type={owners?.[p.company_id]} size="xs" />
+                  </div>
                   <p className="line-clamp-2 text-sm text-muted-foreground">{p.description}</p>
                   <div className="flex flex-wrap items-center gap-2 pt-1 text-xs text-muted-foreground">
                     <Badge variant="secondary">{p.sector}</Badge>
