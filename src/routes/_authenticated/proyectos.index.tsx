@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
-import { Search, MapPin, Filter, X } from "lucide-react";
+import { Search, MapPin, Filter, X, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMyRole } from "@/hooks/useAuth";
 import { Card } from "@/components/ui/card";
@@ -199,29 +199,35 @@ function ProjectsDiscovery() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between gap-2 border-t pt-3 flex-wrap">
-          <div className="flex items-center gap-2">
-            <Label className="text-xs text-muted-foreground">{t("discover.sortLabel")}</Label>
-            <Select value={sort} onValueChange={(v) => setParam({ sort: v })}>
-              <SelectTrigger className="h-8 w-[180px]"><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="match">{t("discover.sortMatch")}</SelectItem>
-                <SelectItem value="newest">{t("discover.sortNewest")}</SelectItem>
-                <SelectItem value="active">{t("discover.sortActive")}</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          {activeCount > 0 && (
+        <div className="space-y-2 border-t pt-3">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-                <Filter className="h-3.5 w-3.5" />
-                {t("discover.activeFilters", { count: activeCount })}
-              </span>
-              <Button variant="ghost" size="sm" onClick={clearAll}>
-                <X className="mr-1 h-3.5 w-3.5" /> {t("discover.clearAll")}
-              </Button>
+              <Label className="text-xs text-muted-foreground">{t("discover.sortLabel")}</Label>
+              <Select value={sort} onValueChange={(v) => setParam({ sort: v })}>
+                <SelectTrigger className="h-8 w-[180px]"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="match">{t("discover.sortMatch")}</SelectItem>
+                  <SelectItem value="newest">{t("discover.sortNewest")}</SelectItem>
+                  <SelectItem value="active">{t("discover.sortActive")}</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-          )}
+            {activeCount > 0 && (
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                  <Filter className="h-3.5 w-3.5" />
+                  {t("discover.activeFilters", { count: activeCount })}
+                </span>
+                <Button variant="ghost" size="sm" onClick={clearAll}>
+                  <X className="mr-1 h-3.5 w-3.5" /> {t("discover.clearAll")}
+                </Button>
+              </div>
+            )}
+          </div>
+          <p className="inline-flex items-start gap-1.5 text-xs text-muted-foreground">
+            <Info className="h-3.5 w-3.5 shrink-0 mt-0.5" />
+            {t("discover.helperText")}
+          </p>
         </div>
       </Card>
 

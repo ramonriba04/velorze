@@ -221,10 +221,11 @@
     "emptyTitle": "No projects match these filters",
     "emptySub": "Try broadening filters or removing some.",
     "sortLabel": "Sort by",
-    "sortMatch": "Most compatible",
+    "sortMatch": "Closest to your profile",
     "sortNewest": "Newest",
     "sortActive": "Recently active",
-    "manualBadge": "Manual search"
+    "manualBadge": "Manual search",
+    "helperText": "Explore uses manual filters. Personalized recommendations are on Home."
   },
   "notifications": {
     "title": "Notifications",
@@ -270,7 +271,7 @@
       "s3Desc": "Investment types and ticket range.",
       "s3Cta": "Configure",
       "s4Title": "Explore opportunities",
-      "s4Desc": "Discover projects recommended for your profile.",
+      "s4Desc": "Browse projects manually using filters.",
       "s4Cta": "Explore"
     }
   },

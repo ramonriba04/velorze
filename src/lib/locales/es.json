@@ -221,10 +221,11 @@
     "emptyTitle": "No encontramos proyectos con esos filtros",
     "emptySub": "Prueba ampliando filtros o quitando alguno.",
     "sortLabel": "Ordenar por",
-    "sortMatch": "Más compatibles",
+    "sortMatch": "Más parecido a tu perfil",
     "sortNewest": "Más recientes",
     "sortActive": "Actividad reciente",
-    "manualBadge": "Búsqueda manual"
+    "manualBadge": "Búsqueda manual",
+    "helperText": "Explorar usa filtros manuales. Las recomendaciones personalizadas están en Inicio."
   },
   "notifications": {
     "title": "Notificaciones",
@@ -270,7 +271,7 @@
       "s3Desc": "Tipos de inversión y rango de ticket.",
       "s3Cta": "Configurar",
       "s4Title": "Explora oportunidades",
-      "s4Desc": "Descubre proyectos recomendados según tu perfil.",
+      "s4Desc": "Navega proyectos manualmente usando filtros.",
       "s4Cta": "Explorar"
     }
   },
