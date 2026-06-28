@@ -5,7 +5,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
-import { assignMyRole } from "@/lib/profiles.functions";
+import { assignMyRole, recordConsent } from "@/lib/profiles.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { Header, Footer } from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
