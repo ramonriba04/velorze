@@ -65,7 +65,7 @@ function CompanyDashboard() {
         <EntityAvatar src={profile?.logo_url} name={name} kind="company" size={48} />
         <div className="min-w-0 flex-1">
           <p className="text-xs text-muted-foreground flex items-center gap-2">
-            {t("home.welcomeBack")} <PlanBadge code={planCode} />
+            {t("home.welcomeBack")} <PlanBadge code={planCode} /> <TrustBadge complete={completion.complete} />
           </p>
           <h1 className="text-2xl sm:text-3xl font-bold truncate">{name || t("nav.profile")}</h1>
         </div>
