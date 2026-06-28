@@ -313,7 +313,28 @@ function AuthPage() {
                   </button>
                 </div>
               )}
+              {mode === "signup" && (
+                <label className="flex items-start gap-2 text-xs text-muted-foreground">
+                  <input
+                    type="checkbox"
+                    checked={acceptedLegal}
+                    onChange={(e) => setAcceptedLegal(e.target.checked)}
+                    className="mt-0.5 h-4 w-4 shrink-0"
+                    required
+                  />
+                  <span>
+                    {t("consent.label.before")}{" "}
+                    <Link to="/terminos" className="underline">{t("consent.label.terms")}</Link>
+                    {t("consent.label.sep1")}
+                    <Link to="/privacidad" className="underline">{t("consent.label.privacy")}</Link>
+                    {t("consent.label.sep2")}
+                    <Link to="/cookies" className="underline">{t("consent.label.cookies")}</Link>
+                    {t("consent.label.after")}
+                  </span>
+                </label>
+              )}
               <Button
+
                 type="submit"
                 disabled={loading || (mode === "signup" && !signupReady)}
                 className="w-full"
