@@ -251,15 +251,72 @@
   },
   "stage": {
     "idea": "Idea",
+    "mvp": "MVP",
+    "early_revenue": "Early revenue",
+    "growth": "Growth",
     "crecimiento": "Growth",
-    "expansion": "Expansion"
+    "expansion": "Expansion",
+    "mature": "Mature"
   },
   "investmentType": {
     "equity": "Equity",
-    "prestamo": "Loan",
-    "joint_venture": "Joint venture",
+    "debt": "Debt",
     "convertible": "Convertible",
+    "revenue_share": "Revenue share",
+    "crowdfunding": "Crowdfunding",
+    "angel": "Angel",
+    "venture": "Venture capital",
+    "private_equity": "Private equity",
+    "strategic": "Strategic investment",
+    "joint_venture": "Joint venture",
+    "prestamo": "Loan",
     "otro": "Other"
+  },
+  "sector": {
+    "technology": "Technology",
+    "fintech": "Fintech",
+    "healthcare": "Healthcare",
+    "real_estate": "Real estate",
+    "energy": "Energy",
+    "industry": "Industry",
+    "ai": "AI",
+    "saas": "SaaS",
+    "biotech": "Biotech",
+    "education": "Education",
+    "consumer": "Consumer",
+    "crypto": "Crypto",
+    "gaming": "Gaming",
+    "mobility": "Mobility",
+    "climate": "Climate"
+  },
+  "companyType": {
+    "label": "Company type",
+    "startup": "Startup",
+    "sme": "SME",
+    "corporate": "Corporate",
+    "holding": "Holding",
+    "venture_studio": "Venture studio",
+    "accelerator": "Accelerator"
+  },
+  "range": {
+    "label": "Investment range",
+    "0_10k": "0 – 10k",
+    "10k_50k": "10k – 50k",
+    "50k_100k": "50k – 100k",
+    "100k_500k": "100k – 500k",
+    "500k_1m": "500k – 1M",
+    "1m_plus": "1M+",
+    "custom": "Custom"
+  },
+  "picker": {
+    "selectSectors": "Select sectors",
+    "selectTypes": "Select types",
+    "selectCountries": "Select countries",
+    "selectOne": "Select an option",
+    "search": "Search...",
+    "noResults": "No results",
+    "other": "Other",
+    "addCustom": "Add custom value"
   },
   "risk": {
     "bajo": "Low",
@@ -274,9 +331,9 @@
     "personal": "Personal",
     "corporativo": "Corporate",
     "sectors": "Sectors of interest",
-    "sectorsHint": "Comma separated",
+    "sectorsHint": "Pick one or more",
     "countries": "Countries of interest",
-    "countriesHint": "Comma separated",
+    "countriesHint": "Search and select",
     "types": "Preferred investment types",
     "description": "Describe your interests"
   },
@@ -285,6 +342,8 @@
     "legalName": "Legal name",
     "website": "Website",
     "country": "Country",
+    "type": "Company type",
+    "sector": "Sector",
     "description": "Description"
   },
   "messages": {
