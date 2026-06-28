@@ -43,15 +43,25 @@ function CompanyProfilePage() {
   const countryOptions = COUNTRIES.map((c) => ({ value: c, label: c }));
   const typeOptions = COMPANY_TYPES.map((c) => ({ value: c, label: t(`companyType.${c}`) }));
 
+  const completeness = companyCompleteness({
+    legal_name: current.legal_name,
+    country: current.country,
+    description: current.description,
+    contact_email: current.contact_email,
+    logo_url: current.logo_url,
+    website: current.website,
+  });
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await save({
         data: {
-          legal_name: current.legal_name ?? "",
+          legal_name: (current.legal_name ?? "").trim(),
           website: current.website || null,
           country: current.country || null,
           company_type: current.company_type || null,
+          contact_email: current.contact_email || null,
           description: current.description || null,
           logo_url: current.logo_url || null,
         },
@@ -63,18 +73,23 @@ function CompanyProfilePage() {
     }
   };
 
-  const completeness = [
-    { label: t("completeness.addLogo"), done: !!current.logo_url },
-    { label: t("completeness.addDescription"), done: !!(current.description && current.description.length > 30) },
-    { label: t("company.website"), done: !!current.website },
-    { label: t("company.country"), done: !!current.country },
-  ];
-
   if (!user || isLoading) return <div className="p-10">{t("common.loading")}</div>;
+
+  const emailInvalid =
+    !!current.contact_email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(current.contact_email);
+  const nameTooShort = !!current.legal_name && current.legal_name.trim().length < 2;
+  const descTooShort = !!current.description && current.description.trim().length > 0 && current.description.trim().length < 20;
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10 pb-24 space-y-4">
-      <CompletenessBadge items={completeness} />
+      <ProfileCompletenessCard
+        pct={completeness.pct}
+        complete={completeness.complete}
+        missing={completeness.missingRequired}
+        ctaTo="/empresa/perfil"
+        ctaCopy={t("completeness.company.cta")}
+      />
+
       <Card className="p-6">
         <h1 className="text-2xl font-bold">{t("company.title")}</h1>
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
