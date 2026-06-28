@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { EntityAvatar } from "@/components/media/EntityAvatar";
+import { EntityTypeBadge } from "@/components/EntityTypeBadge";
 import {
   Heart, MapPin, TrendingUp, Send, MessageCircle, Sparkles, Compass,
   ChevronDown, ChevronUp,
@@ -72,7 +73,7 @@ function InvestorDashboard() {
     enabled: companyIds.length > 0,
     queryFn: async () => {
       const { data } = await supabase.from("company_profiles")
-        .select("user_id, legal_name, logo_url").in("user_id", companyIds);
+        .select("user_id, legal_name, logo_url, entity_type").in("user_id", companyIds);
       const map: Record<string, any> = {};
       (data ?? []).forEach((c: any) => (map[c.user_id] = c));
       return map;
@@ -210,6 +211,7 @@ function InvestorDashboard() {
                   <Badge className={scoreColor(match.score)}>{match.score}% {t("project.match").toLowerCase()}</Badge>
                 </div>
                 <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+                  <EntityTypeBadge type={company?.entity_type} size="xs" />
                   <span className="inline-flex items-center gap-1"><TrendingUp className="h-3 w-3" />{project.sector}</span>
                   <span className="inline-flex items-center gap-1"><MapPin className="h-3 w-3" />{project.country}</span>
                   <Badge variant="outline">{t(`stage.${project.stage}`)}</Badge>

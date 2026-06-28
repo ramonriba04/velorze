@@ -430,13 +430,25 @@
   },
   "company": {
     "title": "Company profile",
+    "titleIndividual": "Project profile",
     "legalName": "Legal name",
+    "publicName": "Public name",
+    "profileImage": "Profile image",
     "website": "Website",
     "country": "Country",
     "type": "Company type",
     "sector": "Sector",
     "description": "Description",
-    "contactEmail": "Contact email"
+    "contactEmail": "Contact email",
+    "entityType": "Who's publishing this project?",
+    "entityTypeHint": "This adapts required fields. It does not affect compatibility."
+  },
+  "entityType": {
+    "persona_fisica": "Individual",
+    "startup": "Startup",
+    "empresa": "Company",
+    "holding": "Holding",
+    "otro": "Other"
   },
   "messages": {
     "empty": "You don't have any conversations yet.",

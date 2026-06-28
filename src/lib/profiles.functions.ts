@@ -56,6 +56,7 @@ export const upsertInvestorProfile = createServerFn({ method: "POST" })
   });
 
 const CompanyProfileSchema = z.object({
+  entity_type: z.enum(["persona_fisica","startup","empresa","holding","otro"]),
   legal_name: trimmed(2, 80),
   website: z.string().url().max(200).optional().or(z.literal("")).nullable(),
   country: optionalTrimmed(80),

@@ -430,13 +430,25 @@
   },
   "company": {
     "title": "Perfil de empresa",
+    "titleIndividual": "Perfil del proyecto",
     "legalName": "Nombre legal",
+    "publicName": "Nombre público",
+    "profileImage": "Foto de perfil",
     "website": "Sitio web",
     "country": "País",
     "type": "Tipo de empresa",
     "sector": "Sector",
     "description": "Descripción",
-    "contactEmail": "Email de contacto"
+    "contactEmail": "Email de contacto",
+    "entityType": "¿Quién publica el proyecto?",
+    "entityTypeHint": "Esto adapta los campos requeridos. No afecta a la compatibilidad."
+  },
+  "entityType": {
+    "persona_fisica": "Persona física",
+    "startup": "Startup",
+    "empresa": "Empresa",
+    "holding": "Holding",
+    "otro": "Otro"
   },
   "messages": {
     "empty": "Aún no tienes conversaciones.",

@@ -12,11 +12,12 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { SingleSearchSelect } from "@/components/ui/multi-select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ImageUpload } from "@/components/media/ImageUpload";
 import { ProfileCompletenessCard } from "@/components/ProfileCompletenessCard";
 import { companyCompleteness } from "@/lib/completeness";
 import { toast } from "sonner";
-import { COUNTRIES, COMPANY_TYPES } from "@/lib/taxonomy";
+import { COUNTRIES, COMPANY_TYPES, ENTITY_TYPES } from "@/lib/taxonomy";
 
 export const Route = createFileRoute("/_authenticated/empresa/perfil")({
   head: () => ({ meta: [{ title: "Profile | Capora" }, { name: "robots", content: "noindex, nofollow" }] }),
@@ -39,6 +40,8 @@ function CompanyProfilePage() {
 
   const [form, setForm] = useState<any>({});
   const current = { ...(data ?? {}), ...form };
+  const entityType: string = current.entity_type ?? "empresa";
+  const isIndividual = entityType === "persona_fisica";
 
   const countryOptions = COUNTRIES.map((c) => ({ value: c, label: c }));
   const typeOptions = COMPANY_TYPES.map((c) => ({ value: c, label: t(`companyType.${c}`) }));
@@ -50,6 +53,7 @@ function CompanyProfilePage() {
     contact_email: current.contact_email,
     logo_url: current.logo_url,
     website: current.website,
+    entity_type: entityType,
   });
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -57,10 +61,11 @@ function CompanyProfilePage() {
     try {
       await save({
         data: {
+          entity_type: entityType as any,
           legal_name: (current.legal_name ?? "").trim(),
-          website: current.website || null,
+          website: isIndividual ? null : (current.website || null),
           country: current.country || null,
-          company_type: current.company_type || null,
+          company_type: isIndividual ? null : (current.company_type || null),
           contact_email: current.contact_email || null,
           description: current.description || null,
           logo_url: current.logo_url || null,
@@ -91,19 +96,32 @@ function CompanyProfilePage() {
       />
 
       <Card className="p-6">
-        <h1 className="text-2xl font-bold">{t("company.title")}</h1>
+        <h1 className="text-2xl font-bold">{isIndividual ? t("company.titleIndividual") : t("company.title")}</h1>
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
+          <div>
+            <Label>{t("company.entityType")}</Label>
+            <Select value={entityType} onValueChange={(v) => setForm({ ...form, entity_type: v })}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                {ENTITY_TYPES.map((e) => (
+                  <SelectItem key={e} value={e}>{t(`entityType.${e}`)}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="mt-1 text-xs text-muted-foreground">{t("company.entityTypeHint")}</p>
+          </div>
+
           <ImageUpload
             value={current.logo_url}
             onChange={(url) => setForm({ ...form, logo_url: url })}
             userId={user.id}
             kind="logo"
             shape="square"
-            label={t("company.title")}
-            hint={t("media.logoHint")}
+            label={isIndividual ? t("company.profileImage") : t("company.title")}
+            hint={isIndividual ? t("media.avatarHint") : t("media.logoHint")}
           />
           <div>
-            <Label>{t("company.legalName")}</Label>
+            <Label>{isIndividual ? t("company.publicName") : t("company.legalName")}</Label>
             <Input required defaultValue={data?.legal_name ?? ""} onChange={(e) => setForm({ ...form, legal_name: e.target.value })} />
             {nameTooShort && <p className="mt-1 text-xs text-destructive">{t("validate.nameShort")}</p>}
           </div>
@@ -113,27 +131,31 @@ function CompanyProfilePage() {
               type="email"
               defaultValue={data?.contact_email ?? ""}
               onChange={(e) => setForm({ ...form, contact_email: e.target.value })}
-              placeholder="contacto@empresa.com"
+              placeholder={isIndividual ? "tu@email.com" : "contacto@empresa.com"}
             />
             {emailInvalid && <p className="mt-1 text-xs text-destructive">{t("validate.emailInvalid")}</p>}
           </div>
-          <div>
-            <Label>{t("company.website")}</Label>
-            <Input type="url" defaultValue={data?.website ?? ""} onChange={(e) => setForm({ ...form, website: e.target.value })} />
-          </div>
-          <div>
-            <Label>{t("company.type")}</Label>
-            <SingleSearchSelect
-              options={typeOptions}
-              value={current.company_type ?? ""}
-              onChange={(v) => setForm({ ...form, company_type: v })}
-              placeholder={t("picker.selectOne")}
-              searchPlaceholder={t("picker.search")}
-              emptyText={t("picker.noResults")}
-              allowOther
-              otherLabel={t("picker.other")}
-            />
-          </div>
+          {!isIndividual && (
+            <>
+              <div>
+                <Label>{t("company.website")}</Label>
+                <Input type="url" defaultValue={data?.website ?? ""} onChange={(e) => setForm({ ...form, website: e.target.value })} />
+              </div>
+              <div>
+                <Label>{t("company.type")}</Label>
+                <SingleSearchSelect
+                  options={typeOptions}
+                  value={current.company_type ?? ""}
+                  onChange={(v) => setForm({ ...form, company_type: v })}
+                  placeholder={t("picker.selectOne")}
+                  searchPlaceholder={t("picker.search")}
+                  emptyText={t("picker.noResults")}
+                  allowOther
+                  otherLabel={t("picker.other")}
+                />
+              </div>
+            </>
+          )}
           <div>
             <Label>{t("company.country")}</Label>
             <SingleSearchSelect
