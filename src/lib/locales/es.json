@@ -425,7 +425,8 @@
     "country": "País",
     "type": "Tipo de empresa",
     "sector": "Sector",
-    "description": "Descripción"
+    "description": "Descripción",
+    "contactEmail": "Email de contacto"
   },
   "messages": {
     "empty": "Aún no tienes conversaciones.",
@@ -491,7 +492,45 @@
     "addAvatar": "Añade una foto de perfil para aumentar tu visibilidad",
     "addLogo": "Añade un logo para generar confianza",
     "addImages": "Añade imágenes al proyecto para mejorar el engagement",
-    "addDescription": "Añade una descripción clara"
+    "addDescription": "Añade una descripción clara",
+    "title": "Perfil completado",
+    "cta": "Ir al perfil",
+    "trust": "Perfil completo",
+    "company.cta": "Completa tu perfil para empezar a recibir interés.",
+    "investor.cta": "Completa tu perfil para desbloquear recomendaciones.",
+    "status": {
+      "complete": "Completo",
+      "almost": "Casi listo",
+      "action": "Acción requerida"
+    },
+    "field": {
+      "legal_name": "Nombre de la empresa",
+      "country": "País",
+      "description": "Descripción",
+      "contact_email": "Email de contacto",
+      "logo_url": "Logo de la empresa",
+      "website": "Sitio web",
+      "display_name": "Nombre completo",
+      "sectors": "Sectores de interés",
+      "investment_range": "Rango de inversión",
+      "countries": "Países",
+      "investment_types": "Tipos de inversión"
+    }
+  },
+  "publishBlocked": {
+    "title": "Completa tu perfil antes de publicar",
+    "body": "Estos campos son obligatorios para publicar un proyecto:",
+    "goToProfile": "Ir al perfil"
+  },
+  "validate": {
+    "nameShort": "El nombre es demasiado corto",
+    "nameLong": "El nombre es demasiado largo",
+    "emailInvalid": "Introduce un email válido",
+    "titleRange": "El título debe tener entre 5 y 120 caracteres",
+    "descriptionRange": "La descripción debe tener entre 20 y 1000 caracteres",
+    "capitalPositive": "El capital debe ser mayor que 0",
+    "ticketOrder": "El ticket máximo debe ser mayor o igual al mínimo",
+    "customLong": "El valor personalizado debe tener máximo 50 caracteres"
   },
   "footer": {
     "rights": "Todos los derechos reservados.",

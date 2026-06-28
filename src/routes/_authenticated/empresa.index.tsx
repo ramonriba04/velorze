@@ -11,6 +11,8 @@ import { Plus, MessageCircle, Briefcase, Rocket, BarChart3, Eye, Heart, Send, Lo
 import { useMyPlan, useCompanyUsage } from "@/hooks/usePlan";
 import { PlanBadge } from "@/components/PlanBadge";
 import { UpgradeDialog } from "@/components/UpgradeDialog";
+import { ProfileCompletenessCard, TrustBadge } from "@/components/ProfileCompletenessCard";
+import { companyCompleteness } from "@/lib/completeness";
 
 export const Route = createFileRoute("/_authenticated/empresa/")({
   component: CompanyDashboard,
@@ -27,7 +29,7 @@ function CompanyDashboard() {
     enabled: !!user,
     queryFn: async () => {
       const { data } = await supabase.from("company_profiles")
-        .select("legal_name, logo_url, description, website, country").eq("user_id", user!.id).maybeSingle();
+        .select("legal_name, logo_url, description, website, country, contact_email").eq("user_id", user!.id).maybeSingle();
       return data;
     },
   });
@@ -54,14 +56,7 @@ function CompanyDashboard() {
     },
   });
 
-  const completionItems = [
-    !!profile?.logo_url,
-    !!(profile?.description && profile.description.length > 30),
-    !!profile?.website,
-    !!profile?.country,
-    !!profile?.legal_name,
-  ];
-  const completion = Math.round((completionItems.filter(Boolean).length / completionItems.length) * 100);
+  const completion = companyCompleteness(profile ?? {});
   const name = profile?.legal_name ?? user?.email?.split("@")[0] ?? "";
 
   return (
@@ -70,7 +65,7 @@ function CompanyDashboard() {
         <EntityAvatar src={profile?.logo_url} name={name} kind="company" size={48} />
         <div className="min-w-0 flex-1">
           <p className="text-xs text-muted-foreground flex items-center gap-2">
-            {t("home.welcomeBack")} <PlanBadge code={planCode} />
+            {t("home.welcomeBack")} <PlanBadge code={planCode} /> <TrustBadge complete={completion.complete} />
           </p>
           <h1 className="text-2xl sm:text-3xl font-bold truncate">{name || t("nav.profile")}</h1>
         </div>
@@ -113,14 +108,14 @@ function CompanyDashboard() {
             <p className="mt-1 text-2xl font-semibold">{counts?.pending ?? 0}</p>
           </Card>
         </Link>
-        {completion < 100 && (
+        {!completion.complete && (
           <Link to="/empresa/perfil" className="col-span-2 sm:col-span-1">
             <Card className="p-4 hover:shadow-elegant transition-shadow">
               <div className="flex items-center justify-between text-xs text-muted-foreground">
-                <span>{t("home.profileComplete")}</span>
-                <span className="font-medium text-foreground">{completion}%</span>
+                <span>{t("completeness.title")}</span>
+                <span className="font-medium text-foreground">{completion.pct}%</span>
               </div>
-              <Progress value={completion} className="mt-2 h-2" />
+              <Progress value={completion.pct} className="mt-2 h-2" />
             </Card>
           </Link>
         )}

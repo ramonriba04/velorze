@@ -425,7 +425,8 @@
     "country": "Country",
     "type": "Company type",
     "sector": "Sector",
-    "description": "Description"
+    "description": "Description",
+    "contactEmail": "Contact email"
   },
   "messages": {
     "empty": "You don't have any conversations yet.",
@@ -491,7 +492,45 @@
     "addAvatar": "Add a profile photo to increase visibility",
     "addLogo": "Add a company logo to build trust",
     "addImages": "Add project images to improve engagement",
-    "addDescription": "Add a clear description"
+    "addDescription": "Add a clear description",
+    "title": "Profile completion",
+    "cta": "Go to profile",
+    "trust": "Profile complete",
+    "company.cta": "Complete your profile to start receiving interest.",
+    "investor.cta": "Complete your profile to unlock recommendations.",
+    "status": {
+      "complete": "Complete",
+      "almost": "Almost ready",
+      "action": "Action needed"
+    },
+    "field": {
+      "legal_name": "Company name",
+      "country": "Country",
+      "description": "Description",
+      "contact_email": "Contact email",
+      "logo_url": "Company logo",
+      "website": "Website",
+      "display_name": "Full name",
+      "sectors": "Sectors of interest",
+      "investment_range": "Investment range",
+      "countries": "Countries",
+      "investment_types": "Investment types"
+    }
+  },
+  "publishBlocked": {
+    "title": "Complete your profile before publishing",
+    "body": "These fields are required before you can publish a project:",
+    "goToProfile": "Go to profile"
+  },
+  "validate": {
+    "nameShort": "Name is too short",
+    "nameLong": "Name is too long",
+    "emailInvalid": "Enter a valid email",
+    "titleRange": "Title must be 5–120 characters",
+    "descriptionRange": "Description must be 20–1000 characters",
+    "capitalPositive": "Capital must be greater than 0",
+    "ticketOrder": "Maximum ticket must be greater than or equal to minimum",
+    "customLong": "Custom value must be at most 50 characters"
   },
   "footer": {
     "rights": "All rights reserved.",
