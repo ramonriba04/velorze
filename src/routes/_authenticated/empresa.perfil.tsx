@@ -12,11 +12,12 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { SingleSearchSelect } from "@/components/ui/multi-select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ImageUpload } from "@/components/media/ImageUpload";
 import { ProfileCompletenessCard } from "@/components/ProfileCompletenessCard";
 import { companyCompleteness } from "@/lib/completeness";
 import { toast } from "sonner";
-import { COUNTRIES, COMPANY_TYPES } from "@/lib/taxonomy";
+import { COUNTRIES, COMPANY_TYPES, ENTITY_TYPES } from "@/lib/taxonomy";
 
 export const Route = createFileRoute("/_authenticated/empresa/perfil")({
   head: () => ({ meta: [{ title: "Profile | Capora" }, { name: "robots", content: "noindex, nofollow" }] }),
@@ -39,6 +40,8 @@ function CompanyProfilePage() {
 
   const [form, setForm] = useState<any>({});
   const current = { ...(data ?? {}), ...form };
+  const entityType: string = current.entity_type ?? "empresa";
+  const isIndividual = entityType === "persona_fisica";
 
   const countryOptions = COUNTRIES.map((c) => ({ value: c, label: c }));
   const typeOptions = COMPANY_TYPES.map((c) => ({ value: c, label: t(`companyType.${c}`) }));
@@ -50,6 +53,7 @@ function CompanyProfilePage() {
     contact_email: current.contact_email,
     logo_url: current.logo_url,
     website: current.website,
+    entity_type: entityType,
   });
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -57,10 +61,11 @@ function CompanyProfilePage() {
     try {
       await save({
         data: {
+          entity_type: entityType as any,
           legal_name: (current.legal_name ?? "").trim(),
-          website: current.website || null,
+          website: isIndividual ? null : (current.website || null),
           country: current.country || null,
-          company_type: current.company_type || null,
+          company_type: isIndividual ? null : (current.company_type || null),
           contact_email: current.contact_email || null,
           description: current.description || null,
           logo_url: current.logo_url || null,
