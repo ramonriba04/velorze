@@ -33,6 +33,12 @@ export const COMPANY_TYPES = [
 ] as const;
 export type CompanyType = (typeof COMPANY_TYPES)[number] | string;
 
+// Entity types — who is raising investment. Replaces the implicit "always a company" assumption.
+export const ENTITY_TYPES = [
+  "persona_fisica","startup","empresa","holding","otro",
+] as const;
+export type EntityType = (typeof ENTITY_TYPES)[number];
+
 export const RISK_LEVELS = ["bajo","medio","alto"] as const;
 
 // Investment / capital ranges (in EUR/USD agnostic units).

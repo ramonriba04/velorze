@@ -10,6 +10,7 @@ export type CompanyProfileShape = {
   contact_email?: string | null;
   logo_url?: string | null;
   website?: string | null;
+  entity_type?: string | null;
 };
 
 export type InvestorProfileShape = {
@@ -27,22 +28,23 @@ const isEmail = (v?: string | null) =>
 const hasText = (v: string | null | undefined, min: number) =>
   !!v && v.trim().length >= min;
 
-// Mirror DB: 6 weighted checks; "required" = the 5 listed in the spec.
+// Mirror DB: individuals don't need logo/website; entities still do (logo required).
 export function companyCompleteness(p: CompanyProfileShape) {
+  const isIndividual = p.entity_type === "persona_fisica";
   const checks = [
-    { key: "legal_name",   required: true,  ok: hasText(p.legal_name, 2) },
-    { key: "country",      required: true,  ok: hasText(p.country, 2) },
-    { key: "description",  required: true,  ok: hasText(p.description, 20) },
-    { key: "contact_email", required: true, ok: isEmail(p.contact_email) },
-    { key: "logo_url",     required: true,  ok: !!p.logo_url },
-    { key: "website",      required: false, ok: !!p.website },
+    { key: "legal_name",    required: true,           ok: hasText(p.legal_name, 2) },
+    { key: "country",       required: true,           ok: hasText(p.country, 2) },
+    { key: "description",   required: true,           ok: hasText(p.description, 20) },
+    { key: "contact_email", required: true,           ok: isEmail(p.contact_email) },
+    { key: "logo_url",      required: true,           ok: !!p.logo_url }, // profile image for individuals
+    { key: "website",       required: !isIndividual,  ok: !!p.website },
   ];
-  const total = checks.length;
-  const done = checks.filter((c) => c.ok).length;
+  const total = isIndividual ? 5 : 6;
+  const done = checks.filter((c) => c.ok && (c.required || !isIndividual)).length;
   const pct = Math.round((done / total) * 100);
   const missingRequired = checks.filter((c) => c.required && !c.ok).map((c) => c.key);
   const complete = missingRequired.length === 0;
-  return { pct, complete, missingRequired, checks };
+  return { pct, complete, missingRequired, checks, isIndividual };
 }
 
 export function investorCompleteness(p: InvestorProfileShape) {
