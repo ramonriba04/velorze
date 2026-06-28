@@ -75,7 +75,27 @@
     "roleInvestor": "Soy inversor",
     "roleInvestorDesc": "Quiero descubrir oportunidades de inversión.",
     "continue": "Continuar",
-    "forgotPassword": "¿Olvidaste tu contraseña?"
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "confirmPassword": "Confirmar contraseña",
+    "pw": {
+      "requirements": "Tu contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.",
+      "length": "Al menos 8 caracteres",
+      "upper": "Una letra mayúscula",
+      "lower": "Una letra minúscula",
+      "number": "Un número",
+      "special": "Un carácter especial",
+      "recommended": "(recomendado)",
+      "mismatch": "Las contraseñas no coinciden"
+    },
+    "verify": {
+      "title": "Verifica tu correo",
+      "sent": "Te hemos enviado un email a {{email}} para verificar tu cuenta.",
+      "checkSpam": "Revisa tu bandeja de entrada y spam.",
+      "resend": "Reenviar email",
+      "resent": "Email de verificación enviado",
+      "changeEmail": "Cambiar email",
+      "loginBlocked": "Debes verificar tu correo antes de iniciar sesión."
+    }
   },
   "recover": {
     "title": "Recuperar contraseña",

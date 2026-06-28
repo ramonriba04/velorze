@@ -75,7 +75,27 @@
     "roleInvestor": "I'm an investor",
     "roleInvestorDesc": "I want to discover investment opportunities.",
     "continue": "Continue",
-    "forgotPassword": "Forgot your password?"
+    "forgotPassword": "Forgot your password?",
+    "confirmPassword": "Confirm password",
+    "pw": {
+      "requirements": "Password must contain at least 8 characters, one uppercase letter, one lowercase letter and one number.",
+      "length": "At least 8 characters",
+      "upper": "One uppercase letter",
+      "lower": "One lowercase letter",
+      "number": "One number",
+      "special": "One special character",
+      "recommended": "(recommended)",
+      "mismatch": "Passwords do not match"
+    },
+    "verify": {
+      "title": "Verify your email",
+      "sent": "We sent a verification email to {{email}}.",
+      "checkSpam": "Check your inbox and spam folder.",
+      "resend": "Resend email",
+      "resent": "Verification email sent",
+      "changeEmail": "Change email",
+      "loginBlocked": "Verify your email before logging in."
+    }
   },
   "recover": {
     "title": "Recover password",
