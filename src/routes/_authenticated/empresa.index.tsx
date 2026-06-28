@@ -11,6 +11,8 @@ import { Plus, MessageCircle, Briefcase, Rocket, BarChart3, Eye, Heart, Send, Lo
 import { useMyPlan, useCompanyUsage } from "@/hooks/usePlan";
 import { PlanBadge } from "@/components/PlanBadge";
 import { UpgradeDialog } from "@/components/UpgradeDialog";
+import { ProfileCompletenessCard, TrustBadge } from "@/components/ProfileCompletenessCard";
+import { companyCompleteness } from "@/lib/completeness";
 
 export const Route = createFileRoute("/_authenticated/empresa/")({
   component: CompanyDashboard,
@@ -27,7 +29,7 @@ function CompanyDashboard() {
     enabled: !!user,
     queryFn: async () => {
       const { data } = await supabase.from("company_profiles")
-        .select("legal_name, logo_url, description, website, country").eq("user_id", user!.id).maybeSingle();
+        .select("legal_name, logo_url, description, website, country, contact_email").eq("user_id", user!.id).maybeSingle();
       return data;
     },
   });
@@ -54,14 +56,7 @@ function CompanyDashboard() {
     },
   });
 
-  const completionItems = [
-    !!profile?.logo_url,
-    !!(profile?.description && profile.description.length > 30),
-    !!profile?.website,
-    !!profile?.country,
-    !!profile?.legal_name,
-  ];
-  const completion = Math.round((completionItems.filter(Boolean).length / completionItems.length) * 100);
+  const completion = companyCompleteness(profile ?? {});
   const name = profile?.legal_name ?? user?.email?.split("@")[0] ?? "";
 
   return (
