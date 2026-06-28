@@ -108,14 +108,14 @@ function CompanyDashboard() {
             <p className="mt-1 text-2xl font-semibold">{counts?.pending ?? 0}</p>
           </Card>
         </Link>
-        {completion < 100 && (
+        {!completion.complete && (
           <Link to="/empresa/perfil" className="col-span-2 sm:col-span-1">
             <Card className="p-4 hover:shadow-elegant transition-shadow">
               <div className="flex items-center justify-between text-xs text-muted-foreground">
-                <span>{t("home.profileComplete")}</span>
-                <span className="font-medium text-foreground">{completion}%</span>
+                <span>{t("completeness.title")}</span>
+                <span className="font-medium text-foreground">{completion.pct}%</span>
               </div>
-              <Progress value={completion} className="mt-2 h-2" />
+              <Progress value={completion.pct} className="mt-2 h-2" />
             </Card>
           </Link>
         )}
