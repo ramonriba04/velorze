@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       company_profiles: {
         Row: {
+          company_type: string | null
           contact_email: string | null
           country: string | null
           created_at: string
@@ -27,6 +28,7 @@ export type Database = {
           website: string | null
         }
         Insert: {
+          company_type?: string | null
           contact_email?: string | null
           country?: string | null
           created_at?: string
@@ -38,6 +40,7 @@ export type Database = {
           website?: string | null
         }
         Update: {
+          company_type?: string | null
           contact_email?: string | null
           country?: string | null
           created_at?: string
@@ -580,7 +583,14 @@ export type Database = {
     }
     Enums: {
       app_role: "empresa" | "inversor" | "admin"
-      business_stage: "idea" | "crecimiento" | "expansion"
+      business_stage:
+        | "idea"
+        | "crecimiento"
+        | "expansion"
+        | "mvp"
+        | "early_revenue"
+        | "growth"
+        | "mature"
       contact_status: "pending" | "accepted" | "rejected"
       investment_type:
         | "equity"
@@ -588,6 +598,13 @@ export type Database = {
         | "joint_venture"
         | "convertible"
         | "otro"
+        | "debt"
+        | "revenue_share"
+        | "crowdfunding"
+        | "angel"
+        | "venture"
+        | "private_equity"
+        | "strategic"
       investor_kind: "personal" | "corporativo"
       project_status: "draft" | "published" | "closed"
       risk_level: "bajo" | "medio" | "alto"
@@ -719,7 +736,15 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["empresa", "inversor", "admin"],
-      business_stage: ["idea", "crecimiento", "expansion"],
+      business_stage: [
+        "idea",
+        "crecimiento",
+        "expansion",
+        "mvp",
+        "early_revenue",
+        "growth",
+        "mature",
+      ],
       contact_status: ["pending", "accepted", "rejected"],
       investment_type: [
         "equity",
@@ -727,6 +752,13 @@ export const Constants = {
         "joint_venture",
         "convertible",
         "otro",
+        "debt",
+        "revenue_share",
+        "crowdfunding",
+        "angel",
+        "venture",
+        "private_equity",
+        "strategic",
       ],
       investor_kind: ["personal", "corporativo"],
       project_status: ["draft", "published", "closed"],
