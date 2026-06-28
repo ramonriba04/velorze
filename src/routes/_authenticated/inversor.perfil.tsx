@@ -25,6 +25,7 @@ import {
 } from "@/lib/taxonomy";
 
 export const Route = createFileRoute("/_authenticated/inversor/perfil")({
+  head: () => ({ meta: [{ title: "Profile | Capora" }, { name: "robots", content: "noindex, nofollow" }] }),
   component: InvestorProfile,
 });
 

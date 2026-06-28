@@ -16,6 +16,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/mensajes")({
+  head: () => ({ meta: [{ title: "Messages | Capora" }, { name: "robots", content: "noindex, nofollow" }] }),
   component: Messages,
 });
 

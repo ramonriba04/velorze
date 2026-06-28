@@ -19,7 +19,6 @@ export const Route = createFileRoute("/planes")({
       { property: "og:description", content: "Explore Capora Free, Pro and Business plans — visibility, active projects and advanced analytics." },
       { property: "og:url", content: "https://capora-ai-connect.lovable.app/planes" },
     ],
-    ],
     links: [{ rel: "canonical", href: "https://capora-ai-connect.lovable.app/planes" }],
   }),
   component: PlansPage,
