@@ -208,6 +208,9 @@ function Landing() {
                 <h3 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">
                   {t(`landing.${c.title}`)}
                 </h3>
+                {c.title === "forCompaniesTitle" && (
+                  <p className="mt-2 text-sm text-muted-foreground">{t("landing.forCompaniesSub")}</p>
+                )}
                 <ul className="mt-5 space-y-3">
                   {c.bullets.map((b) => (
                     <li key={b} className="flex items-start gap-3 text-sm text-foreground/80">
@@ -216,6 +219,9 @@ function Landing() {
                     </li>
                   ))}
                 </ul>
+                {c.title === "forCompaniesTitle" && (
+                  <p className="mt-4 text-xs text-muted-foreground">{t("landing.forCompaniesHelper")}</p>
+                )}
                 <Link to="/auth" search={{ mode: "signup", role: c.role }} className="mt-7 inline-block">
                   <Button className="gap-2">
                     {t(`landing.${c.cta}`)} <ArrowRight className="h-4 w-4" />
