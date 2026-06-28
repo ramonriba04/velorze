@@ -102,8 +102,25 @@ function CompanyProfilePage() {
             label={t("company.title")}
             hint={t("media.logoHint")}
           />
-          <div><Label>{t("company.legalName")}</Label><Input required defaultValue={data?.legal_name ?? ""} onChange={(e) => setForm({ ...form, legal_name: e.target.value })} /></div>
-          <div><Label>{t("company.website")}</Label><Input type="url" defaultValue={data?.website ?? ""} onChange={(e) => setForm({ ...form, website: e.target.value })} /></div>
+          <div>
+            <Label>{t("company.legalName")}</Label>
+            <Input required defaultValue={data?.legal_name ?? ""} onChange={(e) => setForm({ ...form, legal_name: e.target.value })} />
+            {nameTooShort && <p className="mt-1 text-xs text-destructive">{t("validate.nameShort")}</p>}
+          </div>
+          <div>
+            <Label>{t("company.contactEmail")}</Label>
+            <Input
+              type="email"
+              defaultValue={data?.contact_email ?? ""}
+              onChange={(e) => setForm({ ...form, contact_email: e.target.value })}
+              placeholder="contacto@empresa.com"
+            />
+            {emailInvalid && <p className="mt-1 text-xs text-destructive">{t("validate.emailInvalid")}</p>}
+          </div>
+          <div>
+            <Label>{t("company.website")}</Label>
+            <Input type="url" defaultValue={data?.website ?? ""} onChange={(e) => setForm({ ...form, website: e.target.value })} />
+          </div>
           <div>
             <Label>{t("company.type")}</Label>
             <SingleSearchSelect
@@ -130,7 +147,11 @@ function CompanyProfilePage() {
               otherLabel={t("picker.other")}
             />
           </div>
-          <div><Label>{t("company.description")}</Label><Textarea rows={4} defaultValue={data?.description ?? ""} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
+          <div>
+            <Label>{t("company.description")}</Label>
+            <Textarea rows={4} defaultValue={data?.description ?? ""} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+            {descTooShort && <p className="mt-1 text-xs text-destructive">{t("validate.descriptionRange")}</p>}
+          </div>
           <div className="flex gap-2">
             <Button type="submit" className="flex-1">{t("common.save")}</Button>
             <Button type="button" variant="outline" onClick={() => { setForm({}); toast.message(t("common.cancel")); }}>{t("common.cancel")}</Button>
