@@ -210,16 +210,21 @@
     "deleteWord": "DELETE"
   },
   "discover": {
-    "title": "Discover projects",
-    "sub": "Filter by sector, country, stage or ticket to find opportunities.",
+    "title": "Explore projects",
+    "sub": "Discover opportunities manually using filters.",
     "searchPlaceholder": "Search by title or description...",
     "anySector": "Any sector",
     "anyCountry": "Any country",
     "any": "Any",
     "activeFilters": "{{count}} active filters",
     "clearAll": "Clear filters",
-    "emptyTitle": "No results",
-    "emptySub": "Try broadening or removing some filters."
+    "emptyTitle": "No projects match these filters",
+    "emptySub": "Try broadening filters or removing some.",
+    "sortLabel": "Sort by",
+    "sortMatch": "Most compatible",
+    "sortNewest": "Newest",
+    "sortActive": "Recently active",
+    "manualBadge": "Manual search"
   },
   "notifications": {
     "title": "Notifications",
