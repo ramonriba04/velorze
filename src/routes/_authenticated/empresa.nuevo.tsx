@@ -48,6 +48,16 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
   const [images, setImages] = useState<ProjectImage[]>([]);
   const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">("idle");
   const [loaded, setLoaded] = useState(mode === "create");
+  const [blockedOpen, setBlockedOpen] = useState(false);
+  const [companyProfile, setCompanyProfile] = useState<any>(null);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("company_profiles")
+      .select("legal_name, country, description, contact_email, logo_url, website")
+      .eq("user_id", user.id).maybeSingle()
+      .then(({ data }) => setCompanyProfile(data));
+  }, [user]);
 
   useEffect(() => {
     if (mode === "edit" && params.id) {
