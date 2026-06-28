@@ -13,6 +13,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { createContactRequest } from "@/lib/contact.functions";
 import { toast } from "sonner";
 import { ShareButton } from "@/components/ShareButton";
+import { EntityTypeBadge } from "@/components/EntityTypeBadge";
 
 export const Route = createFileRoute("/proyectos/$id")({
   head: ({ params }) => ({
@@ -91,6 +92,7 @@ function ProjectDetail() {
             )}
             <div className="p-8">
               <div className="flex flex-wrap gap-2 mb-4">
+                <EntityTypeBadge type={data.company?.entity_type} />
                 <Badge variant="outline">{data.sector}</Badge>
                 <Badge variant="outline">{data.country}</Badge>
                 <Badge variant="outline">{t(`stage.${data.stage}`)}</Badge>
