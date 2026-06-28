@@ -14,7 +14,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { ImageUpload } from "@/components/media/ImageUpload";
-import { CompletenessBadge } from "@/components/media/CompletenessBadge";
+import { ProfileCompletenessCard } from "@/components/ProfileCompletenessCard";
+import { investorCompleteness } from "@/lib/completeness";
 import { toast } from "sonner";
 import {
   SECTORS,
@@ -97,16 +98,26 @@ function InvestorProfile() {
 
   if (!user || isLoading) return <div className="p-10">{t("common.loading")}</div>;
 
-  const completeness = [
-    { label: t("completeness.addAvatar"), done: !!current.avatar_url },
-    { label: t("completeness.addDescription"), done: !!(current.description && current.description.length > 30) },
-    { label: t("investor.sectors"), done: sectors.length > 0 },
-    { label: t("investor.countries"), done: countries.length > 0 },
-  ];
+  const completeness = investorCompleteness({
+    display_name: current.display_name,
+    sectors,
+    ticket_min: current.ticket_min ? Number(current.ticket_min) : null,
+    ticket_max: current.ticket_max ? Number(current.ticket_max) : null,
+    countries,
+    investment_types: investmentTypes,
+    description: current.description,
+  });
+  const nameTooShort = !!current.display_name && current.display_name.trim().length < 2;
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10 pb-24 space-y-4">
-      <CompletenessBadge items={completeness} />
+      <ProfileCompletenessCard
+        pct={completeness.pct}
+        complete={completeness.complete}
+        missing={completeness.missingRequired}
+        ctaTo="/inversor/perfil"
+        ctaCopy={t("completeness.investor.cta")}
+      />
       <Card className="p-6">
         <h1 className="text-2xl font-bold">{t("investor.title")}</h1>
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
