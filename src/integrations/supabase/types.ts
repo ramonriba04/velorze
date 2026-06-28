@@ -21,6 +21,7 @@ export type Database = {
           country: string | null
           created_at: string
           description: string | null
+          entity_type: string
           legal_name: string
           logo_url: string | null
           updated_at: string
@@ -33,6 +34,7 @@ export type Database = {
           country?: string | null
           created_at?: string
           description?: string | null
+          entity_type?: string
           legal_name: string
           logo_url?: string | null
           updated_at?: string
@@ -45,6 +47,7 @@ export type Database = {
           country?: string | null
           created_at?: string
           description?: string | null
+          entity_type?: string
           legal_name?: string
           logo_url?: string | null
           updated_at?: string
