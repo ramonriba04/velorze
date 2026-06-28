@@ -124,8 +124,19 @@ function Settings() {
         <div className="space-y-1">
           <Label>{t("auth.email")}</Label>
           <Input value={user?.email ?? ""} disabled />
-          <p className="text-xs text-muted-foreground">{t("settings.emailHint")}</p>
         </div>
+        <form className="space-y-2" onSubmit={updateEmail}>
+          <Label htmlFor="new-email">{t("settings.changeEmail")}</Label>
+          <Input
+            id="new-email" type="email" autoComplete="email"
+            value={newEmail} onChange={(e) => setNewEmail(e.target.value)}
+            placeholder={t("settings.newEmailPlaceholder")}
+          />
+          <p className="text-xs text-muted-foreground">{t("settings.emailVerifyHint")}</p>
+          <Button type="submit" size="sm" disabled={emailLoading || !newEmail || newEmail === user?.email}>
+            {emailLoading ? t("common.loading") : t("settings.updateEmail")}
+          </Button>
+        </form>
         <div className="space-y-1">
           <Label>{t("settings.language")}</Label>
           <Select value={i18n.resolvedLanguage ?? "es"} onValueChange={(v) => i18n.changeLanguage(v)}>
