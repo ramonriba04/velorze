@@ -106,6 +106,10 @@ function AuthPage() {
           toast.error(t("auth.pw.mismatch"));
           return;
         }
+        if (!acceptedLegal) {
+          toast.error(t("consent.required"));
+          return;
+        }
         if (typeof window !== "undefined") {
           localStorage.setItem("capora_pending_role", role);
         }
@@ -118,12 +122,25 @@ function AuthPage() {
           },
         });
         if (error) throw error;
+        // Record legal consent (best-effort; logged for audit)
+        try {
+          await consent({
+            data: {
+              terms_version: "2026-06-28",
+              privacy_version: "2026-06-28",
+              cookies_version: "2026-06-28",
+              user_agent: typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 500) : null,
+            },
+          });
+        } catch (e) {
+          console.warn("consent log failed", e);
+        }
         if (data.session) {
-          // Auto-confirm enabled (shouldn't happen now); go straight in.
           await afterAuth();
         } else {
           setNeedsVerification(email);
         }
+
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) {
