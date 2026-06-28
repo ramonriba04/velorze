@@ -37,7 +37,7 @@ function Favorites() {
             title={t("empty.favorites")}
             description={t("empty.favoritesSub")}
             ctaLabel={t("empty.exploreCta")}
-            ctaTo="/inversor"
+            ctaTo="/proyectos"
           />
         </div>
       ) : (

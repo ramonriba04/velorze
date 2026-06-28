@@ -1,9 +1,10 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { Search, MapPin, Filter, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useMyRole } from "@/hooks/useAuth";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { EmptyState } from "@/components/ui/empty-state";
+import { computeMatch, type MatchableInvestor } from "@/lib/matching";
 
 const searchSchema = z.object({
   q: z.string().optional().catch(undefined),
@@ -22,6 +24,7 @@ const searchSchema = z.object({
   type: z.enum(["equity", "prestamo", "joint_venture", "convertible", "otro"]).optional().catch(undefined),
   min: z.coerce.number().int().nonnegative().optional().catch(undefined),
   max: z.coerce.number().int().nonnegative().optional().catch(undefined),
+  sort: z.enum(["match", "newest", "active"]).optional().catch(undefined),
 });
 
 export const Route = createFileRoute("/_authenticated/proyectos/")({
@@ -36,6 +39,8 @@ function ProjectsDiscovery() {
   const { t } = useTranslation();
   const search = Route.useSearch();
   const navigate = useNavigate();
+  const { user } = useMyRole();
+  const sort = search.sort ?? "match";
 
   const setParam = (patch: Record<string, unknown>) =>
     navigate({
@@ -52,6 +57,19 @@ function ProjectsDiscovery() {
       },
       replace: true,
     });
+
+  const { data: investor } = useQuery({
+    queryKey: ["investor_profile_for_sort", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("investor_profiles")
+        .select("sectors, investment_types, ticket_min, ticket_max, countries, risk_level")
+        .eq("user_id", user!.id)
+        .maybeSingle();
+      return data as MatchableInvestor | null;
+    },
+  });
 
   const { data: items, isLoading } = useQuery({
     queryKey: ["projects_discovery", search],
@@ -70,6 +88,28 @@ function ProjectsDiscovery() {
     },
   });
 
+  const sorted = (() => {
+    const list = items ?? [];
+    if (sort === "newest") {
+      return [...list].sort(
+        (a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+      );
+    }
+    if (sort === "active") {
+      return [...list].sort(
+        (a: any, b: any) =>
+          new Date(b.updated_at ?? b.created_at).getTime() -
+          new Date(a.updated_at ?? a.created_at).getTime(),
+      );
+    }
+    // match (default) — needs investor profile, otherwise falls back to newest
+    if (!investor) return list;
+    return [...list]
+      .map((p: any) => ({ p, s: computeMatch(p, investor).score }))
+      .sort((a, b) => b.s - a.s)
+      .map((x) => x.p);
+  })();
+
   const activeCount = [
     search.q, search.sector, search.country, search.stage, search.type,
     typeof search.min === "number" ? search.min : undefined,
@@ -79,9 +119,15 @@ function ProjectsDiscovery() {
   const clearAll = () => navigate({ to: "/proyectos", search: {}, replace: true });
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6">
-      <header className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">{t("discover.title")}</h1>
+    <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6 pb-28">
+      <header className="space-y-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          <Search className="h-5 w-5 text-muted-foreground" />
+          <h1 className="text-2xl font-semibold tracking-tight">{t("discover.title")}</h1>
+          <Badge variant="secondary" className="bg-muted text-muted-foreground hover:bg-muted">
+            {t("discover.manualBadge")}
+          </Badge>
+        </div>
         <p className="text-sm text-muted-foreground">{t("discover.sub")}</p>
       </header>
 
@@ -153,56 +199,70 @@ function ProjectsDiscovery() {
           </div>
         </div>
 
-        {activeCount > 0 && (
-          <div className="flex items-center justify-between border-t pt-3">
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Filter className="h-3.5 w-3.5" />
-              {t("discover.activeFilters", { count: activeCount })}
-            </div>
-            <Button variant="ghost" size="sm" onClick={clearAll}>
-              <X className="mr-1 h-3.5 w-3.5" /> {t("discover.clearAll")}
-            </Button>
+        <div className="flex items-center justify-between gap-2 border-t pt-3 flex-wrap">
+          <div className="flex items-center gap-2">
+            <Label className="text-xs text-muted-foreground">{t("discover.sortLabel")}</Label>
+            <Select value={sort} onValueChange={(v) => setParam({ sort: v })}>
+              <SelectTrigger className="h-8 w-[180px]"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="match">{t("discover.sortMatch")}</SelectItem>
+                <SelectItem value="newest">{t("discover.sortNewest")}</SelectItem>
+                <SelectItem value="active">{t("discover.sortActive")}</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-        )}
+          {activeCount > 0 && (
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                <Filter className="h-3.5 w-3.5" />
+                {t("discover.activeFilters", { count: activeCount })}
+              </span>
+              <Button variant="ghost" size="sm" onClick={clearAll}>
+                <X className="mr-1 h-3.5 w-3.5" /> {t("discover.clearAll")}
+              </Button>
+            </div>
+          )}
+        </div>
       </Card>
 
       {isLoading ? (
         <div className="p-10 text-center text-muted-foreground">{t("common.loading")}</div>
-      ) : !items || items.length === 0 ? (
+      ) : !sorted || sorted.length === 0 ? (
         <EmptyState
           icon={<Search className="h-6 w-6" />}
           title={t("discover.emptyTitle")}
           description={t("discover.emptySub")}
-          ctaLabel={t("discover.clearAll")}
+          ctaLabel={activeCount > 0 ? t("discover.clearAll") : undefined}
           onCta={activeCount > 0 ? clearAll : undefined}
         />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((p: any) => (
-            <Card key={p.id} className="h-full overflow-hidden">
-              {p.cover_url ? (
-                <div className="aspect-[16/9] w-full bg-muted">
-                  <img src={p.cover_url} alt={p.title} className="h-full w-full object-cover" />
+          {sorted.map((p: any) => (
+            <Link key={p.id} to="/proyectos/$id" params={{ id: p.id }}>
+              <Card className="h-full overflow-hidden hover:shadow-elegant transition-shadow">
+                {p.cover_url ? (
+                  <div className="aspect-[16/9] w-full bg-muted">
+                    <img src={p.cover_url} alt={p.title} className="h-full w-full object-cover" />
+                  </div>
+                ) : (
+                  <div className="aspect-[16/9] w-full gradient-primary opacity-80" />
+                )}
+                <div className="space-y-2 p-4">
+                  <h3 className="font-semibold leading-tight">{p.title}</h3>
+                  <p className="line-clamp-2 text-sm text-muted-foreground">{p.description}</p>
+                  <div className="flex flex-wrap items-center gap-2 pt-1 text-xs text-muted-foreground">
+                    <Badge variant="secondary">{p.sector}</Badge>
+                    <Badge variant="outline">{t(`stage.${p.stage}`)}</Badge>
+                    <span className="inline-flex items-center gap-1">
+                      <MapPin className="h-3 w-3" /> {p.country}
+                    </span>
+                  </div>
                 </div>
-              ) : (
-                <div className="aspect-[16/9] w-full gradient-primary opacity-80" />
-              )}
-              <div className="space-y-2 p-4">
-                <h3 className="font-semibold leading-tight">{p.title}</h3>
-                <p className="line-clamp-2 text-sm text-muted-foreground">{p.description}</p>
-                <div className="flex flex-wrap items-center gap-2 pt-1 text-xs text-muted-foreground">
-                  <Badge variant="secondary">{p.sector}</Badge>
-                  <Badge variant="outline">{t(`stage.${p.stage}`)}</Badge>
-                  <span className="inline-flex items-center gap-1">
-                    <MapPin className="h-3 w-3" /> {p.country}
-                  </span>
-                </div>
-              </div>
-            </Card>
+              </Card>
+            </Link>
           ))}
         </div>
       )}
     </div>
   );
 }
-

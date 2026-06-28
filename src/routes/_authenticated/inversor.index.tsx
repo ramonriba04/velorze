@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 import { getRecommendedProjects } from "@/lib/matching.functions";
 import { toggleFavorite, createContactRequest } from "@/lib/contact.functions";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,7 +12,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { EntityAvatar } from "@/components/media/EntityAvatar";
-import { Heart, MapPin, TrendingUp, Send, MessageCircle, Sparkles, Compass } from "lucide-react";
+import {
+  Heart, MapPin, TrendingUp, Send, MessageCircle, Sparkles, Compass,
+  ChevronDown, ChevronUp,
+} from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/inversor/")({
@@ -25,7 +29,6 @@ function scoreColor(s: number) {
   return "bg-muted text-muted-foreground";
 }
 
-
 function InvestorDashboard() {
   const { t } = useTranslation();
   const { user } = useMyRole();
@@ -33,6 +36,7 @@ function InvestorDashboard() {
   const favFn = useServerFn(toggleFavorite);
   const reqFn = useServerFn(createContactRequest);
   const qc = useQueryClient();
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
 
   const { data, isLoading } = useQuery({
     queryKey: ["recommended"],
@@ -61,7 +65,8 @@ function InvestorDashboard() {
     },
   });
 
-  const companyIds = Array.from(new Set((data?.items ?? []).map((i: any) => i.project.company_id)));
+  const items = (data?.items ?? []).filter((i: any) => (i.match?.score ?? 0) > 0 || data?.hasProfile === false);
+  const companyIds = Array.from(new Set(items.map((i: any) => i.project.company_id)));
   const { data: companies } = useQuery({
     queryKey: ["recommended_companies", companyIds.join(",")],
     enabled: companyIds.length > 0,
@@ -84,7 +89,6 @@ function InvestorDashboard() {
     onError: (e) => toast.error((e as Error).message),
   });
 
-  // Completion score
   const completionItems = [
     !!profile?.avatar_url,
     !!(profile?.description && profile.description.length > 30),
@@ -95,7 +99,8 @@ function InvestorDashboard() {
   const completion = Math.round((completionItems.filter(Boolean).length / completionItems.length) * 100);
   const greetingName = profile?.display_name ?? user?.email?.split("@")[0] ?? "";
 
-  const items = data?.items ?? [];
+  const hasProfile = data?.hasProfile !== false;
+  const compatibleItems = (data?.items ?? []).filter((i: any) => (i.match?.score ?? 0) >= 40);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 pb-28 sm:px-6">
@@ -135,30 +140,57 @@ function InvestorDashboard() {
         )}
       </div>
 
-      {/* Recommendations */}
-      <div className="mt-10 flex items-center justify-between">
+      {/* Recommendations header */}
+      <div className="mt-10 flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-primary" />
           <h2 className="text-xl font-semibold">{t("project.recommended")}</h2>
+          <Badge className="bg-primary text-primary-foreground hover:bg-primary">
+            {t("project.recommendedBadge")}
+          </Badge>
         </div>
+        <Link to="/proyectos">
+          <Button variant="outline" size="sm">{t("project.exploreMore")}</Button>
+        </Link>
       </div>
-      <p className="text-sm text-muted-foreground">{t("project.recommendedSub")}</p>
+      <p className="text-sm text-muted-foreground mt-1">{t("project.recommendedSub")}</p>
 
       <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {isLoading && <p className="text-muted-foreground col-span-full">{t("common.loading")}</p>}
-        {!isLoading && items.length === 0 && (
+
+        {!isLoading && !hasProfile && (
           <Card className="md:col-span-2 lg:col-span-3 p-10 text-center border-dashed">
             <Compass className="mx-auto h-10 w-10 text-muted-foreground" />
             <h3 className="mt-3 font-semibold">{t("home.noRecommendations")}</h3>
             <p className="mt-1 text-sm text-muted-foreground max-w-md mx-auto">{t("home.noRecommendationsSub")}</p>
             <div className="mt-4 flex justify-center gap-2">
-              <Link to="/inversor/perfil"><Button variant="outline" size="sm">{t("home.completeProfileCta")}</Button></Link>
-              <Link to="/inversor/favoritos"><Button size="sm">{t("empty.exploreCta")}</Button></Link>
+              <Link to="/inversor/perfil"><Button size="sm">{t("home.completeProfileCta")}</Button></Link>
+              <Link to="/proyectos"><Button size="sm" variant="outline">{t("project.exploreMore")}</Button></Link>
             </div>
           </Card>
         )}
-        {items.map(({ project, match }) => {
+
+        {!isLoading && hasProfile && compatibleItems.length === 0 && (
+          <Card className="md:col-span-2 lg:col-span-3 p-10 text-center border-dashed">
+            <Sparkles className="mx-auto h-10 w-10 text-muted-foreground" />
+            <h3 className="mt-3 font-semibold">{t("home.noMatchesYetTitle")}</h3>
+            <p className="mt-1 text-sm text-muted-foreground max-w-md mx-auto">{t("home.noMatchesYetSub")}</p>
+            <div className="mt-4 flex justify-center gap-2">
+              <Link to="/proyectos"><Button size="sm">{t("project.exploreMore")}</Button></Link>
+            </div>
+          </Card>
+        )}
+
+        {!isLoading && hasProfile && compatibleItems.map(({ project, match }: any) => {
           const company = companies?.[project.company_id];
+          const isOpen = !!expanded[project.id];
+          const chips: { key: string; label: string }[] = [];
+          (match.reasons ?? []).forEach((r: string) => {
+            if (r.startsWith("Sector ")) chips.push({ key: "sector", label: r.replace("Sector ", "") });
+            else if (r.startsWith("País ")) chips.push({ key: "country", label: r.replace("País ", "") });
+            else if (r.startsWith("Ticket")) chips.push({ key: "ticket", label: t("project.ticketMin") });
+            else if (r.startsWith("Tipo ")) chips.push({ key: "type", label: t(`investmentType.${r.replace("Tipo ", "")}`) });
+          });
           return (
             <Card key={project.id} className="overflow-hidden flex flex-col">
               {project.cover_url && (
@@ -175,7 +207,7 @@ function InvestorDashboard() {
                       <p className="text-xs text-muted-foreground truncate">{company?.legal_name ?? ""}</p>
                     </div>
                   </div>
-                  <Badge className={scoreColor(match.score)}>{match.score}%</Badge>
+                  <Badge className={scoreColor(match.score)}>{match.score}% {t("project.match").toLowerCase()}</Badge>
                 </div>
                 <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
                   <span className="inline-flex items-center gap-1"><TrendingUp className="h-3 w-3" />{project.sector}</span>
@@ -184,9 +216,35 @@ function InvestorDashboard() {
                   <Badge variant="outline">{t(`investmentType.${project.investment_type}`)}</Badge>
                 </div>
                 <p className="text-sm text-muted-foreground line-clamp-3">{project.description}</p>
-                {match.reasons.length > 0 && (
-                  <p className="text-xs text-primary">{t("project.matchReasons")}: {match.reasons.join(" · ")}</p>
+
+                {chips.length > 0 && (
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => setExpanded((e) => ({ ...e, [project.id]: !e[project.id] }))}
+                      className="text-xs text-primary inline-flex items-center gap-1 hover:underline"
+                      aria-expanded={isOpen}
+                    >
+                      {t("project.whyMatch")}
+                      {isOpen ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+                    </button>
+                    {isOpen && (
+                      <div className="mt-2 rounded-md border bg-primary/5 p-2">
+                        <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                          {t("project.matchesLabel")}
+                        </p>
+                        <div className="mt-1 flex flex-wrap gap-1">
+                          {chips.map((c) => (
+                            <Badge key={c.key + c.label} variant="secondary" className="text-xs">
+                              ✓ {c.label}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 )}
+
                 <div className="mt-auto flex gap-2 pt-2">
                   <Link to="/proyectos/$id" params={{ id: project.id }} className="flex-1">
                     <Button variant="outline" size="sm" className="w-full">{t("project.viewProject")}</Button>
@@ -203,6 +261,14 @@ function InvestorDashboard() {
           );
         })}
       </div>
+
+      {!isLoading && hasProfile && compatibleItems.length > 0 && (
+        <div className="mt-8 flex justify-center">
+          <Link to="/proyectos">
+            <Button variant="outline">{t("project.exploreMore")}</Button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

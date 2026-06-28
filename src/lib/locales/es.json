@@ -210,16 +210,21 @@
     "deleteWord": "ELIMINAR"
   },
   "discover": {
-    "title": "Descubre proyectos",
-    "sub": "Filtra por sector, país, etapa o ticket para encontrar oportunidades.",
+    "title": "Explorar proyectos",
+    "sub": "Busca oportunidades manualmente usando filtros.",
     "searchPlaceholder": "Buscar por título o descripción...",
     "anySector": "Cualquier sector",
     "anyCountry": "Cualquier país",
     "any": "Cualquiera",
     "activeFilters": "{{count}} filtros activos",
     "clearAll": "Limpiar filtros",
-    "emptyTitle": "Sin resultados",
-    "emptySub": "Prueba a ampliar los filtros o eliminarlos."
+    "emptyTitle": "No encontramos proyectos con esos filtros",
+    "emptySub": "Prueba ampliando filtros o quitando alguno.",
+    "sortLabel": "Ordenar por",
+    "sortMatch": "Más compatibles",
+    "sortNewest": "Más recientes",
+    "sortActive": "Actividad reciente",
+    "manualBadge": "Búsqueda manual"
   },
   "notifications": {
     "title": "Notificaciones",
@@ -326,7 +331,11 @@
     "match": "Compatibilidad",
     "matchReasons": "Por qué encaja",
     "recommended": "Proyectos recomendados para ti",
-    "recommendedSub": "Ordenados por compatibilidad con tu perfil.",
+    "recommendedSub": "Calculados automáticamente según tu perfil inversor.",
+    "recommendedBadge": "Recomendaciones",
+    "whyMatch": "¿Por qué veo esto?",
+    "matchesLabel": "Coincide en",
+    "exploreMore": "Explorar más proyectos",
     "all": "Todos los proyectos",
     "completeProfile": "Completa tu perfil de inversor para ver recomendaciones."
   },
@@ -442,9 +451,11 @@
   "home": {
     "welcomeBack": "Bienvenido de nuevo",
     "profileComplete": "Perfil completado",
-    "noRecommendations": "Aún no hay recomendaciones",
-    "noRecommendationsSub": "Completa tu perfil para que el motor de matching pueda sugerirte oportunidades relevantes.",
+    "noRecommendations": "Completa tu perfil para desbloquear recomendaciones",
+    "noRecommendationsSub": "Necesitamos tus sectores, ticket y geografía para sugerirte oportunidades compatibles.",
     "completeProfileCta": "Completar perfil",
+    "noMatchesYetTitle": "Todavía no encontramos oportunidades compatibles",
+    "noMatchesYetSub": "Volveremos a buscar a medida que se publiquen nuevos proyectos.",
     "firstProjectTitle": "Publica tu primer proyecto",
     "firstProjectSub": "Comparte tu oportunidad con inversores compatibles en minutos.",
     "pendingRequests": "Pendientes"
