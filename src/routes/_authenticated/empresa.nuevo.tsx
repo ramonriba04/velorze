@@ -120,8 +120,8 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
   };
   const hasErrors = Object.values(errors).some(Boolean);
 
-  const verificationStatus: string = (companyProfile?.verification_status as string) ?? "unverified";
-  const verified = verificationStatus === "verified";
+  const trustLevel: string = (companyProfile?.trust_level as string) ?? "unverified";
+  const verified = ["basic", "trusted", "manual"].includes(trustLevel);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
