@@ -120,6 +120,9 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
   };
   const hasErrors = Object.values(errors).some(Boolean);
 
+  const verificationStatus: string = (companyProfile?.verification_status as string) ?? "unverified";
+  const verified = verificationStatus === "verified";
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (hasErrors) {
@@ -129,6 +132,12 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
     // Block publish when company profile is incomplete — show modal instead.
     if (form.status === "published" && !completeness.complete) {
       setBlockedOpen(true);
+      return;
+    }
+    // Block publish when account is not verified — save as draft instead.
+    if (form.status === "published" && !verified) {
+      toast.error(t("verification.publishBlocked"));
+      setForm({ ...form, status: "draft" });
       return;
     }
     try {
@@ -158,9 +167,14 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
         setBlockedOpen(true);
         return;
       }
+      if (/verification_required/i.test(msg)) {
+        toast.error(t("verification.publishBlocked"));
+        return;
+      }
       toast.error(msg);
     }
   };
+
 
 
   const onDelete = async () => {
