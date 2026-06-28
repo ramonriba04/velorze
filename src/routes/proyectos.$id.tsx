@@ -44,9 +44,10 @@ function ProjectDetail() {
       if (!project) return null;
       const { data: company } = await supabase
         .from("company_profiles")
-        .select("legal_name, country, logo_url, description, website, entity_type")
+        .select("legal_name, country, logo_url, description, website, entity_type, verification_status")
         .eq("user_id", project.company_id)
         .maybeSingle();
+
       const { data: imgs } = await supabase
         .from("project_images")
         .select("url")
