@@ -54,10 +54,11 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
   useEffect(() => {
     if (!user) return;
     supabase.from("company_profiles")
-      .select("legal_name, country, description, contact_email, logo_url, website")
+      .select("legal_name, country, description, contact_email, logo_url, website, verification_status, entity_type")
       .eq("user_id", user.id).maybeSingle()
       .then(({ data }) => setCompanyProfile(data));
   }, [user]);
+
 
   useEffect(() => {
     if (mode === "edit" && params.id) {
