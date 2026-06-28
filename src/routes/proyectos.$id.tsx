@@ -15,11 +15,16 @@ import { toast } from "sonner";
 import { ShareButton } from "@/components/ShareButton";
 
 export const Route = createFileRoute("/proyectos/$id")({
-  head: () => ({
+  head: ({ params }) => ({
     meta: [
-      { title: `Proyecto — Capora` },
-      { name: "description", content: "Detalle de proyecto de inversión en Capora." },
+      { title: `Proyecto | Capora` },
+      { name: "description", content: "Detalle de proyecto de inversión publicado en Capora." },
+      { property: "og:title", content: "Proyecto en Capora" },
+      { property: "og:description", content: "Detalle de proyecto de inversión publicado en Capora." },
+      { property: "og:type", content: "article" },
+      { property: "og:url", content: `https://capora-ai-connect.lovable.app/proyectos/${params.id}` },
     ],
+    links: [{ rel: "canonical", href: `https://capora-ai-connect.lovable.app/proyectos/${params.id}` }],
   }),
   component: ProjectDetail,
 });

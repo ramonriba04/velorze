@@ -15,6 +15,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { Toaster } from "@/components/ui/sonner";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 
+const SITE_URL = "https://capora-ai-connect.lovable.app";
+const OG_IMAGE = `${SITE_URL}/__l5e/assets-v1/a56efdb2-a5ec-4e38-86c0-563dfbd9bd43/og-capora.jpg`;
+const DEFAULT_TITLE = "Capora — Marketplace inteligente de inversión";
+const DEFAULT_DESC = "Conecta proyectos con los inversores adecuados mediante matching inteligente de compatibilidad.";
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -52,10 +57,28 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Capora — Marketplace inteligente de inversión" },
-      { name: "description", content: "Conecta tu proyecto con los inversores adecuados. Capora es un marketplace inteligente que ayuda a empresas e inversores a descubrir oportunidades relevantes mediante matching de compatibilidad." },
+      { name: "theme-color", content: "#0b2545" },
+      { name: "apple-mobile-web-app-title", content: "Capora" },
+      { name: "application-name", content: "Capora" },
+      { title: DEFAULT_TITLE },
+      { name: "description", content: DEFAULT_DESC },
+      { property: "og:site_name", content: "Capora" },
+      { property: "og:type", content: "website" },
+      { property: "og:title", content: DEFAULT_TITLE },
+      { property: "og:description", content: DEFAULT_DESC },
+      { property: "og:image", content: OG_IMAGE },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: DEFAULT_TITLE },
+      { name: "twitter:description", content: DEFAULT_DESC },
+      { name: "twitter:image", content: OG_IMAGE },
     ],
-    links: [{ rel: "stylesheet", href: appCss }],
+    links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
+      { rel: "apple-touch-icon", href: "/favicon.png" },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,

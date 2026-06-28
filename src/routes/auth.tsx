@@ -23,7 +23,16 @@ const SearchSchema = z.object({
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (s) => SearchSchema.parse(s),
-  head: () => ({ meta: [{ title: "Acceso — Capora" }] }),
+  head: ({ match }) => {
+    const isSignup = (match.search as { mode?: string })?.mode === "signup";
+    return {
+      meta: [
+        { title: isSignup ? "Create account | Capora" : "Login | Capora" },
+        { name: "description", content: "Access your Capora account to discover investment opportunities." },
+        { name: "robots", content: "noindex, nofollow" },
+      ],
+    };
+  },
   component: AuthPage,
 });
 
