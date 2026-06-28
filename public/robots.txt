@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /app
+Disallow: /auth
+Disallow: /ajustes
+Disallow: /mensajes
+Disallow: /empresa
+Disallow: /inversor
+Disallow: /admin
+Disallow: /onboarding
+Disallow: /lovable/
+
+Sitemap: https://capora-ai-connect.lovable.app/sitemap.xml

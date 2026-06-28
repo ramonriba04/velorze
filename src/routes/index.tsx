@@ -8,11 +8,13 @@ import { Card } from "@/components/ui/card";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Capora — Marketplace inteligente de inversión" },
-      { name: "description", content: "Conecta empresas con inversores privados y corporativos mediante matching inteligente." },
-      { property: "og:title", content: "Capora" },
-      { property: "og:description", content: "Marketplace inteligente que conecta empresas con inversores." },
+      { title: "Capora — Intelligent investment marketplace" },
+      { name: "description", content: "Connect projects with the right investors through intelligent compatibility matching." },
+      { property: "og:title", content: "Capora — Intelligent investment marketplace" },
+      { property: "og:description", content: "Connect projects with the right investors through intelligent compatibility matching." },
+      { property: "og:url", content: "https://capora-ai-connect.lovable.app/" },
     ],
+    links: [{ rel: "canonical", href: "https://capora-ai-connect.lovable.app/" }],
   }),
   component: Landing,
 });
