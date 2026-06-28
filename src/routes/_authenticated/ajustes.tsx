@@ -22,6 +22,7 @@ import {
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/ajustes")({
+  head: () => ({ meta: [{ title: "Settings | Capora" }, { name: "robots", content: "noindex, nofollow" }] }),
   component: Settings,
 });
 

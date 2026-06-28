@@ -13,11 +13,14 @@ import type { PlanCode } from "@/lib/plans";
 export const Route = createFileRoute("/planes")({
   head: () => ({
     meta: [
-      { title: "Planes — Capora" },
-      { name: "description", content: "Descubre los planes Free, Pro y Business de Capora. Mantén tu acceso completo mientras preparamos las opciones de pago." },
-      { property: "og:title", content: "Planes — Capora" },
-      { property: "og:description", content: "Free, Pro y Business — visibilidad, proyectos activos y analíticas avanzadas." },
+      { title: "Plans | Capora" },
+      { name: "description", content: "Explore Capora Free, Pro and Business plans — visibility, active projects and advanced analytics." },
+      { property: "og:title", content: "Plans | Capora" },
+      { property: "og:description", content: "Explore Capora Free, Pro and Business plans — visibility, active projects and advanced analytics." },
+      { property: "og:url", content: "https://capora-ai-connect.lovable.app/planes" },
     ],
+    ],
+    links: [{ rel: "canonical", href: "https://capora-ai-connect.lovable.app/planes" }],
   }),
   component: PlansPage,
 });
