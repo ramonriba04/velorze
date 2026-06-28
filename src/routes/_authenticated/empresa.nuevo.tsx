@@ -54,7 +54,7 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
   useEffect(() => {
     if (!user) return;
     supabase.from("company_profiles")
-      .select("legal_name, country, description, contact_email, logo_url, website, verification_status, entity_type")
+      .select("legal_name, country, description, contact_email, logo_url, website, verification_status, entity_type, trust_level")
       .eq("user_id", user.id).maybeSingle()
       .then(({ data }) => setCompanyProfile(data));
   }, [user]);
@@ -120,8 +120,8 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
   };
   const hasErrors = Object.values(errors).some(Boolean);
 
-  const verificationStatus: string = (companyProfile?.verification_status as string) ?? "unverified";
-  const verified = verificationStatus === "verified";
+  const trustLevel: string = (companyProfile?.trust_level as string) ?? "unverified";
+  const verified = ["basic", "trusted", "manual"].includes(trustLevel);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
