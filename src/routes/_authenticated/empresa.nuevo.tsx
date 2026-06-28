@@ -21,6 +21,9 @@ import {
   COUNTRIES,
   INVESTMENT_RANGES,
 } from "@/lib/taxonomy";
+import { ProfileCompletenessCard } from "@/components/ProfileCompletenessCard";
+import { PublishBlockedDialog } from "@/components/PublishBlockedDialog";
+import { companyCompleteness } from "@/lib/completeness";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/empresa/nuevo")({
