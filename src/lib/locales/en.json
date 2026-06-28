@@ -75,7 +75,27 @@
     "roleInvestor": "I'm an investor",
     "roleInvestorDesc": "I want to discover investment opportunities.",
     "continue": "Continue",
-    "forgotPassword": "Forgot your password?"
+    "forgotPassword": "Forgot your password?",
+    "confirmPassword": "Confirm password",
+    "pw": {
+      "requirements": "Password must contain at least 8 characters, one uppercase letter, one lowercase letter and one number.",
+      "length": "At least 8 characters",
+      "upper": "One uppercase letter",
+      "lower": "One lowercase letter",
+      "number": "One number",
+      "special": "One special character",
+      "recommended": "(recommended)",
+      "mismatch": "Passwords do not match"
+    },
+    "verify": {
+      "title": "Verify your email",
+      "sent": "We sent a verification email to {{email}}.",
+      "checkSpam": "Check your inbox and spam folder.",
+      "resend": "Resend email",
+      "resent": "Verification email sent",
+      "changeEmail": "Change email",
+      "loginBlocked": "Verify your email before logging in."
+    }
   },
   "recover": {
     "title": "Recover password",
@@ -116,7 +136,12 @@
     "title": "Settings",
     "sub": "Manage your account and preferences.",
     "account": "Account",
-    "emailHint": "To change your email, contact support.",
+    "emailHint": "Use the field below to change your email.",
+    "changeEmail": "Change email",
+    "newEmailPlaceholder": "new@email.com",
+    "updateEmail": "Update email",
+    "emailVerifyHint": "We'll send a verification link to your new email. The change applies once you confirm it.",
+    "emailChangeSent": "Verification email sent to your new address.",
     "language": "Language",
     "password": "Change password",
     "passwordUpdated": "Password updated",

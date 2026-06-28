@@ -37,6 +37,27 @@ function Settings() {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteText, setDeleteText] = useState("");
   const [deleting, setDeleting] = useState(false);
+  const [newEmail, setNewEmail] = useState("");
+  const [emailLoading, setEmailLoading] = useState(false);
+
+  const updateEmail = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newEmail || newEmail === user?.email) return;
+    setEmailLoading(true);
+    try {
+      const { error } = await supabase.auth.updateUser(
+        { email: newEmail },
+        { emailRedirectTo: `${window.location.origin}/app` },
+      );
+      if (error) throw error;
+      toast.success(t("settings.emailChangeSent"));
+      setNewEmail("");
+    } catch (err: any) {
+      toast.error(err.message ?? t("common.error"));
+    } finally {
+      setEmailLoading(false);
+    }
+  };
 
   const updatePassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,8 +124,19 @@ function Settings() {
         <div className="space-y-1">
           <Label>{t("auth.email")}</Label>
           <Input value={user?.email ?? ""} disabled />
-          <p className="text-xs text-muted-foreground">{t("settings.emailHint")}</p>
         </div>
+        <form className="space-y-2" onSubmit={updateEmail}>
+          <Label htmlFor="new-email">{t("settings.changeEmail")}</Label>
+          <Input
+            id="new-email" type="email" autoComplete="email"
+            value={newEmail} onChange={(e) => setNewEmail(e.target.value)}
+            placeholder={t("settings.newEmailPlaceholder")}
+          />
+          <p className="text-xs text-muted-foreground">{t("settings.emailVerifyHint")}</p>
+          <Button type="submit" size="sm" disabled={emailLoading || !newEmail || newEmail === user?.email}>
+            {emailLoading ? t("common.loading") : t("settings.updateEmail")}
+          </Button>
+        </form>
         <div className="space-y-1">
           <Label>{t("settings.language")}</Label>
           <Select value={i18n.resolvedLanguage ?? "es"} onValueChange={(v) => i18n.changeLanguage(v)}>
