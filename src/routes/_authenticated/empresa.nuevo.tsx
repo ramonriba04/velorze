@@ -12,7 +12,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SingleSearchSelect } from "@/components/ui/multi-select";
 import { MultiImageUpload, type ProjectImage } from "@/components/media/MultiImageUpload";
+import {
+  SECTORS,
+  INVESTMENT_TYPE_OPTIONS,
+  BUSINESS_STAGE_OPTIONS,
+  COUNTRIES,
+  INVESTMENT_RANGES,
+} from "@/lib/taxonomy";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/empresa/nuevo")({
