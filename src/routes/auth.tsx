@@ -12,7 +12,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { Building2, TrendingUp } from "lucide-react";
+import { Building2, TrendingUp, MailCheck } from "lucide-react";
+import { PasswordChecklist, isPasswordValid } from "@/components/auth/PasswordChecklist";
+import { PasswordInput } from "@/components/auth/PasswordInput";
 
 const SearchSchema = z.object({
   mode: z.enum(["login", "signup"]).optional(),
@@ -34,8 +36,15 @@ function AuthPage() {
   const [role, setRole] = useState<"empresa" | "inversor">(search.role ?? "inversor");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPw, setConfirmPw] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [needsVerification, setNeedsVerification] = useState<string | null>(null);
+  const [loginUnverifiedEmail, setLoginUnverifiedEmail] = useState<string | null>(null);
+
+  const pwValid = isPasswordValid(password);
+  const pwMatch = password.length > 0 && password === confirmPw;
+  const signupReady = !!email && !!fullName && pwValid && pwMatch;
 
   const afterAuth = async () => {
     try {
@@ -55,11 +64,36 @@ function AuthPage() {
     navigate({ to: "/app" });
   };
 
+  const resendVerification = async (targetEmail: string) => {
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.resend({
+        type: "signup",
+        email: targetEmail,
+        options: { emailRedirectTo: `${window.location.origin}/app` },
+      });
+      if (error) throw error;
+      toast.success(t("auth.verify.resent"));
+    } catch (err) {
+      toast.error((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
       if (mode === "signup") {
+        if (!pwValid) {
+          toast.error(t("auth.pw.requirements"));
+          return;
+        }
+        if (!pwMatch) {
+          toast.error(t("auth.pw.mismatch"));
+          return;
+        }
         if (typeof window !== "undefined") {
           localStorage.setItem("capora_pending_role", role);
         }
@@ -73,14 +107,22 @@ function AuthPage() {
         });
         if (error) throw error;
         if (data.session) {
-          toast.success(t("common.saved"));
+          // Auto-confirm enabled (shouldn't happen now); go straight in.
           await afterAuth();
         } else {
-          toast.success("Revisa tu correo para confirmar tu cuenta / Check your email to confirm your account");
+          setNeedsVerification(email);
         }
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        if (error) {
+          const msg = (error.message ?? "").toLowerCase();
+          if (msg.includes("not confirmed") || msg.includes("email_not_confirmed")) {
+            setLoginUnverifiedEmail(email);
+            toast.error(t("auth.verify.loginBlocked"));
+            return;
+          }
+          throw error;
+        }
         navigate({ to: "/app" });
       }
     } catch (err) {
@@ -94,7 +136,6 @@ function AuthPage() {
   const onGoogle = async () => {
     setLoading(true);
     try {
-      // Stash intended role for first-login
       if (mode === "signup") localStorage.setItem("capora_pending_role", role);
       const result = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: `${window.location.origin}/app`,
@@ -109,6 +150,50 @@ function AuthPage() {
       setLoading(false);
     }
   };
+
+  if (needsVerification) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 flex items-center justify-center px-4 py-12">
+          <div className="w-full max-w-md">
+            <Card className="p-8 text-center">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                <MailCheck className="h-6 w-6 text-primary" />
+              </div>
+              <h1 className="mt-4 text-xl font-bold">{t("auth.verify.title")}</h1>
+              <p className="mt-2 text-sm text-muted-foreground">
+                {t("auth.verify.sent", { email: needsVerification })}
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground">{t("auth.verify.checkSpam")}</p>
+              <div className="mt-6 flex flex-col gap-2">
+                <Button
+                  onClick={() => resendVerification(needsVerification)}
+                  disabled={loading}
+                  variant="outline"
+                  className="w-full"
+                >
+                  {t("auth.verify.resend")}
+                </Button>
+                <Button
+                  onClick={() => {
+                    setNeedsVerification(null);
+                    setPassword("");
+                    setConfirmPw("");
+                  }}
+                  variant="ghost"
+                  className="w-full"
+                >
+                  {t("auth.verify.changeEmail")}
+                </Button>
+              </div>
+            </Card>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -152,13 +237,52 @@ function AuthPage() {
               )}
               <div>
                 <Label htmlFor="email">{t("auth.email")}</Label>
-                <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+                <Input id="email" type="email" autoComplete="email" required value={email} onChange={(e) => { setEmail(e.target.value); setLoginUnverifiedEmail(null); }} />
               </div>
               <div>
                 <Label htmlFor="password">{t("auth.password")}</Label>
-                <Input id="password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} />
+                <PasswordInput
+                  id="password"
+                  autoComplete={mode === "signup" ? "new-password" : "current-password"}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                {mode === "signup" && <PasswordChecklist value={password} />}
               </div>
-              <Button type="submit" disabled={loading} className="w-full">
+              {mode === "signup" && (
+                <div>
+                  <Label htmlFor="confirmPw">{t("auth.confirmPassword")}</Label>
+                  <PasswordInput
+                    id="confirmPw"
+                    autoComplete="new-password"
+                    required
+                    value={confirmPw}
+                    onChange={(e) => setConfirmPw(e.target.value)}
+                  />
+                  {confirmPw.length > 0 && !pwMatch && (
+                    <p className="mt-1 text-xs text-destructive">{t("auth.pw.mismatch")}</p>
+                  )}
+                </div>
+              )}
+              {loginUnverifiedEmail && mode === "login" && (
+                <div className="rounded-md border border-amber-300/60 bg-amber-50 p-3 text-xs text-amber-900 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200">
+                  <p>{t("auth.verify.loginBlocked")}</p>
+                  <button
+                    type="button"
+                    onClick={() => resendVerification(loginUnverifiedEmail)}
+                    disabled={loading}
+                    className="mt-1 font-medium underline"
+                  >
+                    {t("auth.verify.resend")}
+                  </button>
+                </div>
+              )}
+              <Button
+                type="submit"
+                disabled={loading || (mode === "signup" && !signupReady)}
+                className="w-full"
+              >
                 {mode === "login" ? t("auth.loginBtn") : t("auth.signupBtn")}
               </Button>
             </form>
@@ -172,7 +296,7 @@ function AuthPage() {
 
             <button
               type="button"
-              onClick={() => setMode(mode === "login" ? "signup" : "login")}
+              onClick={() => { setMode(mode === "login" ? "signup" : "login"); setLoginUnverifiedEmail(null); }}
               className="mt-5 w-full text-center text-sm text-muted-foreground hover:text-foreground"
             >
               {mode === "login" ? t("auth.switchToSignup") : t("auth.switchToLogin")}
