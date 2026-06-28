@@ -14,6 +14,8 @@ import { createContactRequest } from "@/lib/contact.functions";
 import { toast } from "sonner";
 import { ShareButton } from "@/components/ShareButton";
 import { EntityTypeBadge } from "@/components/EntityTypeBadge";
+import { ShieldCheck } from "lucide-react";
+
 
 export const Route = createFileRoute("/proyectos/$id")({
   head: ({ params }) => ({
@@ -44,9 +46,10 @@ function ProjectDetail() {
       if (!project) return null;
       const { data: company } = await supabase
         .from("company_profiles")
-        .select("legal_name, country, logo_url, description, website, entity_type")
+        .select("legal_name, country, logo_url, description, website, entity_type, verification_status")
         .eq("user_id", project.company_id)
         .maybeSingle();
+
       const { data: imgs } = await supabase
         .from("project_images")
         .select("url")
@@ -101,8 +104,19 @@ function ProjectDetail() {
               <h1 className="text-3xl font-bold">{data.title}</h1>
               <div className="mt-3 flex items-center gap-3">
                 <EntityAvatar src={data.company?.logo_url} name={data.company?.legal_name} kind="company" size={40} />
-                <div>
-                  <p className="text-sm font-medium">{data.company?.legal_name ?? ""}</p>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <p className="text-sm font-medium truncate">{data.company?.legal_name ?? ""}</p>
+                    {data.company?.verification_status === "verified" && (
+                      <span
+                        className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-200"
+                        title={t("trust.verifiedTitle")}
+                      >
+                        <ShieldCheck className="h-3 w-3" />
+                        {t("trust.verifiedBadge")}
+                      </span>
+                    )}
+                  </div>
                   {data.company?.website && (
                     <a href={data.company.website} target="_blank" rel="noopener noreferrer" className="text-xs text-muted-foreground hover:text-primary">
                       {data.company.website}
@@ -110,6 +124,7 @@ function ProjectDetail() {
                   )}
                 </div>
               </div>
+
               <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
                 <div><p className="text-muted-foreground">{t("project.capital")}</p><p className="font-semibold">{Number(data.capital_required).toLocaleString()}</p></div>
                 {data.ticket_min && <div><p className="text-muted-foreground">{t("project.ticketMin")}</p><p className="font-semibold">{Number(data.ticket_min).toLocaleString()}</p></div>}

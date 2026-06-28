@@ -189,3 +189,120 @@ export const getMyVerification = createServerFn({ method: "GET" })
     };
   });
 
+// ---------------- Admin verification queue ----------------
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function requireAdmin(supabase: any, userId: string) {
+  const { data, error } = await supabase.rpc("has_role", { _user_id: userId, _role: "admin" });
+  if (error) throw new Error(error.message);
+  if (!data) throw new Error("Forbidden");
+}
+
+
+
+export const adminListVerifications = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z.object({ status: z.enum(["pending", "verified", "rejected", "all"]).default("pending") }).parse(input ?? {}),
+  )
+  .handler(async ({ data, context }) => {
+    await requireAdmin(context.supabase, context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    let q = supabaseAdmin
+      .from("verification_requests")
+      .select("id,user_id,kind,status,legal_name,country,doc_path,reason,submitted_at,reviewed_at,reviewed_by")
+      .order("submitted_at", { ascending: false })
+      .limit(200);
+    if (data.status !== "all") q = q.eq("status", data.status);
+    const { data: rows, error } = await q;
+    if (error) throw new Error(error.message);
+    const userIds = Array.from(new Set((rows ?? []).map((r) => r.user_id)));
+    const { data: profiles } = await supabaseAdmin
+      .from("profiles")
+      .select("id,full_name")
+      .in("id", userIds.length ? userIds : ["00000000-0000-0000-0000-000000000000"]);
+    const pmap = new Map<string, string | null>();
+    (profiles ?? []).forEach((p) => pmap.set(p.id, p.full_name ?? null));
+    return (rows ?? []).map((r) => ({ ...r, full_name: pmap.get(r.user_id) ?? null }));
+  });
+
+export const adminGetVerificationDocUrl = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
+  .handler(async ({ data, context }) => {
+    await requireAdmin(context.supabase, context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: row, error } = await supabaseAdmin
+      .from("verification_requests")
+      .select("doc_path,status")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!row?.doc_path) return { url: null };
+    const { data: signed, error: sErr } = await supabaseAdmin.storage
+      .from("verification-docs")
+      .createSignedUrl(row.doc_path, 60);
+    if (sErr) throw new Error(sErr.message);
+    return { url: signed?.signedUrl ?? null };
+  });
+
+export const adminDecideVerification = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z
+      .object({
+        id: z.string().uuid(),
+        decision: z.enum(["verified", "rejected"]),
+        reason: z.string().trim().max(500).optional().nullable(),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    await requireAdmin(context.supabase, context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: req, error: rErr } = await supabaseAdmin
+      .from("verification_requests")
+      .select("id,user_id,doc_path,status")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (rErr) throw new Error(rErr.message);
+    if (!req) throw new Error("Not found");
+    if (req.status !== "pending") throw new Error("Already decided");
+
+    // Update request row
+    const { error: upErr } = await supabaseAdmin
+      .from("verification_requests")
+      .update({
+        status: data.decision,
+        reason: data.decision === "rejected" ? data.reason ?? null : null,
+        reviewed_at: new Date().toISOString(),
+        reviewed_by: context.userId,
+        doc_path: null,
+      })
+      .eq("id", data.id);
+    if (upErr) throw new Error(upErr.message);
+
+    // Reflect on company profile
+    await supabaseAdmin
+      .from("company_profiles")
+      .update({ verification_status: data.decision })
+      .eq("user_id", req.user_id);
+
+    // Audit log (no document content, just decision metadata)
+    await supabaseAdmin.from("verification_audit").insert({
+      request_id: req.id,
+      actor_id: context.userId,
+      action: data.decision,
+      reason: data.decision === "rejected" ? data.reason ?? null : null,
+    });
+
+    // Auto-delete the document from storage
+    if (req.doc_path) {
+      await supabaseAdmin.storage.from("verification-docs").remove([req.doc_path]);
+    }
+
+    return { ok: true };
+  });
+
+
