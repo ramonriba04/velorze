@@ -104,15 +104,38 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
   }, [form, images, loaded, mode, params.id]);
 
 
+  const completeness = companyCompleteness(companyProfile ?? {});
+
+  const titleLen = (form.title ?? "").trim().length;
+  const descLen = (form.description ?? "").trim().length;
+  const capitalNum = Number(form.capital_required);
+  const tMin = form.ticket_min === "" || form.ticket_min == null ? null : Number(form.ticket_min);
+  const tMax = form.ticket_max === "" || form.ticket_max == null ? null : Number(form.ticket_max);
+  const errors = {
+    title: titleLen > 0 && (titleLen < 5 || titleLen > 120) ? t("validate.titleRange") : "",
+    description: descLen > 0 && (descLen < 20 || descLen > 1000) ? t("validate.descriptionRange") : "",
+    capital: form.capital_required !== "" && (!Number.isFinite(capitalNum) || capitalNum <= 0) ? t("validate.capitalPositive") : "",
+    ticket: tMin != null && tMax != null && tMax < tMin ? t("validate.ticketOrder") : "",
+  };
+  const hasErrors = Object.values(errors).some(Boolean);
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (hasErrors) {
+      toast.error(t("common.checkFields") || Object.values(errors).find(Boolean) || "");
+      return;
+    }
+    // Block publish when company profile is incomplete — show modal instead.
+    if (form.status === "published" && !completeness.complete) {
+      setBlockedOpen(true);
+      return;
+    }
     try {
       const payload = {
         title: form.title, description: form.description, sector: form.sector,
         investment_type: form.investment_type,
-        capital_required: Number(form.capital_required),
-        ticket_min: form.ticket_min ? Number(form.ticket_min) : null,
-        ticket_max: form.ticket_max ? Number(form.ticket_max) : null,
+        capital_required: capitalNum,
+        ticket_min: tMin, ticket_max: tMax,
         country: form.country, stage: form.stage, status: form.status,
         cover_url: images[0]?.url ?? form.cover_url ?? null,
       };
@@ -129,9 +152,15 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
       toast.success(t("common.saved"));
       navigate({ to: "/empresa" });
     } catch (e) {
-      toast.error((e as Error).message);
+      const msg = (e as Error).message;
+      if (/profile_incomplete/i.test(msg)) {
+        setBlockedOpen(true);
+        return;
+      }
+      toast.error(msg);
     }
   };
+
 
   const onDelete = async () => {
     if (!params.id) return;
