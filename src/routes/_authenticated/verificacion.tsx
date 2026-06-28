@@ -142,13 +142,14 @@ function VerificationPage() {
 
 function StatusBadge({ status }: { status: string }) {
   const { t } = useTranslation();
-  const map = {
+  const map: Record<string, { Icon: typeof ShieldCheck; cls: string; label: string }> = {
     unverified: { Icon: ShieldCheck, cls: "text-muted-foreground bg-muted", label: t("verification.statusUnverified") },
     pending: { Icon: Clock, cls: "text-amber-700 bg-amber-100 dark:text-amber-200 dark:bg-amber-900/30", label: t("verification.statusPending") },
     verified: { Icon: CheckCircle2, cls: "text-emerald-700 bg-emerald-100 dark:text-emerald-200 dark:bg-emerald-900/30", label: t("verification.statusVerified") },
     rejected: { Icon: XCircle, cls: "text-destructive bg-destructive/10", label: t("verification.statusRejected") },
-  } as const;
-  const v = (map as Record<string, typeof map.unverified>)[status] ?? map.unverified;
+  };
+  const v = map[status] ?? map.unverified;
+
   return (
     <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${v.cls}`}>
       <v.Icon className="h-3.5 w-3.5" />
