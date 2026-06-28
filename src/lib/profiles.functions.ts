@@ -191,11 +191,12 @@ export const getMyVerification = createServerFn({ method: "GET" })
 
 // ---------------- Admin verification queue ----------------
 
-async function requireAdmin(supabase: { rpc: (fn: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: { message: string } | null }> }, userId: string) {
+async function requireAdmin(supabase: { rpc: (fn: "has_role", args: { _user_id: string; _role: "admin" | "empresa" | "inversor" }) => Promise<{ data: unknown; error: { message: string } | null }> }, userId: string) {
   const { data, error } = await supabase.rpc("has_role", { _user_id: userId, _role: "admin" });
   if (error) throw new Error(error.message);
   if (!data) throw new Error("Forbidden");
 }
+
 
 export const adminListVerifications = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
