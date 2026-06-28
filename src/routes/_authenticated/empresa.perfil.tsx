@@ -13,7 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { SingleSearchSelect } from "@/components/ui/multi-select";
 import { ImageUpload } from "@/components/media/ImageUpload";
-import { CompletenessBadge } from "@/components/media/CompletenessBadge";
+import { ProfileCompletenessCard } from "@/components/ProfileCompletenessCard";
+import { companyCompleteness } from "@/lib/completeness";
 import { toast } from "sonner";
 import { COUNTRIES, COMPANY_TYPES } from "@/lib/taxonomy";
 
