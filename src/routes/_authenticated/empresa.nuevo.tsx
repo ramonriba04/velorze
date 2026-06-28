@@ -171,7 +171,16 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
   };
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-10">
+    <div className="mx-auto max-w-2xl px-4 py-10 space-y-4">
+      {!completeness.complete && (
+        <ProfileCompletenessCard
+          pct={completeness.pct}
+          complete={completeness.complete}
+          missing={completeness.missingRequired}
+          ctaTo="/empresa/perfil"
+          ctaCopy={t("completeness.company.cta")}
+        />
+      )}
       <Card className="p-6">
         <div className="flex items-center justify-between gap-3">
           <h1 className="text-2xl font-bold">{mode === "create" ? t("nav.newProject") : t("common.edit")}</h1>
@@ -182,8 +191,16 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
           )}
         </div>
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
-          <div><Label>{t("project.title")}</Label><Input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
-          <div><Label>{t("project.description")}</Label><Textarea required rows={5} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
+          <div>
+            <Label>{t("project.title")}</Label>
+            <Input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+            {errors.title && <p className="mt-1 text-xs text-destructive">{errors.title}</p>}
+          </div>
+          <div>
+            <Label>{t("project.description")}</Label>
+            <Textarea required rows={5} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+            {errors.description && <p className="mt-1 text-xs text-destructive">{errors.description}</p>}
+          </div>
           {user && (
             <div>
               <Label>{t("media.gallery")}</Label>
@@ -268,17 +285,35 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
             </Select>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div><Label>{t("project.capital")}</Label><Input required type="number" value={form.capital_required} onChange={(e) => setForm({ ...form, capital_required: e.target.value })} /></div>
-            <div><Label>{t("project.ticketMin")}</Label><Input type="number" value={form.ticket_min ?? ""} onChange={(e) => setForm({ ...form, ticket_min: e.target.value })} /></div>
-            <div><Label>{t("project.ticketMax")}</Label><Input type="number" value={form.ticket_max ?? ""} onChange={(e) => setForm({ ...form, ticket_max: e.target.value })} /></div>
+            <div>
+              <Label>{t("project.capital")}</Label>
+              <Input required type="number" value={form.capital_required} onChange={(e) => setForm({ ...form, capital_required: e.target.value })} />
+              {errors.capital && <p className="mt-1 text-xs text-destructive">{errors.capital}</p>}
+            </div>
+            <div>
+              <Label>{t("project.ticketMin")}</Label>
+              <Input type="number" value={form.ticket_min ?? ""} onChange={(e) => setForm({ ...form, ticket_min: e.target.value })} />
+            </div>
+            <div>
+              <Label>{t("project.ticketMax")}</Label>
+              <Input type="number" value={form.ticket_max ?? ""} onChange={(e) => setForm({ ...form, ticket_max: e.target.value })} />
+              {errors.ticket && <p className="mt-1 text-xs text-destructive">{errors.ticket}</p>}
+            </div>
           </div>
           <div className="flex gap-2 pt-2">
-            <Button type="submit" className="flex-1">{t("common.save")}</Button>
+            <Button type="submit" className="flex-1" disabled={hasErrors}>{t("common.save")}</Button>
             {mode === "edit" && <Button type="button" variant="destructive" onClick={onDelete}>{t("common.delete")}</Button>}
           </div>
         </form>
       </Card>
+      <PublishBlockedDialog
+        open={blockedOpen}
+        onOpenChange={setBlockedOpen}
+        missing={completeness.missingRequired}
+        to="/empresa/perfil"
+      />
     </div>
   );
 }
+
 
