@@ -8,19 +8,26 @@ const INVESTMENT_TYPES = [
 ] as const;
 const STAGES = ["idea","mvp","early_revenue","growth","expansion","mature","crecimiento"] as const;
 
+const trimmedStr = (min: number, max: number) =>
+  z.string().transform((s) => s.trim().replace(/\s{2,}/g, " ")).pipe(z.string().min(min).max(max));
+
 const ProjectSchema = z.object({
-  title: z.string().min(3).max(200),
-  description: z.string().min(20).max(5000),
-  sector: z.string().min(2).max(80),
+  title: trimmedStr(5, 120),
+  description: trimmedStr(20, 1000),
+  sector: trimmedStr(2, 50),
   investment_type: z.enum(INVESTMENT_TYPES),
   capital_required: z.number().positive(),
   ticket_min: z.number().nonnegative().optional().nullable(),
   ticket_max: z.number().nonnegative().optional().nullable(),
-  country: z.string().min(2).max(80),
+  country: trimmedStr(2, 80),
   stage: z.enum(STAGES),
   status: z.enum(["draft", "published", "closed"]).default("published"),
   cover_url: z.string().url().optional().nullable().or(z.literal("")),
-});
+}).refine(
+  (d) => d.ticket_min == null || d.ticket_max == null || d.ticket_max >= d.ticket_min,
+  { message: "ticket_max must be >= ticket_min", path: ["ticket_max"] },
+);
+
 
 export const createProject = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
