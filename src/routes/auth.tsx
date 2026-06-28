@@ -223,7 +223,10 @@ function AuthPage() {
                     className={`flex flex-col items-start gap-1 rounded-lg border p-3 text-left text-sm transition ${role === "empresa" ? "border-primary bg-primary/5" : "border-border hover:bg-muted"}`}
                   >
                     <Building2 className="h-4 w-4 text-primary" />
-                    <span className="font-medium">{t("auth.roleCompany")}</span>
+                    <div className="flex flex-col items-start">
+                      <span className="font-medium">{t("auth.roleCompany")}</span>
+                      <span className="text-xs text-muted-foreground font-normal leading-tight">{t("auth.roleCompanyDesc")}</span>
+                    </div>
                   </button>
                   <button
                     type="button"
@@ -231,7 +234,10 @@ function AuthPage() {
                     className={`flex flex-col items-start gap-1 rounded-lg border p-3 text-left text-sm transition ${role === "inversor" ? "border-primary bg-primary/5" : "border-border hover:bg-muted"}`}
                   >
                     <TrendingUp className="h-4 w-4 text-primary" />
-                    <span className="font-medium">{t("auth.roleInvestor")}</span>
+                    <div className="flex flex-col items-start">
+                      <span className="font-medium">{t("auth.roleInvestor")}</span>
+                      <span className="text-xs text-muted-foreground font-normal leading-tight">{t("auth.roleInvestorDesc")}</span>
+                    </div>
                   </button>
                 </div>
               </div>
