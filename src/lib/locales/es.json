@@ -425,7 +425,8 @@
     "country": "País",
     "type": "Tipo de empresa",
     "sector": "Sector",
-    "description": "Descripción"
+    "description": "Descripción",
+    "contactEmail": "Email de contacto"
   },
   "messages": {
     "empty": "Aún no tienes conversaciones.",
