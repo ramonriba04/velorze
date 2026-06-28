@@ -41,19 +41,22 @@ function AuthPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const assign = useServerFn(assignMyRole);
+  const consent = useServerFn(recordConsent);
   const [mode, setMode] = useState<"login" | "signup">(search.mode ?? "login");
   const [role, setRole] = useState<"empresa" | "inversor">(search.role ?? "inversor");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPw, setConfirmPw] = useState("");
   const [fullName, setFullName] = useState("");
+  const [acceptedLegal, setAcceptedLegal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [needsVerification, setNeedsVerification] = useState<string | null>(null);
   const [loginUnverifiedEmail, setLoginUnverifiedEmail] = useState<string | null>(null);
 
   const pwValid = isPasswordValid(password);
   const pwMatch = password.length > 0 && password === confirmPw;
-  const signupReady = !!email && !!fullName && pwValid && pwMatch;
+  const signupReady = !!email && !!fullName && pwValid && pwMatch && acceptedLegal;
+
 
   const afterAuth = async () => {
     try {
