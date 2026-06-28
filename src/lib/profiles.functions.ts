@@ -1,6 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequest } from "@tanstack/react-start/server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
+
 
 const RoleSchema = z.object({ role: z.enum(["empresa", "inversor"]) });
 
