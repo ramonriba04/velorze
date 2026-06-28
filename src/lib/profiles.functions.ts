@@ -221,10 +221,24 @@ export const getMyVerification = createServerFn({ method: "GET" })
       .order("submitted_at", { ascending: false })
       .limit(1)
       .maybeSingle();
+    const p = (profile ?? {}) as {
+      verification_status?: string; entity_type?: string; trust_level?: string;
+      legal_name?: string; country?: string; contact_email?: string;
+      website?: string; linkedin?: string; tax_id?: string;
+    };
     return {
-      status: ((profile as { verification_status?: string } | null)?.verification_status ?? "unverified") as
+      status: (p.verification_status ?? "unverified") as
         | "unverified" | "pending" | "verified" | "rejected",
-      entity_type: (profile as { entity_type?: string } | null)?.entity_type ?? null,
+      trust_level: (p.trust_level ?? "unverified") as "unverified" | "basic" | "trusted" | "manual",
+      entity_type: p.entity_type ?? null,
+      profile: {
+        legal_name: p.legal_name ?? "",
+        country: p.country ?? "",
+        contact_email: p.contact_email ?? "",
+        website: p.website ?? "",
+        linkedin: p.linkedin ?? "",
+        tax_id: p.tax_id ?? "",
+      },
       latest: latest ?? null,
     };
   });
