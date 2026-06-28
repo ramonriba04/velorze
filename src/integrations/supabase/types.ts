@@ -23,7 +23,10 @@ export type Database = {
           description: string | null
           entity_type: string
           legal_name: string
+          linkedin: string | null
           logo_url: string | null
+          tax_id: string | null
+          trust_level: string
           updated_at: string
           user_id: string
           verification_status: string
@@ -37,7 +40,10 @@ export type Database = {
           description?: string | null
           entity_type?: string
           legal_name: string
+          linkedin?: string | null
           logo_url?: string | null
+          tax_id?: string | null
+          trust_level?: string
           updated_at?: string
           user_id: string
           verification_status?: string
@@ -51,7 +57,10 @@ export type Database = {
           description?: string | null
           entity_type?: string
           legal_name?: string
+          linkedin?: string | null
           logo_url?: string | null
+          tax_id?: string | null
+          trust_level?: string
           updated_at?: string
           user_id?: string
           verification_status?: string
@@ -630,49 +639,64 @@ export type Database = {
       }
       verification_requests: {
         Row: {
+          contact_email: string | null
           country: string
           created_at: string
           doc_path: string | null
           id: string
           kind: string
           legal_name: string
+          linkedin: string | null
           reason: string | null
           reviewed_at: string | null
           reviewed_by: string | null
           status: string
           submitted_at: string
+          tax_id: string | null
+          trust_level: string
           updated_at: string
           user_id: string
+          website: string | null
         }
         Insert: {
+          contact_email?: string | null
           country: string
           created_at?: string
           doc_path?: string | null
           id?: string
           kind: string
           legal_name: string
+          linkedin?: string | null
           reason?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
           status?: string
           submitted_at?: string
+          tax_id?: string | null
+          trust_level?: string
           updated_at?: string
           user_id: string
+          website?: string | null
         }
         Update: {
+          contact_email?: string | null
           country?: string
           created_at?: string
           doc_path?: string | null
           id?: string
           kind?: string
           legal_name?: string
+          linkedin?: string | null
           reason?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
           status?: string
           submitted_at?: string
+          tax_id?: string | null
+          trust_level?: string
           updated_at?: string
           user_id?: string
+          website?: string | null
         }
         Relationships: []
       }
@@ -689,6 +713,10 @@ export type Database = {
       company_profile_completeness: {
         Args: { _user_id: string }
         Returns: number
+      }
+      compute_company_trust_level: {
+        Args: { _user_id: string }
+        Returns: string
       }
       get_company_contact_email: {
         Args: { _company_id: string }
@@ -715,7 +743,12 @@ export type Database = {
         Args: { _user_id: string }
         Returns: number
       }
+      is_corporate_email: { Args: { _email: string }; Returns: boolean }
       my_verification_status: { Args: never; Returns: string }
+      refresh_company_trust_level: {
+        Args: { _user_id: string }
+        Returns: string
+      }
     }
     Enums: {
       app_role: "empresa" | "inversor" | "admin"
