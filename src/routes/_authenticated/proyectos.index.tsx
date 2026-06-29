@@ -16,11 +16,14 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { computeMatch, type MatchableInvestor } from "@/lib/matching";
 import { EntityTypeBadge } from "@/components/EntityTypeBadge";
+import { SECTORS, COUNTRIES } from "@/lib/taxonomy";
 
 const searchSchema = z.object({
   q: z.string().optional().catch(undefined),
   sector: z.string().optional().catch(undefined),
+  sectorOther: z.string().optional().catch(undefined),
   country: z.string().optional().catch(undefined),
+  countryOther: z.string().optional().catch(undefined),
   stage: z.enum(["idea", "crecimiento", "expansion"]).optional().catch(undefined),
   type: z.enum(["equity", "prestamo", "joint_venture", "convertible", "otro"]).optional().catch(undefined),
   min: z.coerce.number().int().nonnegative().optional().catch(undefined),
