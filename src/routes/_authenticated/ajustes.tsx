@@ -28,9 +28,10 @@ export const Route = createFileRoute("/_authenticated/ajustes")({
 
 function Settings() {
   const { t, i18n } = useTranslation();
-  const { user } = useMyRole();
+  const { user, role } = useMyRole();
   const removeAccount = useServerFn(deleteMyAccount);
   const { code: planCode, plan, billingStatus } = useMyPlan();
+  const isPublisher = role === "empresa";
 
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
