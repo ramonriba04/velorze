@@ -229,7 +229,9 @@
     "sortNewest": "Newest",
     "sortActive": "Recently active",
     "manualBadge": "Manual search",
-    "helperText": "Explore uses manual filters. Personalized recommendations are on Home."
+    "helperText": "Explore uses manual filters. Personalized recommendations are on Home.",
+    "otherSectorPh": "Type a sector",
+    "otherCountryPh": "Type a country"
   },
   "notifications": {
     "title": "Notifications",
