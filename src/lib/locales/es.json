@@ -170,7 +170,7 @@
     "newPassword": "Nueva contraseña",
     "confirmPassword": "Confirmar contraseña",
     "update": "Actualizar contraseña",
-    "success": "Contraseña actualizada",
+    "success": "Contraseña actualizada correctamente.",
     "mismatch": "Las contraseñas no coinciden",
     "tooShort": "Mínimo 6 caracteres",
     "invalid": "El enlace no es válido o ha expirado. Solicita uno nuevo."
