@@ -80,8 +80,18 @@ function ProjectsDiscovery() {
     queryFn: async () => {
       let query = supabase.from("projects").select("*").eq("status", "published");
       if (search.q) query = query.or(`title.ilike.%${search.q}%,description.ilike.%${search.q}%`);
-      if (search.sector) query = query.ilike("sector", `%${search.sector}%`);
-      if (search.country) query = query.ilike("country", `%${search.country}%`);
+      const sectorVal =
+        search.sector === "otro" ? (search.sectorOther ?? "").trim() : search.sector;
+      if (sectorVal) {
+        if (search.sector === "otro") query = query.ilike("sector", `%${sectorVal}%`);
+        else query = query.eq("sector", sectorVal);
+      }
+      const countryVal =
+        search.country === "otro" ? (search.countryOther ?? "").trim() : search.country;
+      if (countryVal) {
+        if (search.country === "otro") query = query.ilike("country", `%${countryVal}%`);
+        else query = query.eq("country", countryVal);
+      }
       if (search.stage) query = query.eq("stage", search.stage);
       if (search.type) query = query.eq("investment_type", search.type);
       if (typeof search.min === "number") query = query.gte("ticket_max", search.min);
