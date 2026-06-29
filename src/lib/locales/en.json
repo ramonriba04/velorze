@@ -20,7 +20,8 @@
     "newProject": "New project",
     "admin": "Admin",
     "logout": "Log out",
-    "settings": "Settings"
+    "settings": "Settings",
+    "discover": "Discover"
   },
   "logout": {
     "title": "Log out?",
