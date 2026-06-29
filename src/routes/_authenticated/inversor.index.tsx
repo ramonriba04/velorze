@@ -268,8 +268,8 @@ function InvestorDashboard() {
                   <Link to="/proyectos/$id" params={{ id: project.id }} className="flex-1">
                     <Button variant="outline" size="sm" className="w-full">{t("project.viewProject")}</Button>
                   </Link>
-                  <Button size="icon" variant="ghost" onClick={() => { favMut.mutate(project.id); qc.invalidateQueries({ queryKey: ["favorites"] }); }}>
-                    <Heart className="h-4 w-4" />
+                  <Button size="icon" variant="ghost" aria-pressed={favoriteIds?.has(project.id) ? true : false} onClick={() => favMut.mutate(project.id)}>
+                    <Heart className={`h-4 w-4 ${favoriteIds?.has(project.id) ? "fill-current text-primary" : ""}`} />
                   </Button>
                   <Button size="icon" onClick={() => reqMut.mutate(project.id)}>
                     <Send className="h-4 w-4" />
