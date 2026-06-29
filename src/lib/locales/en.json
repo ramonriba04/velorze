@@ -553,7 +553,8 @@
     "status": {
       "complete": "Complete",
       "almost": "Almost ready",
-      "action": "Action needed"
+      "action": "Not finished",
+      "incomplete": "Not finished"
     },
     "field": {
       "legal_name": "Company name",
