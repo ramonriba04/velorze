@@ -145,7 +145,7 @@ function ProjectDetail() {
                 {!user && <Link to="/auth"><Button>{t("nav.login")}</Button></Link>}
                 <ShareButton title={data.title} text={data.description?.slice(0, 140)} />
               </div>
-              <p className="mt-6 text-xs text-muted-foreground border-t border-border pt-4">{t("disclaimer")}</p>
+              
             </div>
           </Card>
         )}

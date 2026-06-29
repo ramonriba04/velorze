@@ -170,7 +170,7 @@
     "newPassword": "New password",
     "confirmPassword": "Confirm password",
     "update": "Update password",
-    "success": "Password updated",
+    "success": "Password updated successfully.",
     "mismatch": "Passwords don't match",
     "tooShort": "Minimum 6 characters",
     "invalid": "This link is invalid or has expired. Request a new one."
@@ -229,7 +229,9 @@
     "sortNewest": "Newest",
     "sortActive": "Recently active",
     "manualBadge": "Manual search",
-    "helperText": "Explore uses manual filters. Personalized recommendations are on Home."
+    "helperText": "Explore uses manual filters. Personalized recommendations are on Home.",
+    "otherSectorPh": "Type a sector",
+    "otherCountryPh": "Type a country"
   },
   "notifications": {
     "title": "Notifications",
@@ -310,7 +312,8 @@
     "deleted": "Deleted",
     "error": "An error occurred",
     "required": "Required",
-    "optional": "(optional)"
+    "optional": "(optional)",
+    "other": "Other"
   },
   "project": {
     "title": "Project title",
@@ -550,7 +553,8 @@
     "status": {
       "complete": "Complete",
       "almost": "Almost ready",
-      "action": "Action needed"
+      "action": "Not finished",
+      "incomplete": "Not finished"
     },
     "field": {
       "legal_name": "Company name",
@@ -677,6 +681,8 @@
     "sub": "Pick the plan that fits your project. Visibility, analytics and tools to grow.",
     "freeNotice": "All users are on Free for now. Paid plans are on the way.",
     "priceTba": "Price coming soon",
+    "investorTitle": "Plans are for publishers only",
+    "investorSub": "Investors use Capora for free. You don't need a paid plan.",
     "feat": {
       "free": {
         "1": "1 active project",

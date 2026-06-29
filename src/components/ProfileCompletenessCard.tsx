@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { CheckCircle2, AlertCircle, ArrowRight } from "lucide-react";
+import { CheckCircle2, Circle, ArrowRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
@@ -15,9 +15,9 @@ type Props = {
 };
 
 function statusBadge(pct: number, t: (k: string) => string) {
-  if (pct >= 100) return { label: `🟢 ${t("completeness.status.complete")}`, tone: "bg-success/10 text-success" };
-  if (pct >= 60)  return { label: `🟡 ${t("completeness.status.almost")}`,   tone: "bg-warning/10 text-warning" };
-  return { label: `🔴 ${t("completeness.status.action")}`, tone: "bg-destructive/10 text-destructive" };
+  if (pct >= 100) return { label: t("completeness.status.complete"), tone: "bg-success/10 text-success" };
+  if (pct >= 60)  return { label: t("completeness.status.almost"),   tone: "bg-warning/10 text-warning" };
+  return { label: t("completeness.status.incomplete"), tone: "bg-muted text-muted-foreground" };
 }
 
 export function ProfileCompletenessCard({
@@ -47,7 +47,7 @@ export function ProfileCompletenessCard({
         <ul className="mt-3 space-y-1 text-xs">
           {missing.map((k) => (
             <li key={k} className="flex items-center gap-2 text-muted-foreground">
-              <AlertCircle className="h-3.5 w-3.5 text-warning" />
+              <Circle className="h-3.5 w-3.5 text-muted-foreground" />
               {t(`completeness.field.${k}`)}
             </li>
           ))}

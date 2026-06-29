@@ -170,7 +170,7 @@
     "newPassword": "Nueva contraseña",
     "confirmPassword": "Confirmar contraseña",
     "update": "Actualizar contraseña",
-    "success": "Contraseña actualizada",
+    "success": "Contraseña actualizada correctamente.",
     "mismatch": "Las contraseñas no coinciden",
     "tooShort": "Mínimo 6 caracteres",
     "invalid": "El enlace no es válido o ha expirado. Solicita uno nuevo."
@@ -229,7 +229,9 @@
     "sortNewest": "Más recientes",
     "sortActive": "Actividad reciente",
     "manualBadge": "Búsqueda manual",
-    "helperText": "Explorar usa filtros manuales. Las recomendaciones personalizadas están en Inicio."
+    "helperText": "Explorar usa filtros manuales. Las recomendaciones personalizadas están en Inicio.",
+    "otherSectorPh": "Escribe un sector",
+    "otherCountryPh": "Escribe un país"
   },
   "notifications": {
     "title": "Notificaciones",
@@ -310,7 +312,8 @@
     "deleted": "Eliminado",
     "error": "Ha ocurrido un error",
     "required": "Obligatorio",
-    "optional": "(opcional)"
+    "optional": "(opcional)",
+    "other": "Otro"
   },
   "project": {
     "title": "Título del proyecto",
@@ -550,7 +553,8 @@
     "status": {
       "complete": "Completo",
       "almost": "Casi listo",
-      "action": "Acción requerida"
+      "action": "Sin completar",
+      "incomplete": "Sin completar"
     },
     "field": {
       "legal_name": "Nombre de la empresa",
@@ -677,6 +681,8 @@
     "sub": "Elige el plan que mejor se adapte a tu proyecto. Visibilidad, analíticas y herramientas para crecer.",
     "freeNotice": "Todos los usuarios siguen en Free. Los planes de pago llegarán pronto.",
     "priceTba": "Precio próximamente",
+    "investorTitle": "Planes solo para publicadores",
+    "investorSub": "Los inversores tienen acceso gratuito a la plataforma. No necesitas un plan de pago.",
     "feat": {
       "free": {
         "1": "1 proyecto activo",

@@ -16,11 +16,14 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { computeMatch, type MatchableInvestor } from "@/lib/matching";
 import { EntityTypeBadge } from "@/components/EntityTypeBadge";
+import { SECTORS, COUNTRIES } from "@/lib/taxonomy";
 
 const searchSchema = z.object({
   q: z.string().optional().catch(undefined),
   sector: z.string().optional().catch(undefined),
+  sectorOther: z.string().optional().catch(undefined),
   country: z.string().optional().catch(undefined),
+  countryOther: z.string().optional().catch(undefined),
   stage: z.enum(["idea", "crecimiento", "expansion"]).optional().catch(undefined),
   type: z.enum(["equity", "prestamo", "joint_venture", "convertible", "otro"]).optional().catch(undefined),
   min: z.coerce.number().int().nonnegative().optional().catch(undefined),
@@ -77,8 +80,18 @@ function ProjectsDiscovery() {
     queryFn: async () => {
       let query = supabase.from("projects").select("*").eq("status", "published");
       if (search.q) query = query.or(`title.ilike.%${search.q}%,description.ilike.%${search.q}%`);
-      if (search.sector) query = query.ilike("sector", `%${search.sector}%`);
-      if (search.country) query = query.ilike("country", `%${search.country}%`);
+      const sectorVal =
+        search.sector === "otro" ? (search.sectorOther ?? "").trim() : search.sector;
+      if (sectorVal) {
+        if (search.sector === "otro") query = query.ilike("sector", `%${sectorVal}%`);
+        else query = query.eq("sector", sectorVal);
+      }
+      const countryVal =
+        search.country === "otro" ? (search.countryOther ?? "").trim() : search.country;
+      if (countryVal) {
+        if (search.country === "otro") query = query.ilike("country", `%${countryVal}%`);
+        else query = query.eq("country", countryVal);
+      }
       if (search.stage) query = query.eq("stage", search.stage);
       if (search.type) query = query.eq("investment_type", search.type);
       if (typeof search.min === "number") query = query.gte("ticket_max", search.min);
@@ -125,7 +138,8 @@ function ProjectsDiscovery() {
   })();
 
   const activeCount = [
-    search.q, search.sector, search.country, search.stage, search.type,
+    search.q, search.sector, search.sectorOther, search.country, search.countryOther,
+    search.stage, search.type,
     typeof search.min === "number" ? search.min : undefined,
     typeof search.max === "number" ? search.max : undefined,
   ].filter((v) => v !== undefined && v !== "").length;
@@ -159,19 +173,47 @@ function ProjectsDiscovery() {
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-1">
             <Label className="text-xs">{t("project.sector")}</Label>
-            <Input
-              value={search.sector ?? ""}
-              onChange={(e) => setParam({ sector: e.target.value })}
-              placeholder={t("discover.anySector")}
-            />
+            <Select
+              value={search.sector ?? "all"}
+              onValueChange={(v) => setParam({ sector: v, sectorOther: v === "otro" ? (search.sectorOther ?? "") : undefined })}
+            >
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t("discover.anySector")}</SelectItem>
+                {SECTORS.map((s) => <SelectItem key={s} value={s}>{t(`sector.${s}`)}</SelectItem>)}
+                <SelectItem value="otro">{t("common.other")}</SelectItem>
+              </SelectContent>
+            </Select>
+            {search.sector === "otro" && (
+              <Input
+                value={search.sectorOther ?? ""}
+                onChange={(e) => setParam({ sectorOther: e.target.value })}
+                placeholder={t("discover.otherSectorPh")}
+                className="mt-1"
+              />
+            )}
           </div>
           <div className="space-y-1">
             <Label className="text-xs">{t("project.country")}</Label>
-            <Input
-              value={search.country ?? ""}
-              onChange={(e) => setParam({ country: e.target.value })}
-              placeholder={t("discover.anyCountry")}
-            />
+            <Select
+              value={search.country ?? "all"}
+              onValueChange={(v) => setParam({ country: v, countryOther: v === "otro" ? (search.countryOther ?? "") : undefined })}
+            >
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent className="max-h-72">
+                <SelectItem value="all">{t("discover.anyCountry")}</SelectItem>
+                {COUNTRIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                <SelectItem value="otro">{t("common.other")}</SelectItem>
+              </SelectContent>
+            </Select>
+            {search.country === "otro" && (
+              <Input
+                value={search.countryOther ?? ""}
+                onChange={(e) => setParam({ countryOther: e.target.value })}
+                placeholder={t("discover.otherCountryPh")}
+                className="mt-1"
+              />
+            )}
           </div>
           <div className="space-y-1">
             <Label className="text-xs">{t("project.stage")}</Label>
