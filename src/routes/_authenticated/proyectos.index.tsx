@@ -138,7 +138,8 @@ function ProjectsDiscovery() {
   })();
 
   const activeCount = [
-    search.q, search.sector, search.country, search.stage, search.type,
+    search.q, search.sector, search.sectorOther, search.country, search.countryOther,
+    search.stage, search.type,
     typeof search.min === "number" ? search.min : undefined,
     typeof search.max === "number" ? search.max : undefined,
   ].filter((v) => v !== undefined && v !== "").length;
