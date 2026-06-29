@@ -20,7 +20,8 @@
     "newProject": "New project",
     "admin": "Admin",
     "logout": "Log out",
-    "settings": "Settings"
+    "settings": "Settings",
+    "discover": "Discover"
   },
   "logout": {
     "title": "Log out?",
@@ -330,7 +331,7 @@
     "contactCompany": "Contact company",
     "alreadyRequested": "Request sent",
     "requestSent": "We sent your request to the company.",
-    "addedFavorite": "Added to favorites",
+    "addedFavorite": "Saved to favorites",
     "removedFavorite": "Removed from favorites",
     "match": "Compatibility",
     "matchReasons": "Why it matches",
@@ -765,5 +766,34 @@
     "trustBasic": "Basic verified",
     "trustTrusted": "Trusted company",
     "trustManual": "Manually verified"
+  },
+  "discovery": {
+    "title": "Discover",
+    "sub": "Recommendations based on mutual compatibility.",
+    "skip": "Skip",
+    "skipInvestor": "Not a fit",
+    "interested": "Interested",
+    "dailyLimit": "Daily recommendation limit",
+    "capReached": "You reached today's limit of 20 recommendations. Come back tomorrow.",
+    "matchToast": "Conversation opened because both parties showed interest.",
+    "connections": "Connections",
+    "emptyTitle": "No more recommendations today",
+    "emptySub": "Come back tomorrow or review your connections."
+  },
+  "connections": {
+    "title": "Connections",
+    "sub": "Your mutual interests and open conversations.",
+    "connected": "Connected",
+    "pending": "Pending",
+    "discarded": "Discarded",
+    "discard": "Discard",
+    "openChat": "Open chat",
+    "emptyTitle": "No connections yet",
+    "emptySub": "When both parties show interest they appear here.",
+    "status": {
+      "pendiente": "Pending",
+      "conectado": "Connected",
+      "descartado": "Discarded"
+    }
   }
 }

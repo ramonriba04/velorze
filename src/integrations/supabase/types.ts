@@ -68,6 +68,44 @@ export type Database = {
         }
         Relationships: []
       }
+      connections: {
+        Row: {
+          company_id: string
+          created_at: string
+          id: string
+          investor_id: string
+          project_id: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          id?: string
+          investor_id: string
+          project_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          id?: string
+          investor_id?: string
+          project_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "connections_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_requests: {
         Row: {
           company_id: string
@@ -144,6 +182,41 @@ export type Database = {
           },
           {
             foreignKeyName: "conversations_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      discovery_interactions: {
+        Row: {
+          created_at: string
+          decision: string
+          id: string
+          project_id: string | null
+          target_user_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          decision: string
+          id?: string
+          project_id?: string | null
+          target_user_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          decision?: string
+          id?: string
+          project_id?: string | null
+          target_user_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discovery_interactions_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
@@ -717,6 +790,10 @@ export type Database = {
       compute_company_trust_level: {
         Args: { _user_id: string }
         Returns: string
+      }
+      discovery_today_interest_count: {
+        Args: { _user_id: string }
+        Returns: number
       }
       get_company_contact_email: {
         Args: { _company_id: string }

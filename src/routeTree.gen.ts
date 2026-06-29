@@ -25,6 +25,8 @@ import { Route as AuthRecuperarRouteImport } from './routes/auth.recuperar'
 import { Route as AuthenticatedVerificacionRouteImport } from './routes/_authenticated/verificacion'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedMensajesRouteImport } from './routes/_authenticated/mensajes'
+import { Route as AuthenticatedDescubrirRouteImport } from './routes/_authenticated/descubrir'
+import { Route as AuthenticatedConexionesRouteImport } from './routes/_authenticated/conexiones'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as AuthenticatedAjustesRouteImport } from './routes/_authenticated/ajustes'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
@@ -118,6 +120,16 @@ const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
 const AuthenticatedMensajesRoute = AuthenticatedMensajesRouteImport.update({
   id: '/mensajes',
   path: '/mensajes',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDescubrirRoute = AuthenticatedDescubrirRouteImport.update({
+  id: '/descubrir',
+  path: '/descubrir',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedConexionesRoute = AuthenticatedConexionesRouteImport.update({
+  id: '/conexiones',
+  path: '/conexiones',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
@@ -215,6 +227,8 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRoute
   '/ajustes': typeof AuthenticatedAjustesRoute
   '/app': typeof AuthenticatedAppRoute
+  '/conexiones': typeof AuthenticatedConexionesRoute
+  '/descubrir': typeof AuthenticatedDescubrirRoute
   '/mensajes': typeof AuthenticatedMensajesRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/verificacion': typeof AuthenticatedVerificacionRoute
@@ -246,6 +260,8 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminRoute
   '/ajustes': typeof AuthenticatedAjustesRoute
   '/app': typeof AuthenticatedAppRoute
+  '/conexiones': typeof AuthenticatedConexionesRoute
+  '/descubrir': typeof AuthenticatedDescubrirRoute
   '/mensajes': typeof AuthenticatedMensajesRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/verificacion': typeof AuthenticatedVerificacionRoute
@@ -279,6 +295,8 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/ajustes': typeof AuthenticatedAjustesRoute
   '/_authenticated/app': typeof AuthenticatedAppRoute
+  '/_authenticated/conexiones': typeof AuthenticatedConexionesRoute
+  '/_authenticated/descubrir': typeof AuthenticatedDescubrirRoute
   '/_authenticated/mensajes': typeof AuthenticatedMensajesRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/verificacion': typeof AuthenticatedVerificacionRoute
@@ -312,6 +330,8 @@ export interface FileRouteTypes {
     | '/admin'
     | '/ajustes'
     | '/app'
+    | '/conexiones'
+    | '/descubrir'
     | '/mensajes'
     | '/onboarding'
     | '/verificacion'
@@ -343,6 +363,8 @@ export interface FileRouteTypes {
     | '/admin'
     | '/ajustes'
     | '/app'
+    | '/conexiones'
+    | '/descubrir'
     | '/mensajes'
     | '/onboarding'
     | '/verificacion'
@@ -375,6 +397,8 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/ajustes'
     | '/_authenticated/app'
+    | '/_authenticated/conexiones'
+    | '/_authenticated/descubrir'
     | '/_authenticated/mensajes'
     | '/_authenticated/onboarding'
     | '/_authenticated/verificacion'
@@ -522,6 +546,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMensajesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/descubrir': {
+      id: '/_authenticated/descubrir'
+      path: '/descubrir'
+      fullPath: '/descubrir'
+      preLoaderRoute: typeof AuthenticatedDescubrirRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/conexiones': {
+      id: '/_authenticated/conexiones'
+      path: '/conexiones'
+      fullPath: '/conexiones'
+      preLoaderRoute: typeof AuthenticatedConexionesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/app': {
       id: '/_authenticated/app'
       path: '/app'
@@ -627,6 +665,8 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedAjustesRoute: typeof AuthenticatedAjustesRoute
   AuthenticatedAppRoute: typeof AuthenticatedAppRoute
+  AuthenticatedConexionesRoute: typeof AuthenticatedConexionesRoute
+  AuthenticatedDescubrirRoute: typeof AuthenticatedDescubrirRoute
   AuthenticatedMensajesRoute: typeof AuthenticatedMensajesRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedVerificacionRoute: typeof AuthenticatedVerificacionRoute
@@ -647,6 +687,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedAjustesRoute: AuthenticatedAjustesRoute,
   AuthenticatedAppRoute: AuthenticatedAppRoute,
+  AuthenticatedConexionesRoute: AuthenticatedConexionesRoute,
+  AuthenticatedDescubrirRoute: AuthenticatedDescubrirRoute,
   AuthenticatedMensajesRoute: AuthenticatedMensajesRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedVerificacionRoute: AuthenticatedVerificacionRoute,

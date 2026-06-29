@@ -44,6 +44,18 @@ function InvestorDashboard() {
     queryFn: () => fetcher(),
   });
 
+  const { data: favoriteIds } = useQuery({
+    queryKey: ["favorites_ids", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("favorites")
+        .select("project_id")
+        .eq("investor_id", user!.id);
+      return new Set((data ?? []).map((f: any) => f.project_id));
+    },
+  });
+
   const { data: profile } = useQuery({
     queryKey: ["investor_profile_summary", user?.id],
     enabled: !!user,
@@ -82,7 +94,12 @@ function InvestorDashboard() {
 
   const favMut = useMutation({
     mutationFn: (project_id: string) => favFn({ data: { project_id } }),
-    onSuccess: (r) => { toast.success(r.favorited ? t("project.addedFavorite") : t("project.removedFavorite")); qc.invalidateQueries({ queryKey: ["investor_counts"] }); },
+    onSuccess: (r) => {
+      toast.success(r.favorited ? t("project.addedFavorite") : t("project.removedFavorite"));
+      qc.invalidateQueries({ queryKey: ["investor_counts"] });
+      qc.invalidateQueries({ queryKey: ["favorites_ids", user?.id] });
+      qc.invalidateQueries({ queryKey: ["favorites", user?.id] });
+    },
   });
   const reqMut = useMutation({
     mutationFn: (project_id: string) => reqFn({ data: { project_id } }),
@@ -251,8 +268,8 @@ function InvestorDashboard() {
                   <Link to="/proyectos/$id" params={{ id: project.id }} className="flex-1">
                     <Button variant="outline" size="sm" className="w-full">{t("project.viewProject")}</Button>
                   </Link>
-                  <Button size="icon" variant="ghost" onClick={() => { favMut.mutate(project.id); qc.invalidateQueries({ queryKey: ["favorites"] }); }}>
-                    <Heart className="h-4 w-4" />
+                  <Button size="icon" variant="ghost" aria-pressed={favoriteIds?.has(project.id) ? true : false} onClick={() => favMut.mutate(project.id)}>
+                    <Heart className={`h-4 w-4 ${favoriteIds?.has(project.id) ? "fill-current text-primary" : ""}`} />
                   </Button>
                   <Button size="icon" onClick={() => reqMut.mutate(project.id)}>
                     <Send className="h-4 w-4" />

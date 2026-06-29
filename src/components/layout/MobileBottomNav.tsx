@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, Heart, MessageCircle } from "lucide-react";
+import { Home, Heart, MessageCircle, Compass, Search } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useMyRole } from "@/hooks/useAuth";
 
@@ -17,6 +17,8 @@ export function MobileBottomNav() {
 
   const items: Array<{ to: string; icon: typeof Home; label: string; match: (p: string) => boolean; hide?: boolean }> = [
     { to: homeTo, icon: Home, label: t("nav.home"), match: (p) => p === homeTo },
+    { to: "/proyectos", icon: Search, label: t("nav.explore"), match: (p) => p.startsWith("/proyectos") && !p.includes("/$") },
+    { to: "/descubrir", icon: Compass, label: t("nav.discover"), match: (p) => p.startsWith("/descubrir") },
     { to: favTo, icon: Heart, label: t("nav.favorites"), match: (p) => p.startsWith("/inversor/favoritos"), hide: isCompany },
     { to: "/mensajes", icon: MessageCircle, label: t("nav.messages"), match: (p) => p.startsWith("/mensajes") },
   ];
