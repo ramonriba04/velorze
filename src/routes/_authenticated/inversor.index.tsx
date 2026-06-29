@@ -94,7 +94,12 @@ function InvestorDashboard() {
 
   const favMut = useMutation({
     mutationFn: (project_id: string) => favFn({ data: { project_id } }),
-    onSuccess: (r) => { toast.success(r.favorited ? t("project.addedFavorite") : t("project.removedFavorite")); qc.invalidateQueries({ queryKey: ["investor_counts"] }); },
+    onSuccess: (r) => {
+      toast.success(r.favorited ? t("project.addedFavorite") : t("project.removedFavorite"));
+      qc.invalidateQueries({ queryKey: ["investor_counts"] });
+      qc.invalidateQueries({ queryKey: ["favorites_ids", user?.id] });
+      qc.invalidateQueries({ queryKey: ["favorites", user?.id] });
+    },
   });
   const reqMut = useMutation({
     mutationFn: (project_id: string) => reqFn({ data: { project_id } }),
