@@ -84,6 +84,20 @@ function PlansPage() {
   const active = usage?.active ?? 0;
   const pct = cap ? Math.min(100, (active / Math.max(1, cap)) * 100) : 0;
 
+  // Plans are only relevant to publishers (companies). Investors stay fully free.
+  if (user && role === "inversor") {
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 text-center">
+        <Sparkles className="mx-auto h-8 w-8 text-primary" />
+        <h1 className="mt-3 text-2xl font-bold tracking-tight">{t("planes.investorTitle")}</h1>
+        <p className="mt-2 text-muted-foreground">{t("planes.investorSub")}</p>
+        <Link to="/inversor" className="mt-6 inline-block">
+          <Button>{t("nav.home")}</Button>
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 pb-28">
       <div className="mb-6">
@@ -97,6 +111,7 @@ function PlansPage() {
         <p className="mt-3 text-muted-foreground">{t("planes.sub")}</p>
         <p className="mt-2 text-xs text-muted-foreground">{t("planes.freeNotice")}</p>
       </header>
+
 
       {user && role === "empresa" && (
         <Card className="mt-8 p-5">
