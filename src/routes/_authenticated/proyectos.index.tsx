@@ -172,19 +172,47 @@ function ProjectsDiscovery() {
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-1">
             <Label className="text-xs">{t("project.sector")}</Label>
-            <Input
-              value={search.sector ?? ""}
-              onChange={(e) => setParam({ sector: e.target.value })}
-              placeholder={t("discover.anySector")}
-            />
+            <Select
+              value={search.sector ?? "all"}
+              onValueChange={(v) => setParam({ sector: v, sectorOther: v === "otro" ? (search.sectorOther ?? "") : undefined })}
+            >
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t("discover.anySector")}</SelectItem>
+                {SECTORS.map((s) => <SelectItem key={s} value={s}>{t(`sector.${s}`)}</SelectItem>)}
+                <SelectItem value="otro">{t("common.other")}</SelectItem>
+              </SelectContent>
+            </Select>
+            {search.sector === "otro" && (
+              <Input
+                value={search.sectorOther ?? ""}
+                onChange={(e) => setParam({ sectorOther: e.target.value })}
+                placeholder={t("discover.otherSectorPh")}
+                className="mt-1"
+              />
+            )}
           </div>
           <div className="space-y-1">
             <Label className="text-xs">{t("project.country")}</Label>
-            <Input
-              value={search.country ?? ""}
-              onChange={(e) => setParam({ country: e.target.value })}
-              placeholder={t("discover.anyCountry")}
-            />
+            <Select
+              value={search.country ?? "all"}
+              onValueChange={(v) => setParam({ country: v, countryOther: v === "otro" ? (search.countryOther ?? "") : undefined })}
+            >
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent className="max-h-72">
+                <SelectItem value="all">{t("discover.anyCountry")}</SelectItem>
+                {COUNTRIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                <SelectItem value="otro">{t("common.other")}</SelectItem>
+              </SelectContent>
+            </Select>
+            {search.country === "otro" && (
+              <Input
+                value={search.countryOther ?? ""}
+                onChange={(e) => setParam({ countryOther: e.target.value })}
+                placeholder={t("discover.otherCountryPh")}
+                className="mt-1"
+              />
+            )}
           </div>
           <div className="space-y-1">
             <Label className="text-xs">{t("project.stage")}</Label>
