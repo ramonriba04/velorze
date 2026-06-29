@@ -20,7 +20,8 @@
     "newProject": "Nuevo proyecto",
     "admin": "Admin",
     "logout": "Cerrar sesión",
-    "settings": "Ajustes"
+    "settings": "Ajustes",
+    "discover": "Descubrir"
   },
   "logout": {
     "title": "¿Cerrar sesión?",
