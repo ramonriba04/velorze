@@ -681,6 +681,8 @@
     "sub": "Pick the plan that fits your project. Visibility, analytics and tools to grow.",
     "freeNotice": "All users are on Free for now. Paid plans are on the way.",
     "priceTba": "Price coming soon",
+    "investorTitle": "Plans are for publishers only",
+    "investorSub": "Investors use Capora for free. You don't need a paid plan.",
     "feat": {
       "free": {
         "1": "1 active project",
