@@ -229,7 +229,9 @@
     "sortNewest": "Más recientes",
     "sortActive": "Actividad reciente",
     "manualBadge": "Búsqueda manual",
-    "helperText": "Explorar usa filtros manuales. Las recomendaciones personalizadas están en Inicio."
+    "helperText": "Explorar usa filtros manuales. Las recomendaciones personalizadas están en Inicio.",
+    "otherSectorPh": "Escribe un sector",
+    "otherCountryPh": "Escribe un país"
   },
   "notifications": {
     "title": "Notificaciones",
