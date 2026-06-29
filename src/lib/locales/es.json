@@ -310,7 +310,8 @@
     "deleted": "Eliminado",
     "error": "Ha ocurrido un error",
     "required": "Obligatorio",
-    "optional": "(opcional)"
+    "optional": "(opcional)",
+    "other": "Otro"
   },
   "project": {
     "title": "Título del proyecto",
