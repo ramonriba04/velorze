@@ -44,6 +44,18 @@ function InvestorDashboard() {
     queryFn: () => fetcher(),
   });
 
+  const { data: favoriteIds } = useQuery({
+    queryKey: ["favorites_ids", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("favorites")
+        .select("project_id")
+        .eq("investor_id", user!.id);
+      return new Set((data ?? []).map((f: any) => f.project_id));
+    },
+  });
+
   const { data: profile } = useQuery({
     queryKey: ["investor_profile_summary", user?.id],
     enabled: !!user,
