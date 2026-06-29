@@ -170,7 +170,7 @@
     "newPassword": "New password",
     "confirmPassword": "Confirm password",
     "update": "Update password",
-    "success": "Password updated",
+    "success": "Password updated successfully.",
     "mismatch": "Passwords don't match",
     "tooShort": "Minimum 6 characters",
     "invalid": "This link is invalid or has expired. Request a new one."
