@@ -47,7 +47,7 @@ export function ProfileCompletenessCard({
         <ul className="mt-3 space-y-1 text-xs">
           {missing.map((k) => (
             <li key={k} className="flex items-center gap-2 text-muted-foreground">
-              <AlertCircle className="h-3.5 w-3.5 text-warning" />
+              <Circle className="h-3.5 w-3.5 text-muted-foreground" />
               {t(`completeness.field.${k}`)}
             </li>
           ))}
