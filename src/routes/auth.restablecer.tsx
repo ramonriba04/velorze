@@ -50,8 +50,8 @@ function ResetPasswordPage() {
       const { error } = await supabase.auth.updateUser({ password });
       if (error) throw error;
       toast.success(t("reset.success"));
-      await supabase.auth.signOut();
-      navigate({ to: "/auth" });
+      // Keep the session: user is auto-logged in after reset and lands in app.
+      navigate({ to: "/app" });
     } catch (err) {
       toast.error((err as Error).message);
     } finally {
