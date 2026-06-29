@@ -766,5 +766,34 @@
     "trustBasic": "Verificación básica",
     "trustTrusted": "Empresa de confianza",
     "trustManual": "Verificada manualmente"
+  },
+  "discovery": {
+    "title": "Descubrir",
+    "sub": "Recomendaciones basadas en compatibilidad mutua.",
+    "skip": "Omitir",
+    "skipInvestor": "No encaja",
+    "interested": "Me interesa",
+    "dailyLimit": "Límite diario de recomendaciones",
+    "capReached": "Has alcanzado el límite diario de 20 recomendaciones. Vuelve mañana.",
+    "matchToast": "Se ha abierto una conversación porque ambas partes mostraron interés.",
+    "connections": "Conexiones",
+    "emptyTitle": "Sin más recomendaciones por hoy",
+    "emptySub": "Vuelve mañana o revisa tus conexiones."
+  },
+  "connections": {
+    "title": "Conexiones",
+    "sub": "Tus intereses mutuos y conversaciones abiertas.",
+    "connected": "Conectado",
+    "pending": "Pendiente",
+    "discarded": "Descartado",
+    "discard": "Descartar",
+    "openChat": "Abrir chat",
+    "emptyTitle": "Sin conexiones aún",
+    "emptySub": "Cuando ambas partes muestren interés aparecerán aquí.",
+    "status": {
+      "pendiente": "Pendiente",
+      "conectado": "Conectado",
+      "descartado": "Descartado"
+    }
   }
 }
