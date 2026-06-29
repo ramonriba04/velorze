@@ -681,6 +681,8 @@
     "sub": "Elige el plan que mejor se adapte a tu proyecto. Visibilidad, analíticas y herramientas para crecer.",
     "freeNotice": "Todos los usuarios siguen en Free. Los planes de pago llegarán pronto.",
     "priceTba": "Precio próximamente",
+    "investorTitle": "Planes solo para publicadores",
+    "investorSub": "Los inversores tienen acceso gratuito a la plataforma. No necesitas un plan de pago.",
     "feat": {
       "free": {
         "1": "1 proyecto activo",
