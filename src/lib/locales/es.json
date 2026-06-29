@@ -551,7 +551,8 @@
     "status": {
       "complete": "Completo",
       "almost": "Casi listo",
-      "action": "Acción requerida"
+      "action": "Sin completar",
+      "incomplete": "Sin completar"
     },
     "field": {
       "legal_name": "Nombre de la empresa",
