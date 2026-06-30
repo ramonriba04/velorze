@@ -74,6 +74,22 @@ export const sendMessage = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+export const markMessagesRead = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z.object({ conversation_id: z.string().uuid() }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase
+      .from("messages")
+      .update({ read_at: new Date().toISOString() })
+      .eq("conversation_id", data.conversation_id)
+      .neq("sender_id", context.userId)
+      .is("read_at", null);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
 export const toggleFavorite = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ project_id: z.string().uuid() }).parse(input))

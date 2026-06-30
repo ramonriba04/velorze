@@ -290,7 +290,10 @@
     "messagesSub": "Cuando una empresa acepte tu solicitud podréis chatear aquí.",
     "notifications": "No tienes notificaciones.",
     "notificationsSub": "Te avisaremos cuando ocurra algo importante.",
-    "exploreCta": "Explorar proyectos"
+    "exploreCta": "Explorar proyectos",
+    "startConnection": "Empieza una conexión",
+    "discoverCta": "Descubrir proyectos",
+    "completeProfileCta": "Completa tu perfil"
   },
   "common": {
     "save": "Guardar",
@@ -466,7 +469,20 @@
     "chats": "Conversaciones",
     "pendingEmpty": "No tienes solicitudes pendientes.",
     "acceptedEmpty": "Aún no tienes contactos aceptados.",
-    "selectHint": "Selecciona una conversación"
+    "selectHint": "Selecciona una conversación",
+    "noMessagesYet": "Sin mensajes todavía"
+  },
+  "chat": {
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "sent": "Enviado",
+    "delivered": "Entregado",
+    "seen": "Visto",
+    "lastSeen": "Última conexión"
+  },
+  "gallery": {
+    "prev": "Anterior",
+    "next": "Siguiente"
   },
   "home": {
     "welcomeBack": "Bienvenido de nuevo",

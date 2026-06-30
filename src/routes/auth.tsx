@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -52,6 +52,14 @@ function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [needsVerification, setNeedsVerification] = useState<string | null>(null);
   const [loginUnverifiedEmail, setLoginUnverifiedEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    supabase.auth.getSession().then(({ data }) => {
+      if (!cancelled && data.session) navigate({ to: "/app", replace: true });
+    });
+    return () => { cancelled = true; };
+  }, [navigate]);
 
   const pwValid = isPasswordValid(password);
   const pwMatch = password.length > 0 && password === confirmPw;

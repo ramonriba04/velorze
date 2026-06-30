@@ -290,7 +290,10 @@
     "messagesSub": "Once a company accepts your request, you'll chat here.",
     "notifications": "No notifications.",
     "notificationsSub": "We'll let you know when something important happens.",
-    "exploreCta": "Explore projects"
+    "exploreCta": "Explore projects",
+    "startConnection": "Start a connection",
+    "discoverCta": "Discover projects",
+    "completeProfileCta": "Complete your profile"
   },
   "common": {
     "save": "Save",
@@ -466,7 +469,20 @@
     "chats": "Chats",
     "pendingEmpty": "No pending requests.",
     "acceptedEmpty": "No accepted contacts yet.",
-    "selectHint": "Select a conversation"
+    "selectHint": "Select a conversation",
+    "noMessagesYet": "No messages yet"
+  },
+  "chat": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "sent": "Sent",
+    "delivered": "Delivered",
+    "seen": "Seen",
+    "lastSeen": "Last seen"
+  },
+  "gallery": {
+    "prev": "Previous",
+    "next": "Next"
   },
   "home": {
     "welcomeBack": "Welcome back",
