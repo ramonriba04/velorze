@@ -1,18 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { useMyRole } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
-import { sendMessage, respondContactRequest } from "@/lib/contact.functions";
+import { sendMessage, respondContactRequest, markMessagesRead } from "@/lib/contact.functions";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Inbox, Handshake, MessagesSquare } from "lucide-react";
+import { Inbox, Handshake, MessagesSquare, Check, CheckCheck, ImageOff } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
+import { EntityAvatar } from "@/components/media/EntityAvatar";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/mensajes")({
@@ -111,30 +112,103 @@ function Messages() {
         </TabsContent>
 
         <TabsContent value="chats" className="mt-4">
-          <ChatsPanel userId={user?.id} />
+          <ChatsPanel userId={user?.id} isCompany={isCompany} />
         </TabsContent>
       </Tabs>
     </div>
   );
 }
 
+/* ---------- helpers ---------- */
 
-function ChatsPanel({ userId }: { userId?: string }) {
+function isSameDay(a: Date, b: Date) {
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+}
+function dayLabel(d: Date, t: (k: string) => string) {
+  const now = new Date();
+  const yesterday = new Date(now); yesterday.setDate(now.getDate() - 1);
+  if (isSameDay(d, now)) return t("chat.today");
+  if (isSameDay(d, yesterday)) return t("chat.yesterday");
+  return d.toLocaleDateString();
+}
+function timeShort(d: Date) {
+  return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
+/* ---------- chats panel ---------- */
+
+function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean }) {
   const { t } = useTranslation();
   const [active, setActive] = useState<string | null>(null);
   const [text, setText] = useState("");
   const send = useServerFn(sendMessage);
+  const markRead = useServerFn(markMessagesRead);
   const listRef = useRef<HTMLDivElement>(null);
+  const qc = useQueryClient();
 
   const { data: convs } = useQuery({
-    queryKey: ["conversations", userId],
+    queryKey: ["conversations_rich", userId],
     enabled: !!userId,
     queryFn: async () => {
-      const { data } = await supabase
+      const { data: cs } = await supabase
         .from("conversations")
-        .select("*, projects(title)")
+        .select("*, projects(id, title, cover_url)")
         .order("created_at", { ascending: false });
-      return data ?? [];
+      const conversations = cs ?? [];
+      if (conversations.length === 0) return [];
+
+      const otherIds = Array.from(new Set(conversations.map((c: any) => isCompany ? c.investor_id : c.company_id)));
+      const projectIds = Array.from(new Set(conversations.map((c: any) => c.project_id).filter(Boolean)));
+      const convIds = conversations.map((c: any) => c.id);
+
+      const [{ data: companies }, { data: investors }, { data: profiles }, { data: images }, { data: msgs }] = await Promise.all([
+        supabase.from("company_profiles").select("user_id, legal_name, logo_url").in("user_id", otherIds),
+        supabase.from("investor_profiles").select("user_id, display_name, avatar_url").in("user_id", otherIds),
+        supabase.from("profiles").select("id, full_name, avatar_url").in("id", otherIds),
+        supabase.from("project_images").select("project_id, url, sort_order").in("project_id", projectIds.length ? projectIds : ["00000000-0000-0000-0000-000000000000"]).order("sort_order"),
+        supabase.from("messages").select("id, conversation_id, body, sender_id, created_at, read_at").in("conversation_id", convIds).order("created_at", { ascending: false }).limit(500),
+      ]);
+
+      const cMap: Record<string, any> = {}; (companies ?? []).forEach((c: any) => cMap[c.user_id] = c);
+      const iMap: Record<string, any> = {}; (investors ?? []).forEach((i: any) => iMap[i.user_id] = i);
+      const pMap: Record<string, any> = {}; (profiles ?? []).forEach((p: any) => pMap[p.id] = p);
+      const thumbMap: Record<string, string> = {};
+      (images ?? []).forEach((i: any) => { if (!thumbMap[i.project_id]) thumbMap[i.project_id] = i.url; });
+      const lastMsg: Record<string, any> = {};
+      const unread: Record<string, number> = {};
+      (msgs ?? []).forEach((m: any) => {
+        if (!lastMsg[m.conversation_id]) lastMsg[m.conversation_id] = m;
+        if (m.sender_id !== userId && !m.read_at) {
+          unread[m.conversation_id] = (unread[m.conversation_id] ?? 0) + 1;
+        }
+      });
+
+      return conversations.map((c: any) => {
+        const otherId = isCompany ? c.investor_id : c.company_id;
+        const other = isCompany
+          ? (iMap[otherId] ?? null)
+          : (cMap[otherId] ?? null);
+        const otherName = isCompany
+          ? (other?.display_name ?? pMap[otherId]?.full_name ?? "—")
+          : (other?.legal_name ?? pMap[otherId]?.full_name ?? "—");
+        const otherAvatar = isCompany
+          ? (other?.avatar_url ?? pMap[otherId]?.avatar_url ?? null)
+          : (other?.logo_url ?? null);
+        const thumb = c.project_id ? (thumbMap[c.project_id] ?? c.projects?.cover_url ?? null) : null;
+        return {
+          ...c,
+          otherName,
+          otherAvatar,
+          otherKind: isCompany ? "user" as const : "company" as const,
+          thumb,
+          lastMessage: lastMsg[c.id] ?? null,
+          unreadCount: unread[c.id] ?? 0,
+        };
+      }).sort((a: any, b: any) => {
+        const ta = a.lastMessage ? new Date(a.lastMessage.created_at).getTime() : new Date(a.created_at).getTime();
+        const tb = b.lastMessage ? new Date(b.lastMessage.created_at).getTime() : new Date(b.created_at).getTime();
+        return tb - ta;
+      });
     },
   });
 
@@ -148,15 +222,42 @@ function ChatsPanel({ userId }: { userId?: string }) {
     },
   });
 
+  // Realtime
   useEffect(() => {
     if (!active) return;
     const channel = supabase.channel(`msg:${active}`)
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages", filter: `conversation_id=eq.${active}` }, () => refetch())
+      .on("postgres_changes", { event: "*", schema: "public", table: "messages", filter: `conversation_id=eq.${active}` }, () => {
+        refetch();
+        qc.invalidateQueries({ queryKey: ["conversations_rich"] });
+      })
       .subscribe();
     return () => { supabase.removeChannel(channel); };
-  }, [active, refetch]);
+  }, [active, refetch, qc]);
 
+  // Auto-scroll
   useEffect(() => { listRef.current?.scrollTo(0, listRef.current.scrollHeight); }, [messages]);
+
+  // Mark as read on open / new messages
+  useEffect(() => {
+    if (!active || !userId) return;
+    const hasUnread = (messages ?? []).some((m: any) => m.sender_id !== userId && !m.read_at);
+    if (!hasUnread) return;
+    markRead({ data: { conversation_id: active } })
+      .then(() => qc.invalidateQueries({ queryKey: ["conversations_rich"] }))
+      .catch(() => {});
+  }, [active, messages, userId, markRead, qc]);
+
+  const grouped = useMemo(() => {
+    const groups: Array<{ label: string; items: any[] }> = [];
+    (messages ?? []).forEach((m: any) => {
+      const d = new Date(m.created_at);
+      const label = dayLabel(d, t);
+      const last = groups[groups.length - 1];
+      if (!last || last.label !== label) groups.push({ label, items: [m] });
+      else last.items.push(m);
+    });
+    return groups;
+  }, [messages, t]);
 
   const onSend = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -164,35 +265,97 @@ function ChatsPanel({ userId }: { userId?: string }) {
     await send({ data: { conversation_id: active, body: text.trim() } });
     setText("");
     refetch();
+    qc.invalidateQueries({ queryKey: ["conversations_rich"] });
   };
 
   if (!convs || convs.length === 0) {
-    return <EmptyState icon={<MessagesSquare />} title={t("empty.messages")} description={t("empty.messagesSub")} />;
+    return (
+      <EmptyState
+        icon={<MessagesSquare />}
+        title={t("empty.messages")}
+        description={t("empty.messagesSub")}
+        ctaLabel={t("empty.startConnection")}
+        ctaTo="/descubrir"
+      />
+    );
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-[280px_1fr]">
-      <Card className="p-2 max-h-[60vh] overflow-y-auto">
-        {convs.map((c: any) => (
-          <button
-            key={c.id}
-            onClick={() => setActive(c.id)}
-            className={`w-full text-left px-3 py-2 rounded-md text-sm ${active === c.id ? "bg-primary/10 text-primary" : "hover:bg-muted"}`}
-          >
-            <p className="font-medium truncate">{c.projects?.title ?? t("messages.title")}</p>
-            <p className="text-xs text-muted-foreground">{new Date(c.created_at).toLocaleDateString()}</p>
-          </button>
-        ))}
+    <div className="grid gap-4 md:grid-cols-[320px_1fr]">
+      <Card className="p-0 max-h-[65vh] overflow-y-auto divide-y">
+        {convs.map((c: any) => {
+          const isActive = active === c.id;
+          const ts = c.lastMessage ? new Date(c.lastMessage.created_at) : new Date(c.created_at);
+          return (
+            <button
+              key={c.id}
+              onClick={() => setActive(c.id)}
+              className={`w-full text-left px-3 py-3 flex gap-3 items-start ${isActive ? "bg-primary/10" : "hover:bg-muted"}`}
+            >
+              <div className="relative h-12 w-12 shrink-0 rounded-md overflow-hidden bg-muted flex items-center justify-center">
+                {c.thumb ? (
+                  <img src={c.thumb} alt="" className="h-full w-full object-cover" loading="lazy" />
+                ) : (
+                  <ImageOff className="h-4 w-4 text-muted-foreground" />
+                )}
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm font-medium truncate">{c.projects?.title ?? t("messages.title")}</p>
+                  <span className="text-[10px] text-muted-foreground shrink-0">{timeShort(ts)}</span>
+                </div>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <EntityAvatar src={c.otherAvatar} name={c.otherName} kind={c.otherKind} size={14} />
+                  <p className="text-[11px] text-muted-foreground truncate">{c.otherName}</p>
+                </div>
+                <div className="flex items-center justify-between gap-2 mt-1">
+                  <p className="text-xs text-muted-foreground truncate">
+                    {c.lastMessage?.body ?? t("messages.noMessagesYet")}
+                  </p>
+                  {c.unreadCount > 0 && (
+                    <span className="shrink-0 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-primary text-primary-foreground text-[10px] font-semibold">
+                      {c.unreadCount}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </button>
+          );
+        })}
       </Card>
-      <Card className="flex flex-col h-[60vh]">
+
+      <Card className="flex flex-col h-[65vh]">
         {!active ? (
           <div className="flex-1 flex items-center justify-center text-sm text-muted-foreground">{t("messages.selectHint")}</div>
         ) : (
           <>
-            <div ref={listRef} className="flex-1 overflow-y-auto p-4 space-y-2">
-              {messages?.map((m: any) => (
-                <div key={m.id} className={`max-w-[75%] rounded-lg px-3 py-2 text-sm ${m.sender_id === userId ? "ml-auto bg-primary text-primary-foreground" : "bg-muted"}`}>
-                  {m.body}
+            <div ref={listRef} className="flex-1 overflow-y-auto p-4 space-y-4">
+              {grouped.map((g) => (
+                <div key={g.label} className="space-y-1.5">
+                  <div className="flex items-center justify-center">
+                    <span className="rounded-full bg-muted px-2.5 py-0.5 text-[10px] uppercase tracking-wide text-muted-foreground">
+                      {g.label}
+                    </span>
+                  </div>
+                  {g.items.map((m: any) => {
+                    const mine = m.sender_id === userId;
+                    const ts = new Date(m.created_at);
+                    return (
+                      <div key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
+                        <div className={`max-w-[75%] rounded-lg px-3 py-2 text-sm ${mine ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
+                          <div>{m.body}</div>
+                          <div className={`mt-1 flex items-center justify-end gap-1 text-[10px] ${mine ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+                            <span>{timeShort(ts)}</span>
+                            {mine && (
+                              m.read_at
+                                ? <CheckCheck className="h-3 w-3" />
+                                : <Check className="h-3 w-3" />
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               ))}
             </div>
