@@ -14,7 +14,8 @@ import { createContactRequest } from "@/lib/contact.functions";
 import { toast } from "sonner";
 import { ShareButton } from "@/components/ShareButton";
 import { EntityTypeBadge } from "@/components/EntityTypeBadge";
-import { ShieldCheck } from "lucide-react";
+import { ShieldCheck, ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 
 export const Route = createFileRoute("/proyectos/$id")({
