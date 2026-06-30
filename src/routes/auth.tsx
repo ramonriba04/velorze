@@ -53,6 +53,14 @@ function AuthPage() {
   const [needsVerification, setNeedsVerification] = useState<string | null>(null);
   const [loginUnverifiedEmail, setLoginUnverifiedEmail] = useState<string | null>(null);
 
+  useEffect(() => {
+    let cancelled = false;
+    supabase.auth.getSession().then(({ data }) => {
+      if (!cancelled && data.session) navigate({ to: "/app", replace: true });
+    });
+    return () => { cancelled = true; };
+  }, [navigate]);
+
   const pwValid = isPasswordValid(password);
   const pwMatch = password.length > 0 && password === confirmPw;
   const signupReady = !!email && !!fullName && pwValid && pwMatch && acceptedLegal;
