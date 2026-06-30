@@ -62,7 +62,23 @@ function ProjectDetail() {
 
   const images: { url: string }[] = data?.images ?? [];
   const cover = images[0]?.url ?? data?.cover_url ?? null;
-  const hasGallery = images.length > 0;
+  const galleryItems: { url: string }[] = images.length > 0
+    ? images
+    : (cover ? [{ url: cover }] : []);
+  const hasMulti = galleryItems.length > 1;
+  const goPrev = () => setActiveImg((i) => (i - 1 + galleryItems.length) % galleryItems.length);
+  const goNext = () => setActiveImg((i) => (i + 1) % galleryItems.length);
+  const touchStart = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!hasMulti) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") goPrev();
+      if (e.key === "ArrowRight") goNext();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [hasMulti, galleryItems.length]);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -71,16 +87,50 @@ function ProjectDetail() {
         {isLoading && <p>{t("common.loading")}</p>}
         {data && (
           <Card className="p-0 overflow-hidden">
-            {cover && (
+            {galleryItems.length > 0 && (
               <div className="bg-muted">
-                <img
-                  src={hasGallery ? images[activeImg].url : cover}
-                  alt={data.title}
-                  className="w-full aspect-video object-cover"
-                />
-                {hasGallery && images.length > 1 && (
+                <div
+                  className="relative"
+                  onTouchStart={(e) => { touchStart.current = e.touches[0].clientX; }}
+                  onTouchEnd={(e) => {
+                    if (touchStart.current == null) return;
+                    const dx = e.changedTouches[0].clientX - touchStart.current;
+                    if (Math.abs(dx) > 50) (dx < 0 ? goNext() : goPrev());
+                    touchStart.current = null;
+                  }}
+                >
+                  <img
+                    src={galleryItems[activeImg]?.url ?? cover ?? ""}
+                    alt={data.title}
+                    className="w-full aspect-video object-cover transition-opacity"
+                  />
+                  {hasMulti && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={goPrev}
+                        aria-label={t("gallery.prev")}
+                        className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 shadow hover:bg-background"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={goNext}
+                        aria-label={t("gallery.next")}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 shadow hover:bg-background"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </button>
+                      <span className="absolute bottom-2 right-2 rounded-full bg-background/80 px-2 py-0.5 text-[11px] font-medium">
+                        {activeImg + 1} / {galleryItems.length}
+                      </span>
+                    </>
+                  )}
+                </div>
+                {hasMulti && (
                   <div className="flex gap-2 p-3 overflow-x-auto border-t border-border">
-                    {images.map((img, i) => (
+                    {galleryItems.map((img, i) => (
                       <button
                         key={img.url + i}
                         type="button"
