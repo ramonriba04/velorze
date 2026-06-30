@@ -108,6 +108,17 @@ function HeroMock({ t }: { t: (k: string) => string }) {
 
 function Landing() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    let cancelled = false;
+    supabase.auth.getSession().then(({ data }) => {
+      if (!cancelled && data.session) navigate({ to: "/app", replace: true });
+    });
+    return () => { cancelled = true; };
+  }, [navigate]);
+
+
 
   const features = [
     { icon: Target, t: "feature1Title", d: "feature1Desc" },
