@@ -290,7 +290,10 @@
     "messagesSub": "Cuando una empresa acepte tu solicitud podréis chatear aquí.",
     "notifications": "No tienes notificaciones.",
     "notificationsSub": "Te avisaremos cuando ocurra algo importante.",
-    "exploreCta": "Explorar proyectos"
+    "exploreCta": "Explorar proyectos",
+    "startConnection": "Empieza una conexión",
+    "discoverCta": "Descubrir proyectos",
+    "completeProfileCta": "Completa tu perfil"
   },
   "common": {
     "save": "Guardar",
