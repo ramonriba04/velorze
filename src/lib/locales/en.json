@@ -469,7 +469,20 @@
     "chats": "Chats",
     "pendingEmpty": "No pending requests.",
     "acceptedEmpty": "No accepted contacts yet.",
-    "selectHint": "Select a conversation"
+    "selectHint": "Select a conversation",
+    "noMessagesYet": "No messages yet"
+  },
+  "chat": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "sent": "Sent",
+    "delivered": "Delivered",
+    "seen": "Seen",
+    "lastSeen": "Last seen"
+  },
+  "gallery": {
+    "prev": "Previous",
+    "next": "Next"
   },
   "home": {
     "welcomeBack": "Welcome back",
