@@ -1,0 +1,9 @@
+REVOKE EXECUTE ON FUNCTION public.company_profile_complete(uuid) FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION public.company_profile_completeness(uuid) FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION public.compute_company_trust_level(uuid) FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION public.discovery_today_interest_count(uuid) FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION public.get_company_contact_email(uuid) FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION public.investor_profile_complete(uuid) FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION public.investor_profile_completeness(uuid) FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION public.my_verification_status() FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION public.refresh_company_trust_level(uuid) FROM PUBLIC, anon;
