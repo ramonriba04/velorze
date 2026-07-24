@@ -51,15 +51,22 @@ function ProjectDetail() {
         .select("legal_name, country, logo_url, description, website, entity_type, verification_status, trust_level")
         .eq("user_id", project.company_id)
         .maybeSingle();
+      const { data: ownerProfile } = await supabase
+        .from("profiles")
+        .select("suspended_at")
+        .eq("id", project.company_id)
+        .maybeSingle();
 
       const { data: imgs } = await supabase
         .from("project_images")
         .select("url")
         .eq("project_id", id)
         .order("sort_order");
-      return { ...project, company, images: imgs ?? [] } as any;
+      return { ...project, company, ownerSuspended: !!ownerProfile?.suspended_at, images: imgs ?? [] } as any;
     },
   });
+
+  const unavailable = !!data && (data.hidden_by_moderation || data.ownerSuspended);
 
   const images: { url: string }[] = data?.images ?? [];
   const cover = images[0]?.url ?? data?.cover_url ?? null;
