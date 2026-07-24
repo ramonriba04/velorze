@@ -4,7 +4,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ShieldCheck, FileText, Clock } from "lucide-react";
+import { ShieldCheck, FileText, Clock, Flag } from "lucide-react";
+import { adminListUserReports, adminListProjectReports, adminModerationAction } from "@/lib/moderation.functions";
 
 import { listAllUsers, listAllProjects, adminSetProjectStatus, adminDeleteProject } from "@/lib/admin.functions";
 import {
