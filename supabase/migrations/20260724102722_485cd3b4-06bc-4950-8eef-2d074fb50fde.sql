@@ -1,0 +1,2 @@
+REVOKE EXECUTE ON FUNCTION public.enforce_profile_complete_before_publish() FROM PUBLIC, anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.tg_company_profile_trust() FROM PUBLIC, anon, authenticated;
