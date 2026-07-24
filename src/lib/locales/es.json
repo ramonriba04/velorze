@@ -533,6 +533,22 @@
       "verified": "Verificadas",
       "rejected": "Rechazadas",
       "all": "Todas"
+    },
+    "moderation": "Moderación",
+    "mod": {
+      "kind": { "users": "Usuarios", "projects": "Proyectos" },
+      "status": { "pending": "Pendientes", "reviewed": "Revisadas", "resolved": "Resueltas", "dismissed": "Descartadas", "all": "Todas" },
+      "empty": "No hay reportes en esta lista.",
+      "reportedBy": "Reportado por",
+      "notes": "Notas",
+      "markReviewed": "Marcar revisado",
+      "suspendUser": "Suspender cuenta",
+      "restoreUser": "Reactivar cuenta",
+      "hideProject": "Ocultar proyecto",
+      "restoreProject": "Restaurar proyecto",
+      "dismiss": "Descartar",
+      "suspended": "Suspendido",
+      "hidden": "Oculto"
     }
   },
   "trust": {
