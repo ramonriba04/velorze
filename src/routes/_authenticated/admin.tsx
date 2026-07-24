@@ -253,3 +253,151 @@ function StatusPill({ status }: { status: string }) {
         : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-200";
   return <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${cls}`}>{status}</span>;
 }
+
+/* -------------------------- Moderation Queue -------------------------- */
+
+type ModStatus = "pending" | "reviewed" | "resolved" | "dismissed" | "all";
+type ModKind = "users" | "projects";
+
+function ModerationQueue() {
+  const { t } = useTranslation();
+  const qc = useQueryClient();
+  const [kind, setKind] = useState<ModKind>("users");
+  const [status, setStatus] = useState<ModStatus>("pending");
+
+  const listU = useServerFn(adminListUserReports);
+  const listP = useServerFn(adminListProjectReports);
+  const actFn = useServerFn(adminModerationAction);
+
+  const { data: uReports, isLoading: uLoading } = useQuery({
+    queryKey: ["admin_user_reports", status],
+    queryFn: () => listU({ data: { status } }),
+    enabled: kind === "users",
+  });
+  const { data: pReports, isLoading: pLoading } = useQuery({
+    queryKey: ["admin_project_reports", status],
+    queryFn: () => listP({ data: { status } }),
+    enabled: kind === "projects",
+  });
+
+  const act = useMutation({
+    mutationFn: (vars: { id: string; action: any; target_type: "user_report" | "project_report"; notes?: string }) =>
+      actFn({ data: vars }),
+    onSuccess: () => {
+      toast.success(t("common.saved"));
+      qc.invalidateQueries({ queryKey: ["admin_user_reports"] });
+      qc.invalidateQueries({ queryKey: ["admin_project_reports"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  return (
+    <div className="space-y-3">
+      <div className="flex flex-wrap gap-2">
+        {(["users", "projects"] as ModKind[]).map((k) => (
+          <Button key={k} size="sm" variant={kind === k ? "default" : "outline"} onClick={() => setKind(k)}>
+            {t(`admin.mod.kind.${k}`)}
+          </Button>
+        ))}
+        <div className="ml-auto flex flex-wrap gap-2">
+          {(["pending", "reviewed", "resolved", "dismissed", "all"] as ModStatus[]).map((s) => (
+            <Button key={s} size="sm" variant={status === s ? "secondary" : "ghost"} onClick={() => setStatus(s)}>
+              {t(`admin.mod.status.${s}`)}
+            </Button>
+          ))}
+        </div>
+      </div>
+
+      {kind === "users" && (
+        <>
+          {uLoading && <p className="text-sm text-muted-foreground">{t("common.loading")}</p>}
+          {!uLoading && (uReports?.length ?? 0) === 0 && (
+            <Card className="p-6 text-center text-sm text-muted-foreground">{t("admin.mod.empty")}</Card>
+          )}
+          {(uReports ?? []).map((r: any) => (
+            <Card key={r.id} className="p-4 space-y-3">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="font-medium truncate">{r.reported_name ?? r.reported_user_id.slice(0, 8)}</p>
+                    <Badge variant="outline" className="text-[10px]">{t(`safety.report.userReasons.${r.reason}`)}</Badge>
+                    <StatusPill status={r.status} />
+                    {r.reported_suspended && <Badge variant="destructive" className="text-[10px]">{t("admin.mod.suspended")}</Badge>}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {t("admin.mod.reportedBy")}: {r.reporter_name ?? r.reporter_id.slice(0, 8)} · {new Date(r.created_at).toLocaleString()}
+                  </p>
+                  {r.details && <p className="mt-1 text-sm">{r.details}</p>}
+                  {r.admin_notes && <p className="mt-1 text-xs text-muted-foreground">{t("admin.mod.notes")}: {r.admin_notes}</p>}
+                </div>
+              </div>
+              {r.status !== "resolved" && r.status !== "dismissed" && (
+                <div className="flex flex-wrap gap-2 border-t border-border pt-3">
+                  <Button size="sm" variant="outline" onClick={() => act.mutate({ id: r.id, action: "mark_reviewed", target_type: "user_report" })}>
+                    {t("admin.mod.markReviewed")}
+                  </Button>
+                  {!r.reported_suspended ? (
+                    <Button size="sm" variant="destructive" onClick={() => act.mutate({ id: r.id, action: "suspend_user", target_type: "user_report" })}>
+                      {t("admin.mod.suspendUser")}
+                    </Button>
+                  ) : (
+                    <Button size="sm" variant="outline" onClick={() => act.mutate({ id: r.id, action: "restore_user", target_type: "user_report" })}>
+                      {t("admin.mod.restoreUser")}
+                    </Button>
+                  )}
+                  <Button size="sm" variant="ghost" onClick={() => act.mutate({ id: r.id, action: "dismiss", target_type: "user_report" })}>
+                    {t("admin.mod.dismiss")}
+                  </Button>
+                </div>
+              )}
+            </Card>
+          ))}
+        </>
+      )}
+
+      {kind === "projects" && (
+        <>
+          {pLoading && <p className="text-sm text-muted-foreground">{t("common.loading")}</p>}
+          {!pLoading && (pReports?.length ?? 0) === 0 && (
+            <Card className="p-6 text-center text-sm text-muted-foreground">{t("admin.mod.empty")}</Card>
+          )}
+          {(pReports ?? []).map((r: any) => (
+            <Card key={r.id} className="p-4 space-y-3">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="font-medium truncate">{r.projects?.title ?? r.project_id.slice(0, 8)}</p>
+                    <Badge variant="outline" className="text-[10px]">{t(`safety.report.projectReasons.${r.reason}`)}</Badge>
+                    <StatusPill status={r.status} />
+                    {r.projects?.hidden_by_moderation && <Badge variant="destructive" className="text-[10px]">{t("admin.mod.hidden")}</Badge>}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">{new Date(r.created_at).toLocaleString()}</p>
+                  {r.details && <p className="mt-1 text-sm">{r.details}</p>}
+                </div>
+              </div>
+              {r.status !== "resolved" && r.status !== "dismissed" && (
+                <div className="flex flex-wrap gap-2 border-t border-border pt-3">
+                  <Button size="sm" variant="outline" onClick={() => act.mutate({ id: r.id, action: "mark_reviewed", target_type: "project_report" })}>
+                    {t("admin.mod.markReviewed")}
+                  </Button>
+                  {!r.projects?.hidden_by_moderation ? (
+                    <Button size="sm" variant="destructive" onClick={() => act.mutate({ id: r.id, action: "hide_project", target_type: "project_report" })}>
+                      {t("admin.mod.hideProject")}
+                    </Button>
+                  ) : (
+                    <Button size="sm" variant="outline" onClick={() => act.mutate({ id: r.id, action: "restore_project", target_type: "project_report" })}>
+                      {t("admin.mod.restoreProject")}
+                    </Button>
+                  )}
+                  <Button size="sm" variant="ghost" onClick={() => act.mutate({ id: r.id, action: "dismiss", target_type: "project_report" })}>
+                    {t("admin.mod.dismiss")}
+                  </Button>
+                </div>
+              )}
+            </Card>
+          ))}
+        </>
+      )}
+    </div>
+  );
+}
