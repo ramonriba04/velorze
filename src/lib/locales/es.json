@@ -832,6 +832,70 @@
       "pendiente": "Pendiente",
       "conectado": "Conectado",
       "descartado": "Descartado"
+  ,
+  "safety": {
+    "title": "Seguridad y privacidad",
+    "sub": "Gestiona bloqueos y controla tu experiencia en Capora.",
+    "manage": "Gestionar",
+    "settingsHint": "Consulta y elimina usuarios bloqueados.",
+    "blockedUsers": "Usuarios bloqueados",
+    "blockedUsersHint": "Los usuarios bloqueados no pueden enviarte mensajes ni solicitudes.",
+    "emptyTitle": "No has bloqueado a nadie",
+    "emptySub": "Cuando bloquees a alguien aparecerá aquí.",
+    "projectUnavailable": "Este proyecto ya no está disponible",
+    "projectUnavailableSub": "El contenido ha sido retirado o el publicador está suspendido.",
+    "block": {
+      "action": "Bloquear",
+      "title": "¿Bloquear a este usuario?",
+      "desc": "No podrá enviarte mensajes ni solicitudes de contacto. La conversación quedará oculta.",
+      "confirm": "Bloquear",
+      "done": "Usuario bloqueado",
+      "unblock": "Desbloquear",
+      "unblocked": "Usuario desbloqueado",
+      "unblockTitle": "¿Desbloquear a este usuario?",
+      "unblockDesc": "{{name}} podrá volver a contactarte.",
+      "sendBlocked": "No puedes enviar mensajes en esta conversación."
+    },
+    "report": {
+      "userAction": "Reportar usuario",
+      "projectAction": "Reportar proyecto",
+      "userTitle": "Reportar usuario",
+      "projectTitle": "Reportar proyecto",
+      "pickReason": "Selecciona el motivo del reporte.",
+      "detailsLabel": "Detalles",
+      "detailsPh": "Explica brevemente qué ha ocurrido (obligatorio para 'Otro').",
+      "detailsRequired": "Añade detalles cuando el motivo sea 'Otro'.",
+      "submit": "Enviar reporte",
+      "doneTitle": "Reporte enviado",
+      "doneBody": "Nuestro equipo lo revisará pronto.",
+      "userReasons": {
+        "fraud": "Fraude o estafa",
+        "payment_request": "Solicita pagos por adelantado",
+        "impersonation": "Suplantación de identidad",
+        "spam": "Spam o publicidad",
+        "inappropriate": "Contenido inapropiado",
+        "false_info": "Información falsa",
+        "other": "Otro"
+      },
+      "projectReasons": {
+        "false_info": "Información falsa",
+        "misleading": "Engañoso",
+        "spam": "Spam",
+        "inappropriate": "Contenido inapropiado",
+        "other": "Otro"
+      }
+    },
+    "notice": {
+      "title": "Aviso de seguridad",
+      "body1": "Hemos detectado datos financieros o una posible solicitud de pago en este mensaje.",
+      "body2": "Capora nunca gestiona pagos. Verifica siempre a la otra parte antes de enviar dinero o compartir datos bancarios.",
+      "verified": "Publicador verificado por Capora.",
+      "unverified": "Este usuario aún no ha verificado su identidad.",
+      "learnMore": "Más información",
+      "dismiss": "Cerrar aviso"
     }
+  },
+  "common": { "more": "Más opciones" }
+}
   }
 }
