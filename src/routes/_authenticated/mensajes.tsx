@@ -11,10 +11,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Inbox, Handshake, MessagesSquare, Check, CheckCheck, ImageOff } from "lucide-react";
+import { Inbox, Handshake, MessagesSquare, Check, CheckCheck, ImageOff, MoreVertical, ShieldCheck } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { EntityAvatar } from "@/components/media/EntityAvatar";
 import { toast } from "sonner";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { ReportDialog } from "@/components/moderation/ReportDialog";
+import { BlockUserDialog } from "@/components/moderation/BlockUserDialog";
+import { SecurityNoticeCard } from "@/components/moderation/SecurityNoticeCard";
+import { detectSecurityPatterns } from "@/lib/security-patterns";
 
 export const Route = createFileRoute("/_authenticated/mensajes")({
   head: () => ({ meta: [{ title: "Messages | Capora" }, { name: "robots", content: "noindex, nofollow" }] }),
@@ -161,13 +166,15 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
       const projectIds = Array.from(new Set(conversations.map((c: any) => c.project_id).filter(Boolean)));
       const convIds = conversations.map((c: any) => c.id);
 
-      const [{ data: companies }, { data: investors }, { data: profiles }, { data: images }, { data: msgs }] = await Promise.all([
-        supabase.from("company_profiles").select("user_id, legal_name, logo_url").in("user_id", otherIds),
+      const [{ data: companies }, { data: investors }, { data: profiles }, { data: images }, { data: msgs }, { data: blocks }] = await Promise.all([
+        supabase.from("company_profiles").select("user_id, legal_name, logo_url, verification_status, trust_level").in("user_id", otherIds),
         supabase.from("investor_profiles").select("user_id, display_name, avatar_url").in("user_id", otherIds),
-        supabase.from("profiles").select("id, full_name, avatar_url").in("id", otherIds),
+        supabase.from("profiles").select("id, full_name, avatar_url, suspended_at").in("id", otherIds),
         supabase.from("project_images").select("project_id, url, sort_order").in("project_id", projectIds.length ? projectIds : ["00000000-0000-0000-0000-000000000000"]).order("sort_order"),
         supabase.from("messages").select("id, conversation_id, body, sender_id, created_at, read_at").in("conversation_id", convIds).order("created_at", { ascending: false }).limit(500),
+        supabase.from("blocked_users").select("blocked_id").eq("blocker_id", userId!),
       ]);
+      const blockedSet = new Set((blocks ?? []).map((b: any) => b.blocked_id));
 
       const cMap: Record<string, any> = {}; (companies ?? []).forEach((c: any) => cMap[c.user_id] = c);
       const iMap: Record<string, any> = {}; (investors ?? []).forEach((i: any) => iMap[i.user_id] = i);
@@ -183,7 +190,9 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
         }
       });
 
-      return conversations.map((c: any) => {
+      return conversations
+        .filter((c: any) => !blockedSet.has(isCompany ? c.investor_id : c.company_id))
+        .map((c: any) => {
         const otherId = isCompany ? c.investor_id : c.company_id;
         const other = isCompany
           ? (iMap[otherId] ?? null)
@@ -195,11 +204,15 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
           ? (other?.avatar_url ?? pMap[otherId]?.avatar_url ?? null)
           : (other?.logo_url ?? null);
         const thumb = c.project_id ? (thumbMap[c.project_id] ?? c.projects?.cover_url ?? null) : null;
+        const otherVerified = !isCompany && cMap[otherId]?.verification_status === "verified";
         return {
           ...c,
+          otherId,
           otherName,
           otherAvatar,
           otherKind: isCompany ? "user" as const : "company" as const,
+          otherVerified,
+          otherSuspended: !!pMap[otherId]?.suspended_at,
           thumb,
           lastMessage: lastMsg[c.id] ?? null,
           unreadCount: unread[c.id] ?? 0,
@@ -262,11 +275,24 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
   const onSend = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!active || !text.trim()) return;
-    await send({ data: { conversation_id: active, body: text.trim() } });
-    setText("");
-    refetch();
-    qc.invalidateQueries({ queryKey: ["conversations_rich"] });
+    try {
+      await send({ data: { conversation_id: active, body: text.trim() } });
+      setText("");
+      refetch();
+      qc.invalidateQueries({ queryKey: ["conversations_rich"] });
+    } catch (err) {
+      const msg = (err as Error).message ?? "";
+      if (/blocked|sender_blocked_by_recipient|recipient_has_blocked/i.test(msg)) {
+        toast.error(t("safety.block.sendBlocked"));
+      } else {
+        toast.error(t("common.error"));
+      }
+    }
   };
+
+  const activeConv = (convs ?? []).find((c: any) => c.id === active);
+  const lastIncoming = [...(messages ?? [])].reverse().find((m: any) => m.sender_id !== userId);
+  const secHits = lastIncoming ? detectSecurityPatterns(lastIncoming.body ?? "") : [];
 
   if (!convs || convs.length === 0) {
     return (
@@ -329,6 +355,45 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
           <div className="flex-1 flex items-center justify-center text-sm text-muted-foreground">{t("messages.selectHint")}</div>
         ) : (
           <>
+            {activeConv && (
+              <div className="border-b px-3 py-2 flex items-center gap-2">
+                <EntityAvatar src={activeConv.otherAvatar} name={activeConv.otherName} kind={activeConv.otherKind} size={28} />
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-1.5">
+                    <p className="text-sm font-medium truncate">{activeConv.otherName}</p>
+                    {activeConv.otherVerified && (
+                      <span title={t("safety.notice.verified")} className="inline-flex items-center text-emerald-600">
+                        <ShieldCheck className="h-3.5 w-3.5" />
+                      </span>
+                    )}
+                  </div>
+                  {activeConv.projects?.title && (
+                    <p className="text-[11px] text-muted-foreground truncate">{activeConv.projects.title}</p>
+                  )}
+                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" aria-label={t("common.more")}>
+                      <MoreVertical className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <ReportDialog
+                      kind="user"
+                      userId={activeConv.otherId}
+                      displayName={activeConv.otherName}
+                      trigger={<DropdownMenuItem onSelect={(e) => e.preventDefault()}>{t("safety.report.userAction")}</DropdownMenuItem>}
+                    />
+                    <BlockUserDialog
+                      userId={activeConv.otherId}
+                      displayName={activeConv.otherName}
+                      onBlocked={() => { setActive(null); qc.invalidateQueries({ queryKey: ["conversations_rich"] }); }}
+                      trigger={<DropdownMenuItem onSelect={(e) => e.preventDefault()}>{t("safety.block.action")}</DropdownMenuItem>}
+                    />
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            )}
             <div ref={listRef} className="flex-1 overflow-y-auto p-4 space-y-4">
               {grouped.map((g) => (
                 <div key={g.label} className="space-y-1.5">
@@ -359,6 +424,16 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
                 </div>
               ))}
             </div>
+            {secHits.length > 0 && activeConv && (
+              <div className="px-3">
+                <SecurityNoticeCard
+                  hits={secHits}
+                  senderId={activeConv.otherId}
+                  senderName={activeConv.otherName}
+                  senderVerified={!!activeConv.otherVerified}
+                />
+              </div>
+            )}
             <form onSubmit={onSend} className="border-t p-3 flex gap-2">
               <Input placeholder={t("messages.writePlaceholder")} value={text} onChange={(e) => setText(e.target.value)} />
               <Button type="submit">{t("common.send")}</Button>

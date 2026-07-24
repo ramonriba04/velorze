@@ -23,6 +23,7 @@ import { Route as ProyectosIdRouteImport } from './routes/proyectos.$id'
 import { Route as AuthRestablecerRouteImport } from './routes/auth.restablecer'
 import { Route as AuthRecuperarRouteImport } from './routes/auth.recuperar'
 import { Route as AuthenticatedVerificacionRouteImport } from './routes/_authenticated/verificacion'
+import { Route as AuthenticatedSeguridadRouteImport } from './routes/_authenticated/seguridad'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedMensajesRouteImport } from './routes/_authenticated/mensajes'
 import { Route as AuthenticatedDescubrirRouteImport } from './routes/_authenticated/descubrir'
@@ -112,6 +113,11 @@ const AuthenticatedVerificacionRoute =
     path: '/verificacion',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedSeguridadRoute = AuthenticatedSeguridadRouteImport.update({
+  id: '/seguridad',
+  path: '/seguridad',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
@@ -231,6 +237,7 @@ export interface FileRoutesByFullPath {
   '/descubrir': typeof AuthenticatedDescubrirRoute
   '/mensajes': typeof AuthenticatedMensajesRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/seguridad': typeof AuthenticatedSeguridadRoute
   '/verificacion': typeof AuthenticatedVerificacionRoute
   '/auth/recuperar': typeof AuthRecuperarRoute
   '/auth/restablecer': typeof AuthRestablecerRoute
@@ -264,6 +271,7 @@ export interface FileRoutesByTo {
   '/descubrir': typeof AuthenticatedDescubrirRoute
   '/mensajes': typeof AuthenticatedMensajesRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/seguridad': typeof AuthenticatedSeguridadRoute
   '/verificacion': typeof AuthenticatedVerificacionRoute
   '/auth/recuperar': typeof AuthRecuperarRoute
   '/auth/restablecer': typeof AuthRestablecerRoute
@@ -299,6 +307,7 @@ export interface FileRoutesById {
   '/_authenticated/descubrir': typeof AuthenticatedDescubrirRoute
   '/_authenticated/mensajes': typeof AuthenticatedMensajesRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
+  '/_authenticated/seguridad': typeof AuthenticatedSeguridadRoute
   '/_authenticated/verificacion': typeof AuthenticatedVerificacionRoute
   '/auth/recuperar': typeof AuthRecuperarRoute
   '/auth/restablecer': typeof AuthRestablecerRoute
@@ -334,6 +343,7 @@ export interface FileRouteTypes {
     | '/descubrir'
     | '/mensajes'
     | '/onboarding'
+    | '/seguridad'
     | '/verificacion'
     | '/auth/recuperar'
     | '/auth/restablecer'
@@ -367,6 +377,7 @@ export interface FileRouteTypes {
     | '/descubrir'
     | '/mensajes'
     | '/onboarding'
+    | '/seguridad'
     | '/verificacion'
     | '/auth/recuperar'
     | '/auth/restablecer'
@@ -401,6 +412,7 @@ export interface FileRouteTypes {
     | '/_authenticated/descubrir'
     | '/_authenticated/mensajes'
     | '/_authenticated/onboarding'
+    | '/_authenticated/seguridad'
     | '/_authenticated/verificacion'
     | '/auth/recuperar'
     | '/auth/restablecer'
@@ -530,6 +542,13 @@ declare module '@tanstack/react-router' {
       path: '/verificacion'
       fullPath: '/verificacion'
       preLoaderRoute: typeof AuthenticatedVerificacionRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/seguridad': {
+      id: '/_authenticated/seguridad'
+      path: '/seguridad'
+      fullPath: '/seguridad'
+      preLoaderRoute: typeof AuthenticatedSeguridadRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/onboarding': {
@@ -669,6 +688,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDescubrirRoute: typeof AuthenticatedDescubrirRoute
   AuthenticatedMensajesRoute: typeof AuthenticatedMensajesRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
+  AuthenticatedSeguridadRoute: typeof AuthenticatedSeguridadRoute
   AuthenticatedVerificacionRoute: typeof AuthenticatedVerificacionRoute
   AuthenticatedEmpresaNuevoRoute: typeof AuthenticatedEmpresaNuevoRoute
   AuthenticatedEmpresaPerfilRoute: typeof AuthenticatedEmpresaPerfilRoute
@@ -691,6 +711,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDescubrirRoute: AuthenticatedDescubrirRoute,
   AuthenticatedMensajesRoute: AuthenticatedMensajesRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
+  AuthenticatedSeguridadRoute: AuthenticatedSeguridadRoute,
   AuthenticatedVerificacionRoute: AuthenticatedVerificacionRoute,
   AuthenticatedEmpresaNuevoRoute: AuthenticatedEmpresaNuevoRoute,
   AuthenticatedEmpresaPerfilRoute: AuthenticatedEmpresaPerfilRoute,
