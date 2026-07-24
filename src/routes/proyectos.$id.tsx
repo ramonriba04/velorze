@@ -93,7 +93,14 @@ function ProjectDetail() {
       <Header />
       <main className="flex-1 mx-auto max-w-3xl w-full px-4 py-10">
         {isLoading && <p>{t("common.loading")}</p>}
-        {data && (
+        {data && unavailable && (
+          <Card className="p-8 text-center space-y-2">
+            <ShieldOff className="mx-auto h-8 w-8 text-muted-foreground" />
+            <p className="font-semibold">{t("safety.projectUnavailable")}</p>
+            <p className="text-sm text-muted-foreground">{t("safety.projectUnavailableSub")}</p>
+          </Card>
+        )}
+        {data && !unavailable && (
           <Card className="p-0 overflow-hidden">
             {galleryItems.length > 0 && (
               <div className="bg-muted">
