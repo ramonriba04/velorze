@@ -533,6 +533,22 @@
       "verified": "Verified",
       "rejected": "Rejected",
       "all": "All"
+    },
+    "moderation": "Moderation",
+    "mod": {
+      "kind": { "users": "Users", "projects": "Projects" },
+      "status": { "pending": "Pending", "reviewed": "Reviewed", "resolved": "Resolved", "dismissed": "Dismissed", "all": "All" },
+      "empty": "No reports in this list.",
+      "reportedBy": "Reported by",
+      "notes": "Notes",
+      "markReviewed": "Mark reviewed",
+      "suspendUser": "Suspend account",
+      "restoreUser": "Restore account",
+      "hideProject": "Hide project",
+      "restoreProject": "Restore project",
+      "dismiss": "Dismiss",
+      "suspended": "Suspended",
+      "hidden": "Hidden"
     }
   },
   "trust": {
@@ -816,6 +832,68 @@
       "pendiente": "Pending",
       "conectado": "Connected",
       "descartado": "Discarded"
+    }
+  },
+  "safety": {
+    "title": "Safety & privacy",
+    "sub": "Manage your blocks and control your Capora experience.",
+    "manage": "Manage",
+    "settingsHint": "View and remove blocked users.",
+    "blockedUsers": "Blocked users",
+    "blockedUsersHint": "Blocked users cannot send you messages or contact requests.",
+    "emptyTitle": "You haven't blocked anyone",
+    "emptySub": "Users you block will appear here.",
+    "projectUnavailable": "This project is no longer available",
+    "projectUnavailableSub": "The content was removed or the publisher is suspended.",
+    "block": {
+      "action": "Block",
+      "title": "Block this user?",
+      "desc": "They won't be able to message you or send contact requests. The conversation will be hidden.",
+      "confirm": "Block",
+      "done": "User blocked",
+      "unblock": "Unblock",
+      "unblocked": "User unblocked",
+      "unblockTitle": "Unblock this user?",
+      "unblockDesc": "{{name}} will be able to contact you again.",
+      "sendBlocked": "You can't send messages in this conversation."
+    },
+    "report": {
+      "userAction": "Report user",
+      "projectAction": "Report project",
+      "userTitle": "Report user",
+      "projectTitle": "Report project",
+      "pickReason": "Select the reason for the report.",
+      "detailsLabel": "Details",
+      "detailsPh": "Briefly explain what happened (required for 'Other').",
+      "detailsRequired": "Add details when the reason is 'Other'.",
+      "submit": "Submit report",
+      "doneTitle": "Report submitted",
+      "doneBody": "Our team will review it shortly.",
+      "userReasons": {
+        "fraud": "Fraud or scam",
+        "payment_request": "Requests upfront payments",
+        "impersonation": "Impersonation",
+        "spam": "Spam or advertising",
+        "inappropriate": "Inappropriate content",
+        "false_info": "False information",
+        "other": "Other"
+      },
+      "projectReasons": {
+        "false_info": "False information",
+        "misleading": "Misleading",
+        "spam": "Spam",
+        "inappropriate": "Inappropriate content",
+        "other": "Other"
+      }
+    },
+    "notice": {
+      "title": "Safety notice",
+      "body1": "We detected financial details or a possible payment request in this message.",
+      "body2": "Capora never handles payments. Always verify the other party before sending money or sharing banking details.",
+      "verified": "Publisher verified by Capora.",
+      "unverified": "This user has not verified their identity yet.",
+      "learnMore": "Learn more",
+      "dismiss": "Dismiss notice"
     }
   }
 }

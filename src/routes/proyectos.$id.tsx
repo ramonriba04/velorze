@@ -14,8 +14,9 @@ import { createContactRequest } from "@/lib/contact.functions";
 import { toast } from "sonner";
 import { ShareButton } from "@/components/ShareButton";
 import { EntityTypeBadge } from "@/components/EntityTypeBadge";
-import { ShieldCheck, ChevronLeft, ChevronRight } from "lucide-react";
+import { ShieldCheck, ChevronLeft, ChevronRight, ShieldOff } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { ReportDialog } from "@/components/moderation/ReportDialog";
 
 
 export const Route = createFileRoute("/proyectos/$id")({
@@ -50,15 +51,22 @@ function ProjectDetail() {
         .select("legal_name, country, logo_url, description, website, entity_type, verification_status, trust_level")
         .eq("user_id", project.company_id)
         .maybeSingle();
+      const { data: ownerProfile } = await supabase
+        .from("profiles")
+        .select("suspended_at")
+        .eq("id", project.company_id)
+        .maybeSingle();
 
       const { data: imgs } = await supabase
         .from("project_images")
         .select("url")
         .eq("project_id", id)
         .order("sort_order");
-      return { ...project, company, images: imgs ?? [] } as any;
+      return { ...project, company, ownerSuspended: !!ownerProfile?.suspended_at, images: imgs ?? [] } as any;
     },
   });
+
+  const unavailable = !!data && (data.hidden_by_moderation || data.ownerSuspended);
 
   const images: { url: string }[] = data?.images ?? [];
   const cover = images[0]?.url ?? data?.cover_url ?? null;
@@ -85,7 +93,14 @@ function ProjectDetail() {
       <Header />
       <main className="flex-1 mx-auto max-w-3xl w-full px-4 py-10">
         {isLoading && <p>{t("common.loading")}</p>}
-        {data && (
+        {data && unavailable && (
+          <Card className="p-8 text-center space-y-2">
+            <ShieldOff className="mx-auto h-8 w-8 text-muted-foreground" />
+            <p className="font-semibold">{t("safety.projectUnavailable")}</p>
+            <p className="text-sm text-muted-foreground">{t("safety.projectUnavailableSub")}</p>
+          </Card>
+        )}
+        {data && !unavailable && (
           <Card className="p-0 overflow-hidden">
             {galleryItems.length > 0 && (
               <div className="bg-muted">
@@ -195,6 +210,9 @@ function ProjectDetail() {
                 )}
                 {!user && <Link to="/auth"><Button>{t("nav.login")}</Button></Link>}
                 <ShareButton title={data.title} text={data.description?.slice(0, 140)} />
+                {user && user.id !== data.company_id && (
+                  <ReportDialog kind="project" projectId={id} />
+                )}
               </div>
               
             </div>

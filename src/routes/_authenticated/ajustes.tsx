@@ -211,6 +211,14 @@ function Settings() {
       </Card>
 
       <Card className="space-y-3 p-6">
+        <h2 className="text-lg font-semibold">{t("safety.title")}</h2>
+        <p className="text-sm text-muted-foreground">{t("safety.settingsHint")}</p>
+        <Link to="/seguridad">
+          <Button variant="outline" size="sm">{t("safety.manage")}</Button>
+        </Link>
+      </Card>
+
+      <Card className="space-y-3 p-6">
         <h2 className="text-lg font-semibold">{t("footer.legal")}</h2>
         <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
           <Link to="/privacidad" className="text-primary hover:underline">{t("footer.privacy")}</Link>

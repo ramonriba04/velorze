@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      blocked_users: {
+        Row: {
+          blocked_id: string
+          blocker_id: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          blocked_id: string
+          blocker_id: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          blocked_id?: string
+          blocker_id?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: []
+      }
       company_profiles: {
         Row: {
           company_type: string | null
@@ -395,6 +416,36 @@ export type Database = {
           },
         ]
       }
+      moderation_audit: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          target_id: string
+          target_type: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          target_id: string
+          target_type: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          target_id?: string
+          target_type?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           created_at: string
@@ -430,6 +481,7 @@ export type Database = {
           id: string
           locale: string
           onboarding_completed_at: string | null
+          suspended_at: string | null
           updated_at: string
         }
         Insert: {
@@ -439,6 +491,7 @@ export type Database = {
           id: string
           locale?: string
           onboarding_completed_at?: string | null
+          suspended_at?: string | null
           updated_at?: string
         }
         Update: {
@@ -448,6 +501,7 @@ export type Database = {
           id?: string
           locale?: string
           onboarding_completed_at?: string | null
+          suspended_at?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -487,6 +541,56 @@ export type Database = {
           },
         ]
       }
+      project_reports: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          details: string | null
+          id: string
+          project_id: string
+          reason: string
+          reporter_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          details?: string | null
+          id?: string
+          project_id: string
+          reason: string
+          reporter_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          details?: string | null
+          id?: string
+          project_id?: string
+          reason?: string
+          reporter_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_reports_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       projects: {
         Row: {
           capital_required: number
@@ -495,6 +599,7 @@ export type Database = {
           cover_url: string | null
           created_at: string
           description: string
+          hidden_by_moderation: boolean
           id: string
           investment_type: Database["public"]["Enums"]["investment_type"]
           sector: string
@@ -512,6 +617,7 @@ export type Database = {
           cover_url?: string | null
           created_at?: string
           description: string
+          hidden_by_moderation?: boolean
           id?: string
           investment_type: Database["public"]["Enums"]["investment_type"]
           sector: string
@@ -529,6 +635,7 @@ export type Database = {
           cover_url?: string | null
           created_at?: string
           description?: string
+          hidden_by_moderation?: boolean
           id?: string
           investment_type?: Database["public"]["Enums"]["investment_type"]
           sector?: string
@@ -656,6 +763,48 @@ export type Database = {
             referencedColumns: ["code"]
           },
         ]
+      }
+      user_reports: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          details: string | null
+          id: string
+          reason: string
+          reported_user_id: string
+          reporter_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          details?: string | null
+          id?: string
+          reason: string
+          reported_user_id: string
+          reporter_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          details?: string | null
+          id?: string
+          reason?: string
+          reported_user_id?: string
+          reporter_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {
@@ -823,6 +972,7 @@ export type Database = {
         Args: { _user_id: string }
         Returns: number
       }
+      is_blocked: { Args: { _a: string; _b: string }; Returns: boolean }
       is_corporate_email: { Args: { _email: string }; Returns: boolean }
       my_verification_status: { Args: never; Returns: string }
       refresh_company_trust_level: {
