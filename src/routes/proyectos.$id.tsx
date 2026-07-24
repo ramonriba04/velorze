@@ -210,6 +210,9 @@ function ProjectDetail() {
                 )}
                 {!user && <Link to="/auth"><Button>{t("nav.login")}</Button></Link>}
                 <ShareButton title={data.title} text={data.description?.slice(0, 140)} />
+                {user && user.id !== data.company_id && (
+                  <ReportDialog kind="project" projectId={id} />
+                )}
               </div>
               
             </div>
