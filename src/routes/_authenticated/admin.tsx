@@ -48,6 +48,10 @@ function AdminPanel() {
             <ShieldCheck className="mr-1.5 h-4 w-4" />
             {t("admin.verifications")}
           </TabsTrigger>
+          <TabsTrigger value="moderation">
+            <Flag className="mr-1.5 h-4 w-4" />
+            {t("admin.moderation")}
+          </TabsTrigger>
           <TabsTrigger value="users">{t("admin.users")}</TabsTrigger>
           <TabsTrigger value="projects">{t("admin.projects")}</TabsTrigger>
         </TabsList>
@@ -55,6 +59,11 @@ function AdminPanel() {
         <TabsContent value="verifications" className="mt-4">
           <VerificationQueue />
         </TabsContent>
+
+        <TabsContent value="moderation" className="mt-4">
+          <ModerationQueue />
+        </TabsContent>
+
 
         <TabsContent value="users" className="mt-4 space-y-2">
           {users?.map((u: any) => (
