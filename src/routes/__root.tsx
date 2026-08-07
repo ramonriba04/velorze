@@ -131,10 +131,27 @@ function RootComponent() {
   const router = useRouter();
 
   useEffect(() => {
-    // Switch i18n language after hydration to avoid SSR text mismatches.
+    // Switch i18n language only once the full tree (including lazily hydrated
+    // route chunks) has settled, otherwise React reports a hydration mismatch.
     const lng = detectClientLanguage();
-    if (lng !== i18n.language) i18n.changeLanguage(lng);
+    if (lng === i18n.language) return;
+    let cancelled = false;
+    const apply = () => {
+      if (!cancelled) i18n.changeLanguage(lng);
+    };
+    const schedule = () =>
+      requestAnimationFrame(() => requestAnimationFrame(apply));
+    if (document.readyState === "complete") {
+      schedule();
+      return () => { cancelled = true; };
+    }
+    window.addEventListener("load", schedule, { once: true });
+    return () => {
+      cancelled = true;
+      window.removeEventListener("load", schedule);
+    };
   }, []);
+
 
   useEffect(() => {
     const { data: sub } = supabase.auth.onAuthStateChange((event) => {
