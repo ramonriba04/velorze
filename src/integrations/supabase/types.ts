@@ -46,6 +46,7 @@ export type Database = {
           legal_name: string
           linkedin: string | null
           logo_url: string | null
+          slug: string | null
           tax_id: string | null
           trust_level: string
           updated_at: string
@@ -63,6 +64,7 @@ export type Database = {
           legal_name: string
           linkedin?: string | null
           logo_url?: string | null
+          slug?: string | null
           tax_id?: string | null
           trust_level?: string
           updated_at?: string
@@ -80,6 +82,7 @@ export type Database = {
           legal_name?: string
           linkedin?: string | null
           logo_url?: string | null
+          slug?: string | null
           tax_id?: string | null
           trust_level?: string
           updated_at?: string
@@ -639,6 +642,35 @@ export type Database = {
           },
         ]
       }
+      project_views: {
+        Row: {
+          created_at: string
+          id: string
+          project_id: string
+          viewer_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          project_id: string
+          viewer_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          project_id?: string
+          viewer_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_views_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       projects: {
         Row: {
           capital_required: number
@@ -651,6 +683,7 @@ export type Database = {
           id: string
           investment_type: Database["public"]["Enums"]["investment_type"]
           sector: string
+          slug: string | null
           stage: Database["public"]["Enums"]["business_stage"]
           status: Database["public"]["Enums"]["project_status"]
           ticket_max: number | null
@@ -669,6 +702,7 @@ export type Database = {
           id?: string
           investment_type: Database["public"]["Enums"]["investment_type"]
           sector: string
+          slug?: string | null
           stage: Database["public"]["Enums"]["business_stage"]
           status?: Database["public"]["Enums"]["project_status"]
           ticket_max?: number | null
@@ -687,6 +721,7 @@ export type Database = {
           id?: string
           investment_type?: Database["public"]["Enums"]["investment_type"]
           sector?: string
+          slug?: string | null
           stage?: Database["public"]["Enums"]["business_stage"]
           status?: Database["public"]["Enums"]["project_status"]
           ticket_max?: number | null
@@ -1024,8 +1059,25 @@ export type Database = {
       is_blocked: { Args: { _a: string; _b: string }; Returns: boolean }
       is_corporate_email: { Args: { _email: string }; Returns: boolean }
       my_verification_status: { Args: never; Returns: string }
+      project_stats: {
+        Args: { _project_id: string }
+        Returns: {
+          accepted: number
+          avg_score: number
+          favorites: number
+          last_activity: string
+          requests: number
+          views: number
+        }[]
+      }
       refresh_company_trust_level: {
         Args: { _user_id: string }
+        Returns: string
+      }
+      slugify: { Args: { _input: string }; Returns: string }
+      unaccent_placeholder: { Args: { _input: string }; Returns: string }
+      unique_slug: {
+        Args: { _base: string; _exclude_id: string; _table: string }
         Returns: string
       }
     }

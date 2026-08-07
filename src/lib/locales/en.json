@@ -258,6 +258,11 @@
       "today": "Today",
       "yesterday": "Yesterday",
       "earlier": "Earlier"
+    },
+    "group": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "earlier": "Earlier"
     }
   },
   "onboarding": {
@@ -527,7 +532,11 @@
   },
   "favorites": {
     "title": "Favorites",
-    "empty": "You haven't saved any projects yet."
+    "empty": "You haven't saved any projects yet.",
+    "add": "Save to favorites",
+    "remove": "Remove from favorites",
+    "save": "Save",
+    "saved": "Saved"
   },
   "admin": {
     "title": "Admin panel",
@@ -957,5 +966,33 @@
     "home": "Go home",
     "explore": "Explore projects",
     "help": "Help center"
+  },
+  "activity": {
+    "title": "Activity",
+    "subtitle": "History of what has happened in your account.",
+    "empty": "No activity yet",
+    "emptySub": "When you publish, save or receive interest, it will show up here.",
+    "kind": {
+      "project_created": "You published an opportunity",
+      "project_updated": "You updated an opportunity",
+      "verification_approved": "Your account was verified",
+      "contact_request_received": "You received a contact request",
+      "contact_request_sent": "You sent a contact request",
+      "new_match": "New connection",
+      "new_message": "New message",
+      "favorite_added": "You saved a project",
+      "profile_updated": "You updated your profile"
+    }
+  },
+  "analytics": {
+    "title": "Your project analytics",
+    "avgMatch": "Average match",
+    "lastActivity": "Last activity",
+    "lockedHint": "Views and average match are available on higher plans."
+  },
+  "publisher": {
+    "projects": "Published opportunities",
+    "noProjects": "No public opportunities",
+    "noProjectsSub": "This publisher has no published projects yet."
   }
 }

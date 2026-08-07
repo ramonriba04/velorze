@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Globe, LogOut, Settings, User as UserIcon, ChevronDown } from "lucide-react";
+import { Globe, LogOut, Settings, User as UserIcon, ChevronDown, Activity } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useMyRole } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -80,9 +80,15 @@ function HeaderProfile({ onLogout }: { onLogout: () => void }) {
         <DropdownMenuItem onSelect={() => navigate({ to: profileTo })}>
           <UserIcon className="mr-2 h-4 w-4" /> {t("nav.profile")}
         </DropdownMenuItem>
+        {role !== "admin" && (
+          <DropdownMenuItem onSelect={() => navigate({ to: "/actividad" })}>
+            <Activity className="mr-2 h-4 w-4" /> {t("activity.title")}
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem onSelect={() => navigate({ to: "/ajustes" })}>
           <Settings className="mr-2 h-4 w-4" /> {t("nav.settings")}
         </DropdownMenuItem>
+
         <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={onLogout} className="text-destructive focus:text-destructive">
           <LogOut className="mr-2 h-4 w-4" /> {t("nav.logout")}

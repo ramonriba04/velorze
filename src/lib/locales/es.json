@@ -258,6 +258,11 @@
       "today": "Hoy",
       "yesterday": "Ayer",
       "earlier": "Anteriores"
+    },
+    "group": {
+      "today": "Hoy",
+      "yesterday": "Ayer",
+      "earlier": "Anterior"
     }
   },
   "onboarding": {
@@ -527,7 +532,11 @@
   },
   "favorites": {
     "title": "Favoritos",
-    "empty": "Aún no has guardado proyectos."
+    "empty": "Aún no has guardado proyectos.",
+    "add": "Guardar en favoritos",
+    "remove": "Quitar de favoritos",
+    "save": "Guardar",
+    "saved": "Guardado"
   },
   "admin": {
     "title": "Panel de administración",
@@ -957,5 +966,33 @@
     "home": "Ir al inicio",
     "explore": "Explorar proyectos",
     "help": "Centro de ayuda"
+  },
+  "activity": {
+    "title": "Actividad",
+    "subtitle": "Historial de lo que ha pasado en tu cuenta.",
+    "empty": "Todavía no hay actividad",
+    "emptySub": "Cuando publiques, guardes o recibas interés, lo verás aquí.",
+    "kind": {
+      "project_created": "Publicaste una oportunidad",
+      "project_updated": "Actualizaste una oportunidad",
+      "verification_approved": "Tu cuenta fue verificada",
+      "contact_request_received": "Recibiste una solicitud de contacto",
+      "contact_request_sent": "Enviaste una solicitud de contacto",
+      "new_match": "Nueva conexión",
+      "new_message": "Nuevo mensaje",
+      "favorite_added": "Guardaste un proyecto",
+      "profile_updated": "Actualizaste tu perfil"
+    }
+  },
+  "analytics": {
+    "title": "Analíticas de tus proyectos",
+    "avgMatch": "Compatibilidad media",
+    "lastActivity": "Última actividad",
+    "lockedHint": "Las vistas y la compatibilidad media están disponibles en planes superiores."
+  },
+  "publisher": {
+    "projects": "Oportunidades publicadas",
+    "noProjects": "Sin oportunidades públicas",
+    "noProjectsSub": "Este publicador todavía no tiene proyectos publicados."
   }
 }

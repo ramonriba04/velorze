@@ -4,7 +4,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { getRecommendedProjects } from "@/lib/matching.functions";
-import { toggleFavorite, createContactRequest } from "@/lib/contact.functions";
+import { createContactRequest } from "@/lib/contact.functions";
+import { useFavorites } from "@/hooks/useFavorite";
 import { supabase } from "@/integrations/supabase/client";
 import { useMyRole } from "@/hooks/useAuth";
 import { Card } from "@/components/ui/card";
@@ -36,7 +37,7 @@ function InvestorDashboard() {
   const { t } = useTranslation();
   const { user } = useMyRole();
   const fetcher = useServerFn(getRecommendedProjects);
-  const favFn = useServerFn(toggleFavorite);
+  
   const reqFn = useServerFn(createContactRequest);
   const qc = useQueryClient();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
@@ -46,17 +47,8 @@ function InvestorDashboard() {
     queryFn: () => fetcher(),
   });
 
-  const { data: favoriteIds } = useQuery({
-    queryKey: ["favorites_ids", user?.id],
-    enabled: !!user,
-    queryFn: async () => {
-      const { data } = await supabase
-        .from("favorites")
-        .select("project_id")
-        .eq("investor_id", user!.id);
-      return new Set((data ?? []).map((f: any) => f.project_id));
-    },
-  });
+  const favorites = useFavorites();
+
 
   const { data: profile } = useQuery({
     queryKey: ["investor_profile_summary", user?.id],
@@ -94,15 +86,6 @@ function InvestorDashboard() {
     },
   });
 
-  const favMut = useMutation({
-    mutationFn: (project_id: string) => favFn({ data: { project_id } }),
-    onSuccess: (r) => {
-      toast.success(r.favorited ? t("project.addedFavorite") : t("project.removedFavorite"));
-      qc.invalidateQueries({ queryKey: ["investor_counts"] });
-      qc.invalidateQueries({ queryKey: ["favorites_ids", user?.id] });
-      qc.invalidateQueries({ queryKey: ["favorites", user?.id] });
-    },
-  });
   const reqMut = useMutation({
     mutationFn: (project_id: string) => reqFn({ data: { project_id } }),
     onSuccess: () => toast.success(t("project.requestSent")),
@@ -279,11 +262,12 @@ function InvestorDashboard() {
                     size="icon"
                     variant="ghost"
                     className="min-h-11 min-w-11"
-                    aria-label={favoriteIds?.has(project.id) ? t("project.removedFavorite") : t("project.addedFavorite")}
-                    aria-pressed={favoriteIds?.has(project.id) ? true : false}
-                    onClick={() => favMut.mutate(project.id)}
+                    aria-label={favorites.isFavorite(project.id) ? t("favorites.remove") : t("favorites.add")}
+                    aria-pressed={favorites.isFavorite(project.id)}
+                    onClick={() => favorites.toggle(project.id)}
                   >
-                    <Heart aria-hidden className={`h-4 w-4 ${favoriteIds?.has(project.id) ? "fill-current text-primary" : ""}`} />
+                    <Heart aria-hidden className={`h-4 w-4 ${favorites.isFavorite(project.id) ? "fill-current text-primary" : ""}`} />
+
                   </Button>
                   <Button
                     size="icon"

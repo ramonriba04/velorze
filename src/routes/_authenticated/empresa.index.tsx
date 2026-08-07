@@ -7,13 +7,16 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { EntityAvatar } from "@/components/media/EntityAvatar";
-import { Plus, MessageCircle, Briefcase, Rocket, BarChart3, Eye, Heart, Send, Lock } from "lucide-react";
+import { Plus, MessageCircle, Briefcase, Rocket, BarChart3 } from "lucide-react";
 import { useMyPlan, useCompanyUsage } from "@/hooks/usePlan";
 import { PlanBadge } from "@/components/PlanBadge";
 import { UpgradeDialog } from "@/components/UpgradeDialog";
 import { ProfileCompletenessCard, TrustBadge } from "@/components/ProfileCompletenessCard";
 import { companyCompleteness } from "@/lib/completeness";
 import { ProjectGridSkeleton } from "@/components/ui/skeletons";
+import { ProjectAnalytics, ProjectStatsInline } from "@/components/analytics/ProjectAnalytics";
+import { ShareButton } from "@/components/ShareButton";
+import { absoluteUrl, projectPath } from "@/lib/urls";
 
 
 export const Route = createFileRoute("/_authenticated/empresa/")({
@@ -125,35 +128,26 @@ function CompanyDashboard() {
       </div>
 
       {/* Analytics */}
-      <div className="mt-10 flex items-center justify-between">
+      <div className="mt-10 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <BarChart3 className="h-5 w-5 text-primary" />
-          <h2 className="text-xl font-semibold">{t("plans.analytics")}</h2>
-          {!features.advanced_analytics && <PlanBadge code="free" />}
+          <h2 className="text-xl font-semibold">{t("analytics.title")}</h2>
         </div>
-        {!features.advanced_analytics && <UpgradeDialog />}
+        <Link to="/actividad" className="text-sm text-primary hover:underline">
+          {t("activity.title")}
+        </Link>
       </div>
-      <div className="mt-4 grid gap-3 grid-cols-2 lg:grid-cols-4">
+      <ProjectAnalytics projectIds={(projects ?? []).map((p: any) => p.id)} />
+      <div className="mt-3 grid grid-cols-2 gap-3 lg:grid-cols-2">
         <Card className="p-4">
-          <div className="flex items-center gap-2 text-muted-foreground text-xs"><Send className="h-4 w-4" />{t("plans.metric.requests")}</div>
-          <p className="mt-1 text-2xl font-semibold">{usage?.requests ?? 0}</p>
-        </Card>
-        <Card className="p-4">
-          <div className="flex items-center gap-2 text-muted-foreground text-xs"><Heart className="h-4 w-4" />{t("plans.metric.favorites")}</div>
-          <p className="mt-1 text-2xl font-semibold">{usage?.favorites ?? 0}</p>
-        </Card>
-        <Card className={`p-4 relative ${features.advanced_analytics ? "" : "opacity-70"}`}>
-          <div className="flex items-center gap-2 text-muted-foreground text-xs">
-            {features.advanced_analytics ? <Eye className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
-            {t("plans.metric.views")}
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <BarChart3 className="h-4 w-4" />
+            {t("plans.metric.conversion")}
           </div>
-          <p className="mt-1 text-2xl font-semibold">{features.advanced_analytics ? "—" : t("plans.locked")}</p>
-        </Card>
-        <Card className="p-4">
-          <div className="flex items-center gap-2 text-muted-foreground text-xs"><BarChart3 className="h-4 w-4" />{t("plans.metric.conversion")}</div>
           <p className="mt-1 text-2xl font-semibold">{usage?.conversion ?? 0}%</p>
         </Card>
       </div>
+
 
 
       <div className="mt-10 flex items-center justify-between">
@@ -189,11 +183,22 @@ function CompanyDashboard() {
               <h3 className="font-semibold text-lg">{p.title}</h3>
               <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{p.description}</p>
               <p className="text-xs text-muted-foreground mt-2">{p.sector} · {p.country} · {p.status}</p>
+              <div className="mt-3">
+                <ProjectStatsInline projectId={p.id} />
+              </div>
               <div className="mt-3 flex gap-2 flex-wrap">
                 <Link to="/proyectos/$id" params={{ id: p.id }}><Button size="sm" variant="outline">{t("common.view")}</Button></Link>
                 <Link to="/empresa/$id/editar" params={{ id: p.id }}><Button size="sm" variant="outline">{t("common.edit")}</Button></Link>
                 <Link to="/empresa/$id/inversores" params={{ id: p.id }}><Button size="sm">{t("nav.investors")}</Button></Link>
+                {p.status === "published" && (
+                  <ShareButton
+                    title={p.title}
+                    text={p.description}
+                    url={absoluteUrl(projectPath(p))}
+                  />
+                )}
               </div>
+
             </div>
           </Card>
         ))}

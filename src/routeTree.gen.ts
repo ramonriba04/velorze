@@ -19,7 +19,9 @@ import { Route as AyudaRouteImport } from './routes/ayuda'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PublisherSlugRouteImport } from './routes/publisher.$slug'
 import { Route as ProyectosIdRouteImport } from './routes/proyectos.$id'
+import { Route as ProjectSlugRouteImport } from './routes/project.$slug'
 import { Route as AuthRestablecerRouteImport } from './routes/auth.restablecer'
 import { Route as AuthRecuperarRouteImport } from './routes/auth.recuperar'
 import { Route as AuthenticatedVerificacionRouteImport } from './routes/_authenticated/verificacion'
@@ -32,6 +34,7 @@ import { Route as AuthenticatedConexionesRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as AuthenticatedAjustesRouteImport } from './routes/_authenticated/ajustes'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedActividadRouteImport } from './routes/_authenticated/actividad'
 import { Route as AuthenticatedProyectosIndexRouteImport } from './routes/_authenticated/proyectos.index'
 import { Route as AuthenticatedInversorIndexRouteImport } from './routes/_authenticated/inversor.index'
 import { Route as AuthenticatedEmpresaIndexRouteImport } from './routes/_authenticated/empresa.index'
@@ -93,9 +96,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PublisherSlugRoute = PublisherSlugRouteImport.update({
+  id: '/publisher/$slug',
+  path: '/publisher/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProyectosIdRoute = ProyectosIdRouteImport.update({
   id: '/proyectos/$id',
   path: '/proyectos/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectSlugRoute = ProjectSlugRouteImport.update({
+  id: '/project/$slug',
+  path: '/project/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRestablecerRoute = AuthRestablecerRouteImport.update({
@@ -158,6 +171,11 @@ const AuthenticatedAjustesRoute = AuthenticatedAjustesRouteImport.update({
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedActividadRoute = AuthenticatedActividadRouteImport.update({
+  id: '/actividad',
+  path: '/actividad',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedProyectosIndexRoute =
@@ -237,6 +255,7 @@ export interface FileRoutesByFullPath {
   '/planes': typeof PlanesRoute
   '/privacidad': typeof PrivacidadRoute
   '/terminos': typeof TerminosRoute
+  '/actividad': typeof AuthenticatedActividadRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/ajustes': typeof AuthenticatedAjustesRoute
   '/app': typeof AuthenticatedAppRoute
@@ -249,7 +268,9 @@ export interface FileRoutesByFullPath {
   '/verificacion': typeof AuthenticatedVerificacionRoute
   '/auth/recuperar': typeof AuthRecuperarRoute
   '/auth/restablecer': typeof AuthRestablecerRoute
+  '/project/$slug': typeof ProjectSlugRoute
   '/proyectos/$id': typeof ProyectosIdRoute
+  '/publisher/$slug': typeof PublisherSlugRoute
   '/empresa/nuevo': typeof AuthenticatedEmpresaNuevoRoute
   '/empresa/perfil': typeof AuthenticatedEmpresaPerfilRoute
   '/empresa/solicitudes': typeof AuthenticatedEmpresaSolicitudesRoute
@@ -272,6 +293,7 @@ export interface FileRoutesByTo {
   '/planes': typeof PlanesRoute
   '/privacidad': typeof PrivacidadRoute
   '/terminos': typeof TerminosRoute
+  '/actividad': typeof AuthenticatedActividadRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/ajustes': typeof AuthenticatedAjustesRoute
   '/app': typeof AuthenticatedAppRoute
@@ -284,7 +306,9 @@ export interface FileRoutesByTo {
   '/verificacion': typeof AuthenticatedVerificacionRoute
   '/auth/recuperar': typeof AuthRecuperarRoute
   '/auth/restablecer': typeof AuthRestablecerRoute
+  '/project/$slug': typeof ProjectSlugRoute
   '/proyectos/$id': typeof ProyectosIdRoute
+  '/publisher/$slug': typeof PublisherSlugRoute
   '/empresa/nuevo': typeof AuthenticatedEmpresaNuevoRoute
   '/empresa/perfil': typeof AuthenticatedEmpresaPerfilRoute
   '/empresa/solicitudes': typeof AuthenticatedEmpresaSolicitudesRoute
@@ -309,6 +333,7 @@ export interface FileRoutesById {
   '/planes': typeof PlanesRoute
   '/privacidad': typeof PrivacidadRoute
   '/terminos': typeof TerminosRoute
+  '/_authenticated/actividad': typeof AuthenticatedActividadRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/ajustes': typeof AuthenticatedAjustesRoute
   '/_authenticated/app': typeof AuthenticatedAppRoute
@@ -321,7 +346,9 @@ export interface FileRoutesById {
   '/_authenticated/verificacion': typeof AuthenticatedVerificacionRoute
   '/auth/recuperar': typeof AuthRecuperarRoute
   '/auth/restablecer': typeof AuthRestablecerRoute
+  '/project/$slug': typeof ProjectSlugRoute
   '/proyectos/$id': typeof ProyectosIdRoute
+  '/publisher/$slug': typeof PublisherSlugRoute
   '/_authenticated/empresa/nuevo': typeof AuthenticatedEmpresaNuevoRoute
   '/_authenticated/empresa/perfil': typeof AuthenticatedEmpresaPerfilRoute
   '/_authenticated/empresa/solicitudes': typeof AuthenticatedEmpresaSolicitudesRoute
@@ -346,6 +373,7 @@ export interface FileRouteTypes {
     | '/planes'
     | '/privacidad'
     | '/terminos'
+    | '/actividad'
     | '/admin'
     | '/ajustes'
     | '/app'
@@ -358,7 +386,9 @@ export interface FileRouteTypes {
     | '/verificacion'
     | '/auth/recuperar'
     | '/auth/restablecer'
+    | '/project/$slug'
     | '/proyectos/$id'
+    | '/publisher/$slug'
     | '/empresa/nuevo'
     | '/empresa/perfil'
     | '/empresa/solicitudes'
@@ -381,6 +411,7 @@ export interface FileRouteTypes {
     | '/planes'
     | '/privacidad'
     | '/terminos'
+    | '/actividad'
     | '/admin'
     | '/ajustes'
     | '/app'
@@ -393,7 +424,9 @@ export interface FileRouteTypes {
     | '/verificacion'
     | '/auth/recuperar'
     | '/auth/restablecer'
+    | '/project/$slug'
     | '/proyectos/$id'
+    | '/publisher/$slug'
     | '/empresa/nuevo'
     | '/empresa/perfil'
     | '/empresa/solicitudes'
@@ -417,6 +450,7 @@ export interface FileRouteTypes {
     | '/planes'
     | '/privacidad'
     | '/terminos'
+    | '/_authenticated/actividad'
     | '/_authenticated/admin'
     | '/_authenticated/ajustes'
     | '/_authenticated/app'
@@ -429,7 +463,9 @@ export interface FileRouteTypes {
     | '/_authenticated/verificacion'
     | '/auth/recuperar'
     | '/auth/restablecer'
+    | '/project/$slug'
     | '/proyectos/$id'
+    | '/publisher/$slug'
     | '/_authenticated/empresa/nuevo'
     | '/_authenticated/empresa/perfil'
     | '/_authenticated/empresa/solicitudes'
@@ -454,7 +490,9 @@ export interface RootRouteChildren {
   PlanesRoute: typeof PlanesRoute
   PrivacidadRoute: typeof PrivacidadRoute
   TerminosRoute: typeof TerminosRoute
+  ProjectSlugRoute: typeof ProjectSlugRoute
   ProyectosIdRoute: typeof ProyectosIdRoute
+  PublisherSlugRoute: typeof PublisherSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -529,11 +567,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/publisher/$slug': {
+      id: '/publisher/$slug'
+      path: '/publisher/$slug'
+      fullPath: '/publisher/$slug'
+      preLoaderRoute: typeof PublisherSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/proyectos/$id': {
       id: '/proyectos/$id'
       path: '/proyectos/$id'
       fullPath: '/proyectos/$id'
       preLoaderRoute: typeof ProyectosIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/project/$slug': {
+      id: '/project/$slug'
+      path: '/project/$slug'
+      fullPath: '/project/$slug'
+      preLoaderRoute: typeof ProjectSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/restablecer': {
@@ -620,6 +672,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/actividad': {
+      id: '/_authenticated/actividad'
+      path: '/actividad'
+      fullPath: '/actividad'
+      preLoaderRoute: typeof AuthenticatedActividadRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/proyectos/': {
       id: '/_authenticated/proyectos/'
       path: '/proyectos'
@@ -701,6 +760,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedActividadRoute: typeof AuthenticatedActividadRoute
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedAjustesRoute: typeof AuthenticatedAjustesRoute
   AuthenticatedAppRoute: typeof AuthenticatedAppRoute
@@ -725,6 +785,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedActividadRoute: AuthenticatedActividadRoute,
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedAjustesRoute: AuthenticatedAjustesRoute,
   AuthenticatedAppRoute: AuthenticatedAppRoute,
@@ -774,18 +835,10 @@ const rootRouteChildren: RootRouteChildren = {
   PlanesRoute: PlanesRoute,
   PrivacidadRoute: PrivacidadRoute,
   TerminosRoute: TerminosRoute,
+  ProjectSlugRoute: ProjectSlugRoute,
   ProyectosIdRoute: ProyectosIdRoute,
+  PublisherSlugRoute: PublisherSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
