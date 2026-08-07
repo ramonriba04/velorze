@@ -159,7 +159,13 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
       if (projectId) {
         await saveImages({ data: { project_id: projectId, images: images.map((i) => ({ url: i.url, storage_path: i.storage_path ?? null })) } });
       }
-      toast.success(t("common.saved"));
+      if (form.status === "published") {
+        toast.success(t("toast.projectPublished"), {
+          description: t("toast.projectPublishedSub"),
+        });
+      } else {
+        toast.success(t("toast.projectSaved"), { description: t("toast.projectSavedSub") });
+      }
       navigate({ to: "/empresa" });
     } catch (e) {
       const msg = (e as Error).message;
