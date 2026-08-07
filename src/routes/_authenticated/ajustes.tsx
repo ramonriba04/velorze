@@ -154,6 +154,24 @@ function Settings() {
         </div>
       </Card>
 
+      <Card className="space-y-3 p-6">
+        <div>
+          <h2 className="text-lg font-semibold">{t("tour.restartTitle")}</h2>
+          <p className="text-sm text-muted-foreground">{t("tour.restartSub")}</p>
+        </div>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => {
+            requestAppTour();
+            toast.success(t("tour.restarted"));
+          }}
+        >
+          {t("tour.restart")}
+        </Button>
+      </Card>
+
+
       <Card className="space-y-4 p-6">
         <h2 className="text-lg font-semibold">{t("settings.password")}</h2>
         <form className="space-y-3" onSubmit={updatePassword}>
