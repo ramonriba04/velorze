@@ -934,6 +934,7 @@ export type Database = {
         Args: { _role: Database["public"]["Enums"]["app_role"] }
         Returns: undefined
       }
+      blocked_with_me: { Args: { _user_id: string }; Returns: string[] }
       company_profile_complete: { Args: { _user_id: string }; Returns: boolean }
       company_profile_completeness: {
         Args: { _user_id: string }
