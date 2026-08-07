@@ -65,6 +65,9 @@ function Favorites() {
     },
   });
 
+  const data = (rawData ?? []).filter((r: any) => !blockedIds.has(r.project.company_id));
+
+
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 pb-28">
       <h1 className="text-3xl font-bold">{t("favorites.title")}</h1>
