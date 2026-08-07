@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
+import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { toggleFavorite } from "@/lib/contact.functions";
 import { useMyRole } from "@/hooks/useAuth";
@@ -10,6 +12,7 @@ import { useMyRole } from "@/hooks/useAuth";
  */
 export function useFavorites() {
   const { user } = useMyRole();
+  const { t } = useTranslation();
   const qc = useQueryClient();
   const favFn = useServerFn(toggleFavorite);
 
@@ -50,10 +53,34 @@ export function useFavorites() {
     },
   });
 
+  // Removing a favorite is reversible for a few seconds via the toast action.
+  const toggle = (projectId: string) => {
+    const wasFavorite = ids.has(projectId);
+    mutation.mutate(projectId);
+    if (wasFavorite) {
+      toast(t("favorites.removedToast"), {
+        description: t("favorites.removedToastSub"),
+        duration: 6000,
+        action: {
+          label: t("common.undo"),
+          onClick: () => mutation.mutate(projectId),
+        },
+      });
+    } else {
+      toast.success(t("favorites.addedToast"), {
+        description: t("favorites.addedToastSub"),
+        action: {
+          label: t("common.undo"),
+          onClick: () => mutation.mutate(projectId),
+        },
+      });
+    }
+  };
+
   return {
     ids,
     isFavorite: (projectId: string) => ids.has(projectId),
-    toggle: (projectId: string) => mutation.mutate(projectId),
+    toggle,
     isLoading: idsQuery.isLoading,
   };
 }
