@@ -18,6 +18,7 @@ export const Route = createFileRoute("/_authenticated")({
       <Header />
       <main className="flex-1 pb-20 md:pb-0"><Outlet /></main>
       <Footer />
+      <AppTour />
     </div>
   ),
 });
