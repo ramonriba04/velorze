@@ -167,7 +167,7 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
       const convIds = conversations.map((c: any) => c.id);
 
       const [{ data: companies }, { data: investors }, { data: profiles }, { data: images }, { data: msgs }, { data: blocks }] = await Promise.all([
-        supabase.from("company_profiles").select("user_id, legal_name, logo_url, verification_status, trust_level").in("user_id", otherIds),
+        supabase.from("company_profiles").select("user_id, legal_name, logo_url, verification_status, trust_level, entity_type").in("user_id", otherIds),
         supabase.from("investor_profiles").select("user_id, display_name, avatar_url").in("user_id", otherIds),
         supabase.from("profiles").select("id, full_name, avatar_url, suspended_at").in("id", otherIds),
         supabase.from("project_images").select("project_id, url, sort_order").in("project_id", projectIds.length ? projectIds : ["00000000-0000-0000-0000-000000000000"]).order("sort_order"),
