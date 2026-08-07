@@ -21,7 +21,8 @@
     "admin": "Admin",
     "logout": "Cerrar sesión",
     "settings": "Ajustes",
-    "discover": "Descubrir"
+    "discover": "Descubrir",
+    "primary": "Navegación principal"
   },
   "logout": {
     "title": "¿Cerrar sesión?",
@@ -332,7 +333,8 @@
     "error": "Ha ocurrido un error",
     "required": "Obligatorio",
     "optional": "(opcional)",
-    "other": "Otro"
+    "other": "Otro",
+    "moreOptions": "Más opciones"
   },
   "project": {
     "title": "Título del proyecto",

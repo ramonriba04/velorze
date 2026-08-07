@@ -70,7 +70,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-dvh items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold">Algo no fue bien</h1>
         <p className="mt-2 text-sm text-muted-foreground">Intenta recargar la página.</p>
@@ -135,6 +135,8 @@ function RootComponent() {
     const lng = detectClientLanguage();
     if (lng !== i18n.language) i18n.changeLanguage(lng);
   }, []);
+
+
 
   useEffect(() => {
     const { data: sub } = supabase.auth.onAuthStateChange((event) => {

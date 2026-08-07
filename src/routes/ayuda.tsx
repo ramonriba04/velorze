@@ -19,7 +19,7 @@ function HelpCenter() {
   const { t } = useTranslation();
   const items = ["matching", "contact", "privacy", "account"] as const;
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-dvh flex flex-col">
       <Header />
       <main className="flex-1 mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">
         <h1 className="text-3xl font-bold tracking-tight">{t("help.title")}</h1>

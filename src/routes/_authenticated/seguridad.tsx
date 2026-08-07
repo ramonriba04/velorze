@@ -15,6 +15,8 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader,
   AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { ListSkeleton } from "@/components/ui/skeletons";
+
 
 export const Route = createFileRoute("/_authenticated/seguridad")({
   head: () => ({ meta: [{ title: "Seguridad | Capora" }, { name: "robots", content: "noindex, nofollow" }] }),
@@ -56,7 +58,7 @@ function Safety() {
         <p className="mt-1 text-xs text-muted-foreground">{t("safety.blockedUsersHint")}</p>
 
         <div className="mt-4 space-y-2">
-          {isLoading && <p className="text-sm text-muted-foreground">{t("common.loading")}</p>}
+          {isLoading && <ListSkeleton count={3} />}
           {!isLoading && (data ?? []).length === 0 && (
             <EmptyState icon={<ShieldCheck />} title={t("safety.emptyTitle")} description={t("safety.emptySub")} />
           )}

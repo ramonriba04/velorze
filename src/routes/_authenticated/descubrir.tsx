@@ -16,6 +16,8 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { EntityAvatar } from "@/components/media/EntityAvatar";
 import { EmptyState } from "@/components/ui/empty-state";
+import { SwipeCardSkeleton } from "@/components/ui/skeletons";
+
 
 export const Route = createFileRoute("/_authenticated/descubrir")({
   component: DiscoveryPage,
@@ -67,7 +69,7 @@ function DiscoveryPage() {
   const pct = Math.min(100, Math.round((used / cap) * 100));
 
   return (
-    <div className="mx-auto max-w-3xl px-3 py-6 pb-28 sm:px-6 sm:py-8">
+    <div className="mx-auto max-w-3xl px-3 py-6 sm:px-6 sm:py-8">
       <header className="flex items-start justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
@@ -94,7 +96,8 @@ function DiscoveryPage() {
 
       <div className="mt-4">
         {isLoading ? (
-          <div className="p-10 text-center text-muted-foreground">{t("common.loading")}</div>
+          <SwipeCardSkeleton />
+
         ) : !current ? (
           <EmptyState
             icon={<Sparkles className="h-6 w-6" />}

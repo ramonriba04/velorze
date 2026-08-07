@@ -17,6 +17,8 @@ import { EntityTypeBadge } from "@/components/EntityTypeBadge";
 import { ShieldCheck, ChevronLeft, ChevronRight, ShieldOff } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { ReportDialog } from "@/components/moderation/ReportDialog";
+import { DetailSkeleton } from "@/components/ui/skeletons";
+
 
 
 export const Route = createFileRoute("/proyectos/$id")({
@@ -89,10 +91,11 @@ function ProjectDetail() {
   }, [hasMulti, galleryItems.length]);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-dvh flex-col">
       <Header />
-      <main className="flex-1 mx-auto max-w-3xl w-full px-4 py-10">
-        {isLoading && <p>{t("common.loading")}</p>}
+      <main className="flex-1 mx-auto max-w-3xl w-full px-4 py-10 pb-20 md:pb-10">
+        {isLoading && <DetailSkeleton />}
+
         {data && unavailable && (
           <Card className="p-8 text-center space-y-2">
             <ShieldOff className="mx-auto h-8 w-8 text-muted-foreground" />
@@ -117,6 +120,8 @@ function ProjectDetail() {
                   <img
                     src={galleryItems[activeImg]?.url ?? cover ?? ""}
                     alt={data.title}
+                    fetchPriority="high"
+                    decoding="async"
                     className="w-full aspect-video object-cover transition-opacity"
                   />
                   {hasMulti && (

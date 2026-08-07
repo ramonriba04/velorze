@@ -13,6 +13,8 @@ import { PlanBadge } from "@/components/PlanBadge";
 import { UpgradeDialog } from "@/components/UpgradeDialog";
 import { ProfileCompletenessCard, TrustBadge } from "@/components/ProfileCompletenessCard";
 import { companyCompleteness } from "@/lib/completeness";
+import { ProjectGridSkeleton } from "@/components/ui/skeletons";
+
 
 export const Route = createFileRoute("/_authenticated/empresa/")({
   component: CompanyDashboard,
@@ -34,7 +36,7 @@ function CompanyDashboard() {
     },
   });
 
-  const { data: projects } = useQuery({
+  const { data: projects, isLoading: loadingProjects } = useQuery({
     queryKey: ["my_projects", user?.id],
     enabled: !!user,
     queryFn: async () => {
@@ -43,6 +45,7 @@ function CompanyDashboard() {
       return data ?? [];
     },
   });
+
 
   const { data: counts } = useQuery({
     queryKey: ["company_counts", user?.id],
@@ -60,7 +63,7 @@ function CompanyDashboard() {
   const name = profile?.legal_name ?? user?.email?.split("@")[0] ?? "";
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 pb-28 sm:px-6">
+    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       <div className="flex items-center gap-3">
         <EntityAvatar src={profile?.logo_url} name={name} kind="company" size={48} />
         <div className="min-w-0 flex-1">
@@ -161,7 +164,12 @@ function CompanyDashboard() {
       </div>
 
       <div className="mt-4 grid gap-4 md:grid-cols-2">
-        {(!projects || projects.length === 0) && (
+        {loadingProjects && (
+          <div className="md:col-span-2">
+            <ProjectGridSkeleton count={2} className="grid gap-4 md:grid-cols-2" />
+          </div>
+        )}
+        {!loadingProjects && (!projects || projects.length === 0) && (
           <Card className="md:col-span-2 p-10 text-center border-dashed">
             <Rocket className="mx-auto h-10 w-10 text-muted-foreground" />
             <h3 className="mt-3 font-semibold">{t("home.firstProjectTitle")}</h3>
@@ -169,6 +177,7 @@ function CompanyDashboard() {
             <Link to="/empresa/nuevo"><Button className="mt-4">{t("project.createFirst")}</Button></Link>
           </Card>
         )}
+
         {projects?.map((p: any) => (
           <Card key={p.id} className="overflow-hidden">
             {p.cover_url && (

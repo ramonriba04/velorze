@@ -7,6 +7,7 @@ import { assignMyRole } from "@/lib/profiles.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
 import { Card } from "@/components/ui/card";
+import { PageLoading } from "@/components/ui/skeletons";
 import { Building2, TrendingUp } from "lucide-react";
 import { useState } from "react";
 
@@ -54,7 +55,7 @@ function AppHome() {
   }, [role, loading, navigate, picking, assign, profile, loadingProfile]);
 
 
-  if (loading) return <div className="p-10 text-center text-muted-foreground">{t("common.loading")}</div>;
+  if (loading) return <PageLoading />;
 
   if (!role) {
     return (
@@ -85,5 +86,5 @@ function AppHome() {
     );
   }
 
-  return <div className="p-10 text-center text-muted-foreground">{t("common.loading")}</div>;
+  return <PageLoading />;
 }

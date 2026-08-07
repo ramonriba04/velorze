@@ -10,6 +10,7 @@ import { useMyRole } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { getMyVerification, submitVerification } from "@/lib/profiles.functions";
 import { Card } from "@/components/ui/card";
+import { FormSkeleton } from "@/components/ui/skeletons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -77,7 +78,11 @@ function VerificationPage() {
     setTaxId(data.profile.tax_id || "");
   }, [data?.profile]);
 
-  if (!user || isLoading) return <div className="p-10">{t("common.loading")}</div>;
+  if (!user || isLoading) return (
+      <div className="mx-auto max-w-2xl px-4 py-10">
+        <Card className="p-6"><FormSkeleton fields={5} /></Card>
+      </div>
+    );
 
   const status = data?.status ?? "unverified";
   const trustLevel = data?.trust_level ?? "unverified";

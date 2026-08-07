@@ -18,6 +18,8 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { computeMatch, type MatchableInvestor } from "@/lib/matching";
 import { EntityTypeBadge } from "@/components/EntityTypeBadge";
 import { SECTORS, COUNTRIES } from "@/lib/taxonomy";
+import { ProjectGridSkeleton } from "@/components/ui/skeletons";
+
 
 const searchSchema = z.object({
   q: z.string().optional().catch(undefined),
@@ -150,7 +152,7 @@ function ProjectsDiscovery() {
   const clearAll = () => navigate({ to: "/proyectos", search: {}, replace: true });
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6 pb-28">
+    <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6">
       <header className="space-y-2">
         <div className="flex items-center gap-2 flex-wrap">
           <Search className="h-5 w-5 text-muted-foreground" />
@@ -164,14 +166,16 @@ function ProjectsDiscovery() {
 
       <Card className="space-y-4 p-4 sm:p-5">
         <div className="relative">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Search aria-hidden className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={search.q ?? ""}
             onChange={(e) => setParam({ q: e.target.value })}
             placeholder={t("discover.searchPlaceholder")}
+            aria-label={t("discover.searchPlaceholder")}
             className="pl-9"
           />
         </div>
+
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-1">
@@ -180,7 +184,7 @@ function ProjectsDiscovery() {
               value={search.sector ?? "all"}
               onValueChange={(v) => setParam({ sector: v, sectorOther: v === "otro" ? (search.sectorOther ?? "") : undefined })}
             >
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger aria-label={t("project.sector")}><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">{t("discover.anySector")}</SelectItem>
                 {SECTORS.map((s) => <SelectItem key={s} value={s}>{t(`sector.${s}`)}</SelectItem>)}
@@ -202,7 +206,7 @@ function ProjectsDiscovery() {
               value={search.country ?? "all"}
               onValueChange={(v) => setParam({ country: v, countryOther: v === "otro" ? (search.countryOther ?? "") : undefined })}
             >
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger aria-label={t("project.country")}><SelectValue /></SelectTrigger>
               <SelectContent className="max-h-72">
                 <SelectItem value="all">{t("discover.anyCountry")}</SelectItem>
                 {COUNTRIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
@@ -221,7 +225,7 @@ function ProjectsDiscovery() {
           <div className="space-y-1">
             <Label className="text-xs">{t("project.stage")}</Label>
             <Select value={search.stage ?? "all"} onValueChange={(v) => setParam({ stage: v })}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger aria-label={t("project.stage")}><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">{t("discover.any")}</SelectItem>
                 {STAGES.map((s) => <SelectItem key={s} value={s}>{t(`stage.${s}`)}</SelectItem>)}
@@ -231,7 +235,7 @@ function ProjectsDiscovery() {
           <div className="space-y-1">
             <Label className="text-xs">{t("project.investmentType")}</Label>
             <Select value={search.type ?? "all"} onValueChange={(v) => setParam({ type: v })}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger aria-label={t("project.investmentType")}><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">{t("discover.any")}</SelectItem>
                 {TYPES.map((tp) => <SelectItem key={tp} value={tp}>{t(`investmentType.${tp}`)}</SelectItem>)}
@@ -263,7 +267,7 @@ function ProjectsDiscovery() {
             <div className="flex items-center gap-2">
               <Label className="text-xs text-muted-foreground">{t("discover.sortLabel")}</Label>
               <Select value={sort} onValueChange={(v) => setParam({ sort: v })}>
-                <SelectTrigger className="h-8 w-[180px]"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="h-8 w-[180px]" aria-label={t("discover.sortLabel")}><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="match">{t("discover.sortMatch")}</SelectItem>
                   <SelectItem value="newest">{t("discover.sortNewest")}</SelectItem>
@@ -291,7 +295,8 @@ function ProjectsDiscovery() {
       </Card>
 
       {isLoading ? (
-        <div className="p-10 text-center text-muted-foreground">{t("common.loading")}</div>
+        <ProjectGridSkeleton count={6} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" />
+
       ) : !sorted || sorted.length === 0 ? (
         <EmptyState
           icon={<Search className="h-6 w-6" />}
@@ -303,15 +308,16 @@ function ProjectsDiscovery() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {sorted.map((p: any) => (
-            <Link key={p.id} to="/proyectos/$id" params={{ id: p.id }}>
+            <Link key={p.id} to="/proyectos/$id" params={{ id: p.id }} className="block rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
               <Card className="h-full overflow-hidden hover:shadow-elegant transition-shadow">
                 {p.cover_url ? (
                   <div className="aspect-[16/9] w-full bg-muted">
-                    <img src={p.cover_url} alt={p.title} className="h-full w-full object-cover" />
+                    <img src={p.cover_url} alt={p.title} loading="lazy" className="h-full w-full object-cover" />
                   </div>
                 ) : (
-                  <div className="aspect-[16/9] w-full gradient-primary opacity-80" />
+                  <div aria-hidden className="aspect-[16/9] w-full gradient-primary opacity-80" />
                 )}
+
                 <div className="space-y-2 p-4">
                   <div className="flex items-center justify-between gap-2">
                     <h3 className="font-semibold leading-tight">{p.title}</h3>

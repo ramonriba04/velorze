@@ -18,6 +18,8 @@ import {
   ChevronDown, ChevronUp,
 } from "lucide-react";
 import { toast } from "sonner";
+import { ProjectGridSkeleton } from "@/components/ui/skeletons";
+
 
 export const Route = createFileRoute("/_authenticated/inversor/")({
   component: InvestorDashboard,
@@ -121,7 +123,7 @@ function InvestorDashboard() {
   const compatibleItems = (data?.items ?? []).filter((i: any) => (i.match?.score ?? 0) >= 40);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 pb-28 sm:px-6">
+    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       {/* Welcome */}
       <div className="flex items-center gap-3">
         <EntityAvatar src={profile?.avatar_url} name={greetingName} size={48} />
@@ -174,7 +176,12 @@ function InvestorDashboard() {
       <p className="text-sm text-muted-foreground mt-1">{t("project.recommendedSub")}</p>
 
       <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {isLoading && <p className="text-muted-foreground col-span-full">{t("common.loading")}</p>}
+        {isLoading && (
+          <div className="col-span-full">
+            <ProjectGridSkeleton count={6} className="grid gap-4 md:grid-cols-2 lg:grid-cols-3" />
+          </div>
+        )}
+
 
         {!isLoading && !hasProfile && (
           <Card className="md:col-span-2 lg:col-span-3 p-10 text-center border-dashed">
@@ -268,13 +275,26 @@ function InvestorDashboard() {
                   <Link to="/proyectos/$id" params={{ id: project.id }} className="flex-1">
                     <Button variant="outline" size="sm" className="w-full">{t("project.viewProject")}</Button>
                   </Link>
-                  <Button size="icon" variant="ghost" aria-pressed={favoriteIds?.has(project.id) ? true : false} onClick={() => favMut.mutate(project.id)}>
-                    <Heart className={`h-4 w-4 ${favoriteIds?.has(project.id) ? "fill-current text-primary" : ""}`} />
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="min-h-11 min-w-11"
+                    aria-label={favoriteIds?.has(project.id) ? t("project.removedFavorite") : t("project.addedFavorite")}
+                    aria-pressed={favoriteIds?.has(project.id) ? true : false}
+                    onClick={() => favMut.mutate(project.id)}
+                  >
+                    <Heart aria-hidden className={`h-4 w-4 ${favoriteIds?.has(project.id) ? "fill-current text-primary" : ""}`} />
                   </Button>
-                  <Button size="icon" onClick={() => reqMut.mutate(project.id)}>
-                    <Send className="h-4 w-4" />
+                  <Button
+                    size="icon"
+                    className="min-h-11 min-w-11"
+                    aria-label={t("project.contactCompany")}
+                    onClick={() => reqMut.mutate(project.id)}
+                  >
+                    <Send aria-hidden className="h-4 w-4" />
                   </Button>
                 </div>
+
               </div>
             </Card>
           );

@@ -15,6 +15,7 @@ import {
 } from "@/lib/profiles.functions";
 import { useMyRole } from "@/hooks/useAuth";
 import { Card } from "@/components/ui/card";
+import { PageLoading, ListSkeleton } from "@/components/ui/skeletons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -36,7 +37,7 @@ function AdminPanel() {
   const { data: users } = useQuery({ queryKey: ["admin_users"], queryFn: () => usersFn(), enabled: role === "admin" });
   const { data: projects } = useQuery({ queryKey: ["admin_projects"], queryFn: () => projectsFn(), enabled: role === "admin" });
 
-  if (loading) return <div className="p-10">{t("common.loading")}</div>;
+  if (loading) return <PageLoading />;
   if (role !== "admin") return <div className="p-10 text-center text-muted-foreground">403 — Acceso restringido</div>;
 
   return (
@@ -154,7 +155,7 @@ function VerificationQueue() {
         ))}
       </div>
 
-      {isLoading && <p className="text-sm text-muted-foreground">{t("common.loading")}</p>}
+      {isLoading && <ListSkeleton count={3} />}
       {!isLoading && (data?.length ?? 0) === 0 && (
         <Card className="p-6 text-center text-sm text-muted-foreground">{t("admin.noVerifications")}</Card>
       )}
@@ -310,7 +311,7 @@ function ModerationQueue() {
 
       {kind === "users" && (
         <>
-          {uLoading && <p className="text-sm text-muted-foreground">{t("common.loading")}</p>}
+          {uLoading && <ListSkeleton count={3} />}
           {!uLoading && (uReports?.length ?? 0) === 0 && (
             <Card className="p-6 text-center text-sm text-muted-foreground">{t("admin.mod.empty")}</Card>
           )}
@@ -373,7 +374,7 @@ function ModerationQueue() {
 
       {kind === "projects" && (
         <>
-          {pLoading && <p className="text-sm text-muted-foreground">{t("common.loading")}</p>}
+          {pLoading && <ListSkeleton count={3} />}
           {!pLoading && (pReports?.length ?? 0) === 0 && (
             <Card className="p-6 text-center text-sm text-muted-foreground">{t("admin.mod.empty")}</Card>
           )}
