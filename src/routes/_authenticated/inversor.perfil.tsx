@@ -120,6 +120,7 @@ function InvestorProfile() {
         pct={completeness.pct}
         complete={completeness.complete}
         missing={completeness.missingRequired}
+        checks={completeness.checks}
         ctaTo="/inversor/perfil"
         ctaCopy={t("completeness.investor.cta")}
       />
