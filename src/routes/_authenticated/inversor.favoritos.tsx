@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useMyRole } from "@/hooks/useAuth";
+import { useBlockedIds } from "@/hooks/useBlockedIds";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -18,7 +19,9 @@ function Favorites() {
   const { t } = useTranslation();
   const { user } = useMyRole();
 
-  const { data, isLoading } = useQuery({
+  const blockedIds = useBlockedIds(user?.id);
+
+  const { data: rawData, isLoading } = useQuery({
     queryKey: ["favorites_rich", user?.id],
     enabled: !!user,
     queryFn: async () => {
