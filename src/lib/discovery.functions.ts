@@ -19,10 +19,20 @@ async function getRole(ctx: { supabase: any; userId: string }) {
   return (data?.role as "inversor" | "empresa" | "admin" | null) ?? null;
 }
 
+
+async function blockedIds(ctx: { supabase: any; userId: string }): Promise<Set<string>> {
+  const { data } = await ctx.supabase.rpc("blocked_with_me", { _user_id: ctx.userId });
+  const ids = ((data as any[]) ?? [])
+    .map((row: any) => (typeof row === "string" ? row : row?.blocked_with_me))
+    .filter(Boolean);
+  return new Set<string>(ids);
+}
+
 export const getDiscoveryFeed = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const role = await getRole(context);
+    const blocked = await blockedIds(context);
     const { data: usedToday } = await context.supabase.rpc(
       "discovery_today_interest_count",
       { _user_id: context.userId },
@@ -57,7 +67,7 @@ export const getDiscoveryFeed = createServerFn({ method: "GET" })
       const baseProject = (ownProjects ?? [])[0] ?? null;
 
       const items = (investors ?? [])
-        .filter((inv: any) => !decidedKeys.has(`${inv.user_id}:`))
+        .filter((inv: any) => !decidedKeys.has(`${inv.user_id}:`) && !blocked.has(inv.user_id))
         .map((inv: any) => {
           const match = baseProject
             ? computeMatch(baseProject as MatchableProject, inv as MatchableInvestor)
@@ -86,7 +96,7 @@ export const getDiscoveryFeed = createServerFn({ method: "GET" })
       .limit(80);
 
     const items = (projects ?? [])
-      .filter((p: any) => !decidedKeys.has(`${p.company_id}:${p.id}`))
+      .filter((p: any) => !decidedKeys.has(`${p.company_id}:${p.id}`) && !blocked.has(p.company_id))
       .map((p: any) => {
         const match = investor
           ? computeMatch(p as MatchableProject, investor as MatchableInvestor)
