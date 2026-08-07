@@ -367,8 +367,11 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
                   <div className="flex items-center gap-1.5">
                     <p className="text-sm font-medium truncate">{activeConv.otherName}</p>
                     {activeConv.otherVerified && (
-                      <span title={t("safety.notice.verified")} className="inline-flex items-center text-emerald-600">
-                        <ShieldCheck className="h-3.5 w-3.5" />
+                      <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700 dark:text-emerald-400">
+                        <ShieldCheck className="h-3 w-3" />
+                        {activeConv.otherEntityType === "persona_fisica"
+                          ? t("safety.verified.individual")
+                          : t("safety.verified.company")}
                       </span>
                     )}
                   </div>
