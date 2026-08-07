@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
+import { blockedIds } from "./blocks.server";
 import {
   computeMatch,
   type MatchableInvestor,
@@ -19,10 +20,13 @@ async function getRole(ctx: { supabase: any; userId: string }) {
   return (data?.role as "inversor" | "empresa" | "admin" | null) ?? null;
 }
 
+
+
 export const getDiscoveryFeed = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const role = await getRole(context);
+    const blocked = await blockedIds(context);
     const { data: usedToday } = await context.supabase.rpc(
       "discovery_today_interest_count",
       { _user_id: context.userId },
@@ -57,7 +61,7 @@ export const getDiscoveryFeed = createServerFn({ method: "GET" })
       const baseProject = (ownProjects ?? [])[0] ?? null;
 
       const items = (investors ?? [])
-        .filter((inv: any) => !decidedKeys.has(`${inv.user_id}:`))
+        .filter((inv: any) => !decidedKeys.has(`${inv.user_id}:`) && !blocked.has(inv.user_id))
         .map((inv: any) => {
           const match = baseProject
             ? computeMatch(baseProject as MatchableProject, inv as MatchableInvestor)
@@ -86,7 +90,7 @@ export const getDiscoveryFeed = createServerFn({ method: "GET" })
       .limit(80);
 
     const items = (projects ?? [])
-      .filter((p: any) => !decidedKeys.has(`${p.company_id}:${p.id}`))
+      .filter((p: any) => !decidedKeys.has(`${p.company_id}:${p.id}`) && !blocked.has(p.company_id))
       .map((p: any) => {
         const match = investor
           ? computeMatch(p as MatchableProject, investor as MatchableInvestor)

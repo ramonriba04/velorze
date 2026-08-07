@@ -167,7 +167,7 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
       const convIds = conversations.map((c: any) => c.id);
 
       const [{ data: companies }, { data: investors }, { data: profiles }, { data: images }, { data: msgs }, { data: blocks }] = await Promise.all([
-        supabase.from("company_profiles").select("user_id, legal_name, logo_url, verification_status, trust_level").in("user_id", otherIds),
+        supabase.from("company_profiles").select("user_id, legal_name, logo_url, verification_status, trust_level, entity_type").in("user_id", otherIds),
         supabase.from("investor_profiles").select("user_id, display_name, avatar_url").in("user_id", otherIds),
         supabase.from("profiles").select("id, full_name, avatar_url, suspended_at").in("id", otherIds),
         supabase.from("project_images").select("project_id, url, sort_order").in("project_id", projectIds.length ? projectIds : ["00000000-0000-0000-0000-000000000000"]).order("sort_order"),
@@ -204,7 +204,13 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
           ? (other?.avatar_url ?? pMap[otherId]?.avatar_url ?? null)
           : (other?.logo_url ?? null);
         const thumb = c.project_id ? (thumbMap[c.project_id] ?? c.projects?.cover_url ?? null) : null;
-        const otherVerified = !isCompany && cMap[otherId]?.verification_status === "verified";
+        const otherCompany = cMap[otherId];
+        const otherVerified =
+          !isCompany &&
+          !!otherCompany &&
+          (otherCompany.verification_status === "verified" ||
+            ["basic", "trusted", "manual"].includes(otherCompany.trust_level ?? "unverified"));
+        const otherEntityType = otherCompany?.entity_type ?? null;
         return {
           ...c,
           otherId,
@@ -212,6 +218,7 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
           otherAvatar,
           otherKind: isCompany ? "user" as const : "company" as const,
           otherVerified,
+          otherEntityType,
           otherSuspended: !!pMap[otherId]?.suspended_at,
           thumb,
           lastMessage: lastMsg[c.id] ?? null,
@@ -291,8 +298,6 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
   };
 
   const activeConv = (convs ?? []).find((c: any) => c.id === active);
-  const lastIncoming = [...(messages ?? [])].reverse().find((m: any) => m.sender_id !== userId);
-  const secHits = lastIncoming ? detectSecurityPatterns(lastIncoming.body ?? "") : [];
 
   if (!convs || convs.length === 0) {
     return (
@@ -362,8 +367,11 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
                   <div className="flex items-center gap-1.5">
                     <p className="text-sm font-medium truncate">{activeConv.otherName}</p>
                     {activeConv.otherVerified && (
-                      <span title={t("safety.notice.verified")} className="inline-flex items-center text-emerald-600">
-                        <ShieldCheck className="h-3.5 w-3.5" />
+                      <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700 dark:text-emerald-400">
+                        <ShieldCheck className="h-3 w-3" />
+                        {activeConv.otherEntityType === "persona_fisica"
+                          ? t("safety.verified.individual")
+                          : t("safety.verified.company")}
                       </span>
                     )}
                   </div>
@@ -405,35 +413,38 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
                   {g.items.map((m: any) => {
                     const mine = m.sender_id === userId;
                     const ts = new Date(m.created_at);
+                    const hits = mine ? [] : detectSecurityPatterns(m.body ?? "");
                     return (
-                      <div key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
-                        <div className={`max-w-[75%] rounded-lg px-3 py-2 text-sm ${mine ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
-                          <div>{m.body}</div>
-                          <div className={`mt-1 flex items-center justify-end gap-1 text-[10px] ${mine ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
-                            <span>{timeShort(ts)}</span>
-                            {mine && (
-                              m.read_at
-                                ? <CheckCheck className="h-3 w-3" />
-                                : <Check className="h-3 w-3" />
-                            )}
+                      <div key={m.id} className="space-y-1">
+                        <div className={`flex ${mine ? "justify-end" : "justify-start"}`}>
+                          <div className={`max-w-[75%] rounded-lg px-3 py-2 text-sm ${mine ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
+                            <div>{m.body}</div>
+                            <div className={`mt-1 flex items-center justify-end gap-1 text-[10px] ${mine ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+                              <span>{timeShort(ts)}</span>
+                              {mine && (
+                                m.read_at
+                                  ? <CheckCheck className="h-3 w-3" />
+                                  : <Check className="h-3 w-3" />
+                              )}
+                            </div>
                           </div>
                         </div>
+                        {hits.length > 0 && activeConv && (
+                          <SecurityNoticeCard
+                            key={`sec-${m.id}`}
+                            hits={hits}
+                            senderId={activeConv.otherId}
+                            senderName={activeConv.otherName}
+                            onBlocked={() => { setActive(null); qc.invalidateQueries({ queryKey: ["conversations_rich"] }); }}
+                          />
+                        )}
                       </div>
                     );
                   })}
                 </div>
               ))}
             </div>
-            {secHits.length > 0 && activeConv && (
-              <div className="px-3">
-                <SecurityNoticeCard
-                  hits={secHits}
-                  senderId={activeConv.otherId}
-                  senderName={activeConv.otherName}
-                  senderVerified={!!activeConv.otherVerified}
-                />
-              </div>
-            )}
+
             <form onSubmit={onSend} className="border-t p-3 flex gap-2">
               <Input placeholder={t("messages.writePlaceholder")} value={text} onChange={(e) => setText(e.target.value)} />
               <Button type="submit">{t("common.send")}</Button>

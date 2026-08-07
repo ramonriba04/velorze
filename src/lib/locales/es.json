@@ -187,7 +187,6 @@
     "title": "Política de cookies",
     "body": "Capora utiliza cookies estrictamente necesarias para el funcionamiento del servicio (sesión, idioma, seguridad). Estas se cargan siempre.\n\nLas cookies de medición y marketing solo se activan con tu consentimiento explícito, que puedes dar, rechazar o personalizar desde el banner de cookies. Tu elección se guarda en este dispositivo y puedes cambiarla en cualquier momento borrando las cookies del navegador.\n\nNo cargamos analítica ni rastreo entre sitios antes de tu consentimiento."
   },
-
   "contact": {
     "title": "Contacto",
     "body": "¿Tienes preguntas, sugerencias o necesitas ayuda? Escríbenos y te responderemos lo antes posible."
@@ -536,8 +535,17 @@
     },
     "moderation": "Moderación",
     "mod": {
-      "kind": { "users": "Usuarios", "projects": "Proyectos" },
-      "status": { "pending": "Pendientes", "reviewed": "Revisadas", "resolved": "Resueltas", "dismissed": "Descartadas", "all": "Todas" },
+      "kind": {
+        "users": "Usuarios",
+        "projects": "Proyectos"
+      },
+      "status": {
+        "pending": "Pendientes",
+        "reviewed": "Revisadas",
+        "resolved": "Resueltas",
+        "dismissed": "Descartadas",
+        "all": "Todas"
+      },
       "empty": "No hay reportes en esta lista.",
       "reportedBy": "Reportado por",
       "notes": "Notas",
@@ -548,17 +556,19 @@
       "restoreProject": "Restaurar proyecto",
       "dismiss": "Descartar",
       "suspended": "Suspendido",
-      "hidden": "Oculto"
+      "hidden": "Oculto",
+      "totalReports": "{{count}} reportes",
+      "lastReport": "Último: {{date}}",
+      "topReason": "Motivo más frecuente"
     }
   },
   "trust": {
     "verifiedBadge": "Publicador verificado",
     "verifiedTitle": "Identidad revisada por el equipo de Capora"
   },
-
   "legal": {
     "title": "Aviso legal",
-    "body": "Capora es únicamente una plataforma de conexión entre empresas e inversores. No procesa pagos, no gestiona inversiones, no actúa como intermediario financiero y no ofrece asesoramiento financiero. Las recomendaciones generadas por el sistema son meramente informativas. Los usuarios son responsables de realizar su propia diligencia debida antes de tomar cualquier decisión de inversión."
+    "body": "Capora es únicamente una plataforma de conexión entre empresas e inversores. No procesa pagos, no gestiona inversiones, no actúa como intermediario financiero y no ofrece asesoramiento financiero. Las recomendaciones generadas por el sistema son meramente informativas. Los usuarios son responsables de realizar su propia diligencia debida antes de tomar cualquier decisión de inversión.\n\nLa verificación de identidad reduce el riesgo de fraude, pero no garantiza la legitimidad de todas las oportunidades de inversión publicadas en Capora. Los usuarios siguen siendo responsables de realizar su propia diligencia debida antes de invertir o transferir dinero."
   },
   "disclaimer": "Marketplace inteligente para conectar proyectos e inversores.",
   "media": {
@@ -832,7 +842,8 @@
       "pendiente": "Pendiente",
       "conectado": "Conectado",
       "descartado": "Descartado"
-  ,
+    }
+  },
   "safety": {
     "title": "Seguridad y privacidad",
     "sub": "Gestiona bloqueos y controla tu experiencia en Capora.",
@@ -846,14 +857,14 @@
     "projectUnavailableSub": "El contenido ha sido retirado o el publicador está suspendido.",
     "block": {
       "action": "Bloquear",
-      "title": "¿Bloquear a este usuario?",
-      "desc": "No podrá enviarte mensajes ni solicitudes de contacto. La conversación quedará oculta.",
-      "confirm": "Bloquear",
+      "title": "¿Seguro que quieres bloquear a este usuario?",
+      "desc": "No podrá volver a contactar contigo y dejará de aparecer en tus recomendaciones.",
+      "confirm": "Bloquear usuario",
       "done": "Usuario bloqueado",
       "unblock": "Desbloquear",
       "unblocked": "Usuario desbloqueado",
       "unblockTitle": "¿Desbloquear a este usuario?",
-      "unblockDesc": "{{name}} podrá volver a contactarte.",
+      "unblockDesc": "{{name}} podrá volver a contactar contigo y aparecer en tus recomendaciones.",
       "sendBlocked": "No puedes enviar mensajes en esta conversación."
     },
     "report": {
@@ -866,8 +877,8 @@
       "detailsPh": "Explica brevemente qué ha ocurrido (obligatorio para 'Otro').",
       "detailsRequired": "Añade detalles cuando el motivo sea 'Otro'.",
       "submit": "Enviar reporte",
-      "doneTitle": "Reporte enviado",
-      "doneBody": "Nuestro equipo lo revisará pronto.",
+      "doneTitle": "Gracias.",
+      "doneBody": "Nuestro equipo revisará este reporte lo antes posible.",
       "userReasons": {
         "fraud": "Fraude o estafa",
         "payment_request": "Solicita pagos por adelantado",
@@ -886,15 +897,19 @@
       }
     },
     "notice": {
-      "title": "Aviso de seguridad",
-      "body1": "Hemos detectado datos financieros o una posible solicitud de pago en este mensaje.",
-      "body2": "Capora nunca gestiona pagos. Verifica siempre a la otra parte antes de enviar dinero o compartir datos bancarios.",
+      "title": "Aviso de seguridad de Capora",
+      "body1": "Hemos detectado información financiera o datos de contacto en este mensaje.",
+      "body2": "Antes de realizar cualquier pago o compartir información sensible, asegúrate de haber verificado completamente a la otra parte.",
       "verified": "Publicador verificado por Capora.",
       "unverified": "Este usuario aún no ha verificado su identidad.",
       "learnMore": "Más información",
-      "dismiss": "Cerrar aviso"
-    }
-  }
-}
+      "dismiss": "Cerrar",
+      "body3": "Capora no participa en las transacciones entre usuarios y recomienda actuar con precaución."
+    },
+    "verified": {
+      "company": "Empresa verificada",
+      "individual": "Persona física verificada"
+    },
+    "blockedSince": "Bloqueado el {{date}}"
   }
 }

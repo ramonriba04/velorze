@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
+import { blockedIds } from "./blocks.server";
 import {
   computeMatch as computeMatchPure,
   type MatchableInvestor as InvestorProfile,
@@ -17,9 +18,12 @@ export function computeMatch(project: Project, investor: InvestorProfile): Match
   return { score, reasons };
 }
 
+
+
 export const getRecommendedProjects = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
+    const blocked = await blockedIds(context);
     const { data: investor } = await context.supabase
       .from("investor_profiles")
       .select("*")
@@ -34,14 +38,16 @@ export const getRecommendedProjects = createServerFn({ method: "GET" })
       .limit(60);
     if (error) throw new Error(error.message);
 
+    const visible = (projects ?? []).filter((p: any) => !blocked.has(p.company_id));
+
     if (!investor) {
       return {
         hasProfile: false,
-        items: (projects ?? []).map((p) => ({ project: p, match: { score: 0, reasons: [] } })),
+        items: visible.map((p) => ({ project: p, match: { score: 0, reasons: [] } })),
       };
     }
 
-    const scored = (projects ?? [])
+    const scored = visible
       .map((p) => ({ project: p, match: computeMatch(p as Project, investor as InvestorProfile) }))
       .sort((a, b) => b.match.score - a.match.score);
 
@@ -80,12 +86,14 @@ export const getCompatibleInvestors = createServerFn({ method: "POST" })
       .maybeSingle();
     if (!project) throw new Error("Project not found or not yours");
 
+    const blockedSet = await blockedIds(context);
     const { data: investors } = await context.supabase
       .from("investor_profiles")
       .select("*, profiles:user_id(full_name, avatar_url)")
       .limit(200);
 
     const scored = (investors ?? [])
+      .filter((inv: any) => !blockedSet.has(inv.user_id))
       .map((inv) => ({
         investor: inv,
         match: computeMatch(project as Project, inv as unknown as InvestorProfile),

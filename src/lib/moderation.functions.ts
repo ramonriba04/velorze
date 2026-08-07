@@ -65,6 +65,7 @@ export const listMyBlocks = createServerFn({ method: "GET" })
         name: c?.legal_name ?? i?.display_name ?? p?.full_name ?? r.blocked_id.slice(0, 8),
         avatar_url: c?.logo_url ?? i?.avatar_url ?? p?.avatar_url ?? null,
         kind: c ? "company" : "user",
+        entity_type: c?.entity_type ?? null,
       };
     });
   });
@@ -161,11 +162,36 @@ export const adminListUserReports = createServerFn({ method: "GET" })
       .select("id, full_name, suspended_at")
       .in("id", ids.length ? ids : ["00000000-0000-0000-0000-000000000000"]);
     const pm = new Map((profiles ?? []).map((p: any) => [p.id, p]));
+
+    // Aggregate history per reported user (all statuses) to help admins prioritise
+    const reportedIds = Array.from(new Set((rows ?? []).map((r: any) => r.reported_user_id)));
+    const { data: allForUsers } = await supabaseAdmin
+      .from("user_reports")
+      .select("reported_user_id, reason, created_at")
+      .in("reported_user_id", reportedIds.length ? reportedIds : ["00000000-0000-0000-0000-000000000000"]);
+    const summary = new Map<string, { total: number; last_at: string | null; top_reason: string | null }>();
+    const reasonCounts = new Map<string, Map<string, number>>();
+    (allForUsers ?? []).forEach((r: any) => {
+      const cur = summary.get(r.reported_user_id) ?? { total: 0, last_at: null, top_reason: null };
+      cur.total += 1;
+      if (!cur.last_at || new Date(r.created_at) > new Date(cur.last_at)) cur.last_at = r.created_at;
+      summary.set(r.reported_user_id, cur);
+      const rc = reasonCounts.get(r.reported_user_id) ?? new Map<string, number>();
+      rc.set(r.reason, (rc.get(r.reason) ?? 0) + 1);
+      reasonCounts.set(r.reported_user_id, rc);
+    });
+    reasonCounts.forEach((rc, uid) => {
+      const top = Array.from(rc.entries()).sort((a, b) => b[1] - a[1])[0];
+      const cur = summary.get(uid);
+      if (cur && top) cur.top_reason = top[0];
+    });
+
     return (rows ?? []).map((r: any) => ({
       ...r,
       reporter_name: pm.get(r.reporter_id)?.full_name ?? null,
       reported_name: pm.get(r.reported_user_id)?.full_name ?? null,
       reported_suspended: !!pm.get(r.reported_user_id)?.suspended_at,
+      summary: summary.get(r.reported_user_id) ?? { total: 1, last_at: r.created_at, top_reason: r.reason },
     }));
   });
 
@@ -284,4 +310,17 @@ export const getUserSafetyFlags = createServerFn({ method: "POST" })
       .eq("blocked_id", data.user_id)
       .maybeSingle();
     return { blocked: !!block };
+  });
+
+/* -------------------------------------------------------------------------- */
+/*  Shared helper: users involved in a block with me (either direction)        */
+/* -------------------------------------------------------------------------- */
+
+export const listBlockedWithMe = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data } = await context.supabase.rpc("blocked_with_me", { _user_id: context.userId });
+    return ((data as any[]) ?? []).map((row: any) =>
+      typeof row === "string" ? row : row?.blocked_with_me,
+    ).filter(Boolean) as string[];
   });
