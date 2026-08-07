@@ -5,6 +5,7 @@ import { z } from "zod";
 import { Search, MapPin, Filter, X, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMyRole } from "@/hooks/useAuth";
+import { useBlockedIds } from "@/hooks/useBlockedIds";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -62,6 +63,8 @@ function ProjectsDiscovery() {
       replace: true,
     });
 
+  const blockedIds = useBlockedIds(user?.id);
+
   const { data: investor } = useQuery({
     queryKey: ["investor_profile_for_sort", user?.id],
     enabled: !!user,
@@ -116,7 +119,7 @@ function ProjectsDiscovery() {
   });
 
   const sorted = (() => {
-    const list = items ?? [];
+    const list = (items ?? []).filter((p: any) => !blockedIds.has(p.company_id));
     if (sort === "newest") {
       return [...list].sort(
         (a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
