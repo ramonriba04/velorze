@@ -301,21 +301,26 @@
       "s4Title": "Explora oportunidades",
       "s4Desc": "Navega proyectos manualmente usando filtros.",
       "s4Cta": "Explorar"
-    }
+    },
+    "doneTitle": "🎉 Tu perfil está listo",
+    "doneSub": "Ya puedes empezar a descubrir oportunidades compatibles.",
+    "doneCta": "Ir al panel"
   },
   "empty": {
     "projects": "Aún no hay oportunidades publicadas.",
     "projectsSub": "Vuelve pronto o completa tu perfil para recibir recomendaciones.",
-    "favorites": "Aún no has guardado proyectos.",
-    "favoritesSub": "Explora oportunidades y guarda las que te interesen.",
-    "messages": "Aún no tienes conversaciones.",
-    "messagesSub": "Cuando una empresa acepte tu solicitud podréis chatear aquí.",
+    "favorites": "Guarda proyectos para encontrarlos rápido más tarde.",
+    "favoritesSub": "Toca el corazón en cualquier proyecto para guardarlo aquí.",
+    "messages": "Tus conversaciones aparecerán aquí.",
+    "messagesSub": "Cuando conectes con alguien podréis hablar en este espacio.",
     "notifications": "No tienes notificaciones.",
-    "notificationsSub": "Te avisaremos cuando ocurra algo importante.",
+    "notificationsSub": "Te avisaremos de solicitudes, matches y verificaciones.",
     "exploreCta": "Explorar proyectos",
     "startConnection": "Empieza una conexión",
     "discoverCta": "Descubrir proyectos",
-    "completeProfileCta": "Completa tu perfil"
+    "completeProfileCta": "Completa tu perfil",
+    "recommended": "Todavía no encontramos proyectos compatibles.",
+    "recommendedSub": "Completa tu perfil o explora proyectos manualmente."
   },
   "common": {
     "save": "Guardar",
@@ -339,7 +344,8 @@
     "required": "Obligatorio",
     "optional": "(opcional)",
     "other": "Otro",
-    "moreOptions": "Más opciones"
+    "moreOptions": "Más opciones",
+    "undo": "Deshacer"
   },
   "project": {
     "title": "Título del proyecto",
@@ -536,7 +542,11 @@
     "add": "Guardar en favoritos",
     "remove": "Quitar de favoritos",
     "save": "Guardar",
-    "saved": "Guardado"
+    "saved": "Guardado",
+    "addedToast": "❤️ Añadido a favoritos",
+    "addedToastSub": "Lo encontrarás en tu lista de favoritos.",
+    "removedToast": "Eliminado de favoritos",
+    "removedToastSub": "Puedes deshacerlo durante unos segundos."
   },
   "admin": {
     "title": "Panel de administración",
@@ -994,5 +1004,48 @@
     "projects": "Oportunidades publicadas",
     "noProjects": "Sin oportunidades públicas",
     "noProjectsSub": "Este publicador todavía no tiene proyectos publicados."
+  },
+  "tour": {
+    "title": "Guía rápida",
+    "skip": "Omitir guía",
+    "next": "Siguiente",
+    "done": "Empezar",
+    "step": {
+      "home": {
+        "title": "🏠 Inicio",
+        "desc": "Recomendaciones generadas con compatibilidad por IA."
+      },
+      "explore": {
+        "title": "🔍 Explorar",
+        "desc": "Búsqueda manual con filtros por sector, país y etapa."
+      },
+      "favorites": {
+        "title": "❤️ Favoritos",
+        "desc": "Los proyectos que has guardado para revisar después."
+      },
+      "messages": {
+        "title": "💬 Mensajes",
+        "desc": "Tus conversaciones con inversores y publicadores."
+      },
+      "notifications": {
+        "title": "🔔 Notificaciones",
+        "desc": "Actividad importante: solicitudes, matches y verificaciones."
+      }
+    },
+    "restartTitle": "Guía de la aplicación",
+    "restartSub": "Vuelve a ver la guía de las áreas principales.",
+    "restart": "Reiniciar guía",
+    "restarted": "La guía se mostrará de nuevo."
+  },
+  "toast": {
+    "profileSaved": "✅ Cambios guardados correctamente",
+    "profileSavedSub": "Tu perfil está actualizado.",
+    "projectPublished": "🎉 Tu proyecto ya está publicado",
+    "projectPublishedSub": "Los inversores compatibles pueden descubrirlo.",
+    "projectSaved": "✅ Proyecto guardado",
+    "projectSavedSub": "Publícalo cuando esté listo.",
+    "verified": "✅ Tu identidad ha sido verificada",
+    "verifiedSub": "Ya puedes publicar proyectos.",
+    "requestAnswered": "✅ Solicitud actualizada"
   }
 }
