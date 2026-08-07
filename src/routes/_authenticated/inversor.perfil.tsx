@@ -90,7 +90,7 @@ function InvestorProfile() {
           avatar_url: current.avatar_url || null,
         },
       });
-      toast.success(t("common.saved"));
+      toast.success(t("toast.profileSaved"), { description: t("toast.profileSavedSub") });
       refetch();
     } catch (e) {
       toast.error((e as Error).message);

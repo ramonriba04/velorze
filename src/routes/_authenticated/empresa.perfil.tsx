@@ -72,7 +72,7 @@ function CompanyProfilePage() {
           logo_url: current.logo_url || null,
         },
       });
-      toast.success(t("common.saved"));
+      toast.success(t("toast.profileSaved"), { description: t("toast.profileSavedSub") });
       refetch();
     } catch (e) {
       toast.error((e as Error).message);

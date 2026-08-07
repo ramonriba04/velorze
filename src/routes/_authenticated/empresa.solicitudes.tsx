@@ -39,7 +39,7 @@ function CompanyRequests() {
 
   const mut = useMutation({
     mutationFn: (v: { id: string; status: "accepted" | "rejected" }) => respond({ data: v }),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["company_requests"] }); toast.success(t("common.saved")); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["company_requests"] }); toast.success(t("toast.requestAnswered")); },
   });
 
   return (
