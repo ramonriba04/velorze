@@ -210,6 +210,8 @@ function Settings() {
         </Dialog>
       </Card>
 
+      <NotificationPreferencesCard />
+
       <Card className="space-y-3 p-6">
         <h2 className="text-lg font-semibold">{t("safety.title")}</h2>
         <p className="text-sm text-muted-foreground">{t("safety.settingsHint")}</p>
@@ -217,6 +219,7 @@ function Settings() {
           <Button variant="outline" size="sm">{t("safety.manage")}</Button>
         </Link>
       </Card>
+
 
       <Card className="space-y-3 p-6">
         <h2 className="text-lg font-semibold">{t("footer.legal")}</h2>
