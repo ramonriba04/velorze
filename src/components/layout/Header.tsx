@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Globe, LogOut, Settings, User as UserIcon, ChevronDown } from "lucide-react";
+import { Globe, LogOut, Settings, User as UserIcon, ChevronDown, Activity } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useMyRole } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
