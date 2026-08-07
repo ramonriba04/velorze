@@ -9,6 +9,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { EntityAvatar } from "@/components/media/EntityAvatar";
 import { EmptyState } from "@/components/ui/empty-state";
+import { EntityTypeBadge } from "@/components/EntityTypeBadge";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader,
@@ -63,7 +64,10 @@ function Safety() {
             <div key={b.blocked_id} className="flex items-center gap-3 rounded-md border p-2.5">
               <EntityAvatar src={b.avatar_url} name={b.name} kind={b.kind as any} size={36} />
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium">{b.name}</p>
+                <div className="flex items-center gap-1.5">
+                  <p className="truncate text-sm font-medium">{b.name}</p>
+                  {b.entity_type && <EntityTypeBadge entityType={b.entity_type} />}
+                </div>
                 <p className="text-[11px] text-muted-foreground">{new Date(b.created_at).toLocaleDateString()}</p>
               </div>
               <AlertDialog>
