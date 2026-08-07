@@ -31,6 +31,7 @@ function Onboarding() {
   const { user, role, loading } = useMyRole();
   const navigate = useNavigate();
   const finish = useServerFn(markOnboardingComplete);
+  const [finished, setFinished] = useState(false);
 
   const isCompany = role === "empresa";
 
