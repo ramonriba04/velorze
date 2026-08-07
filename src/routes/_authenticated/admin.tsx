@@ -327,6 +327,22 @@ function ModerationQueue() {
                   <p className="text-xs text-muted-foreground mt-1">
                     {t("admin.mod.reportedBy")}: {r.reporter_name ?? r.reporter_id.slice(0, 8)} · {new Date(r.created_at).toLocaleString()}
                   </p>
+                  {r.summary && (
+                    <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[11px] text-muted-foreground">
+                      <Badge variant="secondary" className="text-[10px]">
+                        {t("admin.mod.totalReports", { count: r.summary.total })}
+                      </Badge>
+                      {r.summary.last_at && (
+                        <span>{t("admin.mod.lastReport", { date: new Date(r.summary.last_at).toLocaleDateString() })}</span>
+                      )}
+                      {r.summary.top_reason && (
+                        <span>
+                          · {t("admin.mod.topReason")}: {t(`safety.report.userReasons.${r.summary.top_reason}`)}
+                        </span>
+                      )}
+                    </div>
+                  )}
+
                   {r.details && <p className="mt-1 text-sm">{r.details}</p>}
                   {r.admin_notes && <p className="mt-1 text-xs text-muted-foreground">{t("admin.mod.notes")}: {r.admin_notes}</p>}
                 </div>
