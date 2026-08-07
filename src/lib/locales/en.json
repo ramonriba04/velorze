@@ -532,7 +532,11 @@
   },
   "favorites": {
     "title": "Favorites",
-    "empty": "You haven't saved any projects yet."
+    "empty": "You haven't saved any projects yet.",
+    "add": "Save to favorites",
+    "remove": "Remove from favorites",
+    "save": "Save",
+    "saved": "Saved"
   },
   "admin": {
     "title": "Admin panel",

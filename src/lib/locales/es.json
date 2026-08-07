@@ -532,7 +532,11 @@
   },
   "favorites": {
     "title": "Favoritos",
-    "empty": "Aún no has guardado proyectos."
+    "empty": "Aún no has guardado proyectos.",
+    "add": "Guardar en favoritos",
+    "remove": "Quitar de favoritos",
+    "save": "Guardar",
+    "saved": "Guardado"
   },
   "admin": {
     "title": "Panel de administración",
