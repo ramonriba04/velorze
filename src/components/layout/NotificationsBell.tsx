@@ -1,39 +1,20 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { Bell } from "lucide-react";
+import { useState } from "react";
+import { Bell, CheckCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMyRole } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
-
-type Notification = {
-  id: string;
-  type: string;
-  payload: Record<string, any>;
-  read_at: string | null;
-  created_at: string;
-};
-
-function notificationLink(n: Notification, role: string | null): { to: string } {
-  switch (n.type) {
-    case "contact_request_received":
-      return { to: "/empresa/solicitudes" };
-    case "contact_request_accepted":
-    case "contact_request_rejected":
-      return { to: "/inversor/solicitudes" };
-    case "message_received":
-      return { to: "/mensajes" };
-    default:
-      return { to: role === "empresa" ? "/empresa" : "/inversor" };
-  }
-}
+import {
+  type AppNotification, groupNotifications, notificationLink, formatNotificationTime,
+} from "@/lib/notifications";
 
 export function NotificationsBell() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user, role } = useMyRole();
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -48,73 +29,105 @@ export function NotificationsBell() {
         .select("id, type, payload, read_at, created_at")
         .order("created_at", { ascending: false })
         .limit(20);
-      return (data ?? []) as Notification[];
+      return (data ?? []) as AppNotification[];
     },
   });
 
   const unread = notifications?.filter((n) => !n.read_at) ?? [];
+  const groups = groupNotifications(notifications ?? []);
 
-  // Mark all as read when dropdown opens
-  useEffect(() => {
-    if (!open || unread.length === 0 || !user) return;
-    const ids = unread.map((n) => n.id);
-    (async () => {
-      await supabase
-        .from("notifications")
-        .update({ read_at: new Date().toISOString() })
-        .in("id", ids);
-      qc.invalidateQueries({ queryKey: ["notifications", user.id] });
-    })();
-  }, [open, unread.length, user, qc]);
+  const markRead = async (ids: string[]) => {
+    if (ids.length === 0 || !user) return;
+    await supabase
+      .from("notifications")
+      .update({ read_at: new Date().toISOString() })
+      .in("id", ids);
+    qc.invalidateQueries({ queryKey: ["notifications", user.id] });
+  };
 
   if (!user) return null;
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="relative" aria-label={t("notifications.title")}>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="relative min-h-11 min-w-11"
+          aria-label={unread.length > 0
+            ? `${t("notifications.title")} — ${t("notifications.unreadCount", { count: unread.length })}`
+            : t("notifications.title")}
+        >
           <Bell className="h-4 w-4" />
           {unread.length > 0 && (
-            <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-semibold text-destructive-foreground">
+            <span className="absolute right-1 top-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-semibold text-destructive-foreground">
               {unread.length > 9 ? "9+" : unread.length}
             </span>
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-80 p-0">
-        <div className="flex items-center justify-between border-b px-3 py-2">
-          <span className="text-sm font-semibold">{t("notifications.title")}</span>
-          {notifications && notifications.length > 0 && (
-            <span className="text-xs text-muted-foreground">{notifications.length}</span>
+      <DropdownMenuContent align="end" className="w-[min(20rem,calc(100vw-1.5rem))] p-0">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b px-3 py-2">
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold">{t("notifications.title")}</p>
+            <p className="truncate text-xs text-muted-foreground">
+              {unread.length > 0
+                ? t("notifications.unreadCount", { count: unread.length })
+                : t("notifications.allRead")}
+            </p>
+          </div>
+          {unread.length > 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="shrink-0 gap-1 text-xs"
+              onClick={() => markRead(unread.map((n) => n.id))}
+            >
+              <CheckCheck className="h-3.5 w-3.5" />
+              {t("notifications.markAllRead")}
+            </Button>
           )}
         </div>
         <div className="max-h-96 overflow-y-auto">
-          {!notifications || notifications.length === 0 ? (
+          {groups.length === 0 ? (
             <div className="p-6 text-center">
               <p className="text-sm font-medium">{t("empty.notifications")}</p>
               <p className="mt-1 text-xs text-muted-foreground">{t("empty.notificationsSub")}</p>
             </div>
           ) : (
-            <ul className="divide-y">
-              {notifications.map((n) => {
-                const link = notificationLink(n, role);
-                return (
-                  <li key={n.id}>
-                    <Link
-                      to={link.to as any}
-                      onClick={() => setOpen(false)}
-                      className={`block px-3 py-2.5 hover:bg-muted ${!n.read_at ? "bg-primary/5" : ""}`}
-                    >
-                      <p className="text-sm">{t(`notifications.types.${n.type}`, t("notifications.types.default"))}</p>
-                      <p className="mt-0.5 text-xs text-muted-foreground">
-                        {new Date(n.created_at).toLocaleString()}
-                      </p>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
+            groups.map((g) => (
+              <div key={g.key}>
+                <p className="bg-muted/50 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  {t(`notifications.groups.${g.key}`)}
+                </p>
+                <ul className="divide-y">
+                  {g.items.map((n) => (
+                    <li key={n.id}>
+                      <Link
+                        to={notificationLink(n, role) as any}
+                        onClick={() => { setOpen(false); if (!n.read_at) markRead([n.id]); }}
+                        className={`block px-3 py-2.5 hover:bg-muted ${!n.read_at ? "bg-primary/5" : ""}`}
+                      >
+                        <p className="text-sm">
+                          {t(`notifications.types.${n.type}`, t("notifications.types.default"))}
+                        </p>
+                        <p className="mt-0.5 text-xs text-muted-foreground">
+                          {formatNotificationTime(n.created_at, i18n.resolvedLanguage)}
+                        </p>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
           )}
+        </div>
+        <div className="border-t p-2">
+          <Link to="/notificaciones" onClick={() => setOpen(false)}>
+            <Button variant="ghost" size="sm" className="w-full text-xs">
+              {t("notifications.viewAll")}
+            </Button>
+          </Link>
         </div>
       </DropdownMenuContent>
     </DropdownMenu>

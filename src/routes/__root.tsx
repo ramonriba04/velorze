@@ -7,6 +7,9 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
+import { Compass } from "lucide-react";
+
 
 import appCss from "../styles.css?url";
 import i18n, { detectClientLanguage } from "../lib/i18n";
@@ -23,16 +26,42 @@ const DEFAULT_TITLE = "Capora — Marketplace inteligente de inversión";
 const DEFAULT_DESC = "Conecta proyectos con los inversores adecuados mediante matching inteligente de compatibilidad.";
 
 function NotFoundComponent() {
+  const { t } = useTranslation();
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <p className="mt-4 text-muted-foreground">Página no encontrada</p>
-        <a href="/" className="mt-6 inline-flex rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">Ir al inicio</a>
+    <div className="flex min-h-dvh items-center justify-center bg-background px-4 py-16">
+      <div className="w-full max-w-md text-center">
+        <div className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-primary/10">
+          <Compass className="h-7 w-7 text-primary" aria-hidden />
+        </div>
+        <p className="mt-6 text-sm font-semibold tracking-[0.2em] text-muted-foreground">
+          {t("notFound.code")}
+        </p>
+        <h1 className="mt-2 text-2xl font-semibold tracking-tight text-foreground">
+          {t("notFound.title")}
+        </h1>
+        <p className="mt-3 text-sm text-muted-foreground">{t("notFound.sub")}</p>
+        <div className="mt-7 flex flex-col items-stretch justify-center gap-2 sm:flex-row">
+          <a
+            href="/"
+            className="inline-flex min-h-11 items-center justify-center rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            {t("notFound.home")}
+          </a>
+          <a
+            href="/proyectos"
+            className="inline-flex min-h-11 items-center justify-center rounded-md border border-border px-5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+          >
+            {t("notFound.explore")}
+          </a>
+        </div>
+        <a href="/ayuda" className="mt-5 inline-block text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
+          {t("notFound.help")}
+        </a>
       </div>
     </div>
   );
 }
+
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);

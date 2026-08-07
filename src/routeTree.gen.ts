@@ -25,6 +25,7 @@ import { Route as AuthRecuperarRouteImport } from './routes/auth.recuperar'
 import { Route as AuthenticatedVerificacionRouteImport } from './routes/_authenticated/verificacion'
 import { Route as AuthenticatedSeguridadRouteImport } from './routes/_authenticated/seguridad'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
+import { Route as AuthenticatedNotificacionesRouteImport } from './routes/_authenticated/notificaciones'
 import { Route as AuthenticatedMensajesRouteImport } from './routes/_authenticated/mensajes'
 import { Route as AuthenticatedDescubrirRouteImport } from './routes/_authenticated/descubrir'
 import { Route as AuthenticatedConexionesRouteImport } from './routes/_authenticated/conexiones'
@@ -123,6 +124,12 @@ const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedNotificacionesRoute =
+  AuthenticatedNotificacionesRouteImport.update({
+    id: '/notificaciones',
+    path: '/notificaciones',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedMensajesRoute = AuthenticatedMensajesRouteImport.update({
   id: '/mensajes',
   path: '/mensajes',
@@ -236,6 +243,7 @@ export interface FileRoutesByFullPath {
   '/conexiones': typeof AuthenticatedConexionesRoute
   '/descubrir': typeof AuthenticatedDescubrirRoute
   '/mensajes': typeof AuthenticatedMensajesRoute
+  '/notificaciones': typeof AuthenticatedNotificacionesRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/seguridad': typeof AuthenticatedSeguridadRoute
   '/verificacion': typeof AuthenticatedVerificacionRoute
@@ -270,6 +278,7 @@ export interface FileRoutesByTo {
   '/conexiones': typeof AuthenticatedConexionesRoute
   '/descubrir': typeof AuthenticatedDescubrirRoute
   '/mensajes': typeof AuthenticatedMensajesRoute
+  '/notificaciones': typeof AuthenticatedNotificacionesRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/seguridad': typeof AuthenticatedSeguridadRoute
   '/verificacion': typeof AuthenticatedVerificacionRoute
@@ -306,6 +315,7 @@ export interface FileRoutesById {
   '/_authenticated/conexiones': typeof AuthenticatedConexionesRoute
   '/_authenticated/descubrir': typeof AuthenticatedDescubrirRoute
   '/_authenticated/mensajes': typeof AuthenticatedMensajesRoute
+  '/_authenticated/notificaciones': typeof AuthenticatedNotificacionesRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/seguridad': typeof AuthenticatedSeguridadRoute
   '/_authenticated/verificacion': typeof AuthenticatedVerificacionRoute
@@ -342,6 +352,7 @@ export interface FileRouteTypes {
     | '/conexiones'
     | '/descubrir'
     | '/mensajes'
+    | '/notificaciones'
     | '/onboarding'
     | '/seguridad'
     | '/verificacion'
@@ -376,6 +387,7 @@ export interface FileRouteTypes {
     | '/conexiones'
     | '/descubrir'
     | '/mensajes'
+    | '/notificaciones'
     | '/onboarding'
     | '/seguridad'
     | '/verificacion'
@@ -411,6 +423,7 @@ export interface FileRouteTypes {
     | '/_authenticated/conexiones'
     | '/_authenticated/descubrir'
     | '/_authenticated/mensajes'
+    | '/_authenticated/notificaciones'
     | '/_authenticated/onboarding'
     | '/_authenticated/seguridad'
     | '/_authenticated/verificacion'
@@ -558,6 +571,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/notificaciones': {
+      id: '/_authenticated/notificaciones'
+      path: '/notificaciones'
+      fullPath: '/notificaciones'
+      preLoaderRoute: typeof AuthenticatedNotificacionesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/mensajes': {
       id: '/_authenticated/mensajes'
       path: '/mensajes'
@@ -687,6 +707,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedConexionesRoute: typeof AuthenticatedConexionesRoute
   AuthenticatedDescubrirRoute: typeof AuthenticatedDescubrirRoute
   AuthenticatedMensajesRoute: typeof AuthenticatedMensajesRoute
+  AuthenticatedNotificacionesRoute: typeof AuthenticatedNotificacionesRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedSeguridadRoute: typeof AuthenticatedSeguridadRoute
   AuthenticatedVerificacionRoute: typeof AuthenticatedVerificacionRoute
@@ -710,6 +731,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedConexionesRoute: AuthenticatedConexionesRoute,
   AuthenticatedDescubrirRoute: AuthenticatedDescubrirRoute,
   AuthenticatedMensajesRoute: AuthenticatedMensajesRoute,
+  AuthenticatedNotificacionesRoute: AuthenticatedNotificacionesRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedSeguridadRoute: AuthenticatedSeguridadRoute,
   AuthenticatedVerificacionRoute: AuthenticatedVerificacionRoute,

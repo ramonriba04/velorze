@@ -239,7 +239,24 @@
       "contact_request_received": "You received a new contact request",
       "contact_request_accepted": "A company accepted your request",
       "contact_request_rejected": "A company declined your request",
-      "message_received": "You received a new message"
+      "message_received": "You received a new message",
+      "new_match": "New match: there is mutual interest",
+      "project_published": "Your project is now published",
+      "verification_approved": "Your verification was approved",
+      "verification_rejected": "Your verification was not approved",
+      "project_reported": "One of your projects was reported",
+      "account_warning": "Important notice about your account"
+    },
+    "center": "Notification center",
+    "centerSub": "Everything happening in your account, in one place.",
+    "viewAll": "View all",
+    "markAllRead": "Mark all as read",
+    "allRead": "All read",
+    "unreadCount": "{{count}} unread",
+    "groups": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "earlier": "Earlier"
     }
   },
   "onboarding": {
@@ -911,5 +928,32 @@
       "individual": "Verified individual"
     },
     "blockedSince": "Blocked on {{date}}"
+  },
+  "notifPrefs": {
+    "title": "Email notifications",
+    "sub": "Choose which alerts you want in your inbox.",
+    "master": "Receive emails from Capora",
+    "masterHint": "If you turn this off you won't receive any alert emails (except account security ones).",
+    "saved": "Preferences saved",
+    "pending": "Emails will go live soon. Your preferences are already saved.",
+    "items": {
+      "email_new_match": "New match",
+      "email_contact_request": "New contact request",
+      "email_contact_accepted": "Request accepted or declined",
+      "email_new_message": "New message",
+      "email_project_published": "Project published",
+      "email_verification_result": "Verification result",
+      "email_project_reported": "Project reported",
+      "email_account_warning": "Account notices",
+      "email_product_updates": "Product updates"
+    }
+  },
+  "notFound": {
+    "code": "404",
+    "title": "This page doesn't exist",
+    "sub": "The link may have changed or the project is no longer available.",
+    "home": "Go home",
+    "explore": "Explore projects",
+    "help": "Help center"
   }
 }

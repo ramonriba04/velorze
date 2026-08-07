@@ -239,7 +239,24 @@
       "contact_request_received": "Has recibido una nueva solicitud de contacto",
       "contact_request_accepted": "Una empresa ha aceptado tu solicitud",
       "contact_request_rejected": "Una empresa ha rechazado tu solicitud",
-      "message_received": "Has recibido un nuevo mensaje"
+      "message_received": "Has recibido un nuevo mensaje",
+      "new_match": "Nuevo match: hay interés mutuo",
+      "project_published": "Tu proyecto se ha publicado",
+      "verification_approved": "Tu verificación ha sido aprobada",
+      "verification_rejected": "Tu verificación no ha sido aprobada",
+      "project_reported": "Uno de tus proyectos ha sido reportado",
+      "account_warning": "Aviso importante sobre tu cuenta"
+    },
+    "center": "Centro de notificaciones",
+    "centerSub": "Todo lo que ocurre en tu cuenta, en un solo lugar.",
+    "viewAll": "Ver todas",
+    "markAllRead": "Marcar todo como leído",
+    "allRead": "Todo leído",
+    "unreadCount": "{{count}} sin leer",
+    "groups": {
+      "today": "Hoy",
+      "yesterday": "Ayer",
+      "earlier": "Anteriores"
     }
   },
   "onboarding": {
@@ -911,5 +928,32 @@
       "individual": "Persona física verificada"
     },
     "blockedSince": "Bloqueado el {{date}}"
+  },
+  "notifPrefs": {
+    "title": "Notificaciones por email",
+    "sub": "Elige qué avisos quieres recibir en tu correo.",
+    "master": "Recibir emails de Capora",
+    "masterHint": "Si lo desactivas, no recibirás ningún email de aviso (salvo los de seguridad de la cuenta).",
+    "saved": "Preferencias guardadas",
+    "pending": "Los emails se activarán próximamente. Tus preferencias ya quedan guardadas.",
+    "items": {
+      "email_new_match": "Nuevo match",
+      "email_contact_request": "Nueva solicitud de contacto",
+      "email_contact_accepted": "Solicitud aceptada o rechazada",
+      "email_new_message": "Nuevo mensaje",
+      "email_project_published": "Proyecto publicado",
+      "email_verification_result": "Resultado de verificación",
+      "email_project_reported": "Proyecto reportado",
+      "email_account_warning": "Avisos de cuenta",
+      "email_product_updates": "Novedades de producto"
+    }
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Esta página no existe",
+    "sub": "Puede que el enlace haya cambiado o que el proyecto ya no esté disponible.",
+    "home": "Ir al inicio",
+    "explore": "Explorar proyectos",
+    "help": "Centro de ayuda"
   }
 }
