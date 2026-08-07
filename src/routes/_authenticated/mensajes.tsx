@@ -410,35 +410,38 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
                   {g.items.map((m: any) => {
                     const mine = m.sender_id === userId;
                     const ts = new Date(m.created_at);
+                    const hits = mine ? [] : detectSecurityPatterns(m.body ?? "");
                     return (
-                      <div key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
-                        <div className={`max-w-[75%] rounded-lg px-3 py-2 text-sm ${mine ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
-                          <div>{m.body}</div>
-                          <div className={`mt-1 flex items-center justify-end gap-1 text-[10px] ${mine ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
-                            <span>{timeShort(ts)}</span>
-                            {mine && (
-                              m.read_at
-                                ? <CheckCheck className="h-3 w-3" />
-                                : <Check className="h-3 w-3" />
-                            )}
+                      <div key={m.id} className="space-y-1">
+                        <div className={`flex ${mine ? "justify-end" : "justify-start"}`}>
+                          <div className={`max-w-[75%] rounded-lg px-3 py-2 text-sm ${mine ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
+                            <div>{m.body}</div>
+                            <div className={`mt-1 flex items-center justify-end gap-1 text-[10px] ${mine ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+                              <span>{timeShort(ts)}</span>
+                              {mine && (
+                                m.read_at
+                                  ? <CheckCheck className="h-3 w-3" />
+                                  : <Check className="h-3 w-3" />
+                              )}
+                            </div>
                           </div>
                         </div>
+                        {hits.length > 0 && activeConv && (
+                          <SecurityNoticeCard
+                            key={`sec-${m.id}`}
+                            hits={hits}
+                            senderId={activeConv.otherId}
+                            senderName={activeConv.otherName}
+                            onBlocked={() => { setActive(null); qc.invalidateQueries({ queryKey: ["conversations_rich"] }); }}
+                          />
+                        )}
                       </div>
                     );
                   })}
                 </div>
               ))}
             </div>
-            {secHits.length > 0 && activeConv && (
-              <div className="px-3">
-                <SecurityNoticeCard
-                  hits={secHits}
-                  senderId={activeConv.otherId}
-                  senderName={activeConv.otherName}
-                  senderVerified={!!activeConv.otherVerified}
-                />
-              </div>
-            )}
+
             <form onSubmit={onSend} className="border-t p-3 flex gap-2">
               <Input placeholder={t("messages.writePlaceholder")} value={text} onChange={(e) => setText(e.target.value)} />
               <Button type="submit">{t("common.send")}</Button>
