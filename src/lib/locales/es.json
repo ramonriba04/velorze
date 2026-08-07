@@ -516,8 +516,8 @@
   "home": {
     "welcomeBack": "Bienvenido de nuevo",
     "profileComplete": "Perfil completado",
-    "noRecommendations": "Completa tu perfil para desbloquear recomendaciones",
-    "noRecommendationsSub": "Necesitamos tus sectores, ticket y geografía para sugerirte oportunidades compatibles.",
+    "noRecommendations": "Todavía no encontramos proyectos compatibles.",
+    "noRecommendationsSub": "Completa tu perfil o explora proyectos manualmente.",
     "completeProfileCta": "Completar perfil",
     "noMatchesYetTitle": "Todavía no encontramos oportunidades compatibles",
     "noMatchesYetSub": "Volveremos a buscar a medida que se publiquen nuevos proyectos.",
