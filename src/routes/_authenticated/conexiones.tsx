@@ -14,6 +14,8 @@ import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
 import { EntityAvatar } from "@/components/media/EntityAvatar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { ListSkeleton } from "@/components/ui/skeletons";
+
 
 export const Route = createFileRoute("/_authenticated/conexiones")({
   component: ConnectionsPage,
@@ -48,7 +50,7 @@ function ConnectionsPage() {
   };
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8 pb-28 sm:px-6">
+    <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
       <header className="flex items-center gap-2">
         <Users className="h-5 w-5 text-primary" />
         <h1 className="text-2xl font-semibold tracking-tight">
@@ -73,9 +75,8 @@ function ConnectionsPage() {
         {(["conectado", "pendiente", "descartado"] as const).map((key) => (
           <TabsContent key={key} value={key} className="mt-4 space-y-3">
             {isLoading ? (
-              <div className="p-6 text-center text-sm text-muted-foreground">
-                {t("common.loading")}
-              </div>
+              <ListSkeleton count={3} />
+
             ) : buckets[key].length === 0 ? (
               <EmptyState
                 icon={<Users className="h-6 w-6" />}

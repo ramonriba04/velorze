@@ -27,6 +27,7 @@ export function MobileBottomNav() {
 
   return (
     <nav
+      aria-label={t("nav.primary", "Primary")}
       className="fixed bottom-0 inset-x-0 z-40 md:hidden border-t border-border/60 bg-background/95 backdrop-blur"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
@@ -37,12 +38,13 @@ export function MobileBottomNav() {
             <li key={to}>
               <Link
                 to={to}
-                className={`flex flex-col items-center justify-center gap-0.5 py-2 text-[11px] ${
-                  active ? "text-primary" : "text-muted-foreground"
+                aria-current={active ? "page" : undefined}
+                className={`flex min-h-14 flex-col items-center justify-center gap-0.5 py-2 text-[11px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset ${
+                  active ? "text-primary" : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <Icon className="h-5 w-5" />
-                <span className="truncate">{label}</span>
+                <Icon className="h-5 w-5 shrink-0" aria-hidden />
+                <span className="max-w-full truncate px-1">{label}</span>
               </Link>
             </li>
           );
@@ -51,3 +53,4 @@ export function MobileBottomNav() {
     </nav>
   );
 }
+

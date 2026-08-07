@@ -8,6 +8,8 @@ import { respondContactRequest } from "@/lib/contact.functions";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
+import { ListSkeleton } from "@/components/ui/skeletons";
+
 import { Inbox } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/inversor/solicitudes")({
@@ -17,7 +19,7 @@ export const Route = createFileRoute("/_authenticated/inversor/solicitudes")({
 function InvestorRequests() {
   const { t } = useTranslation();
   const { user } = useMyRole();
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["my_requests", user?.id],
     enabled: !!user,
     queryFn: async () => {
@@ -34,8 +36,11 @@ function InvestorRequests() {
     <div className="mx-auto max-w-3xl px-4 py-10">
       <h1 className="text-3xl font-bold">{t("requests.title")}</h1>
       <div className="mt-6 space-y-3">
-        {(!data || data.length === 0) ? (
+        {isLoading ? (
+          <ListSkeleton count={3} withAvatar={false} />
+        ) : (!data || data.length === 0) ? (
           <EmptyState icon={<Inbox />} title={t("requests.empty")} description={t("empty.messagesSub")} ctaLabel={t("empty.exploreCta")} ctaTo="/inversor" />
+
         ) : data.map((r: any) => (
           <Card key={r.id} className="p-4 flex items-center justify-between">
             <div>

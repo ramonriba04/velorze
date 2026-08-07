@@ -87,19 +87,19 @@ function PlansPage() {
   // Plans are only relevant to publishers (companies). Investors stay fully free.
   if (user && role === "inversor") {
     return (
-      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 text-center">
+      <main className="mx-auto max-w-2xl px-4 py-16 sm:px-6 text-center">
         <Sparkles className="mx-auto h-8 w-8 text-primary" />
         <h1 className="mt-3 text-2xl font-bold tracking-tight">{t("planes.investorTitle")}</h1>
         <p className="mt-2 text-muted-foreground">{t("planes.investorSub")}</p>
         <Link to="/inversor" className="mt-6 inline-block">
           <Button>{t("nav.home")}</Button>
         </Link>
-      </div>
+      </main>
     );
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 pb-28">
+    <main className="mx-auto max-w-6xl px-4 py-10 pb-20 sm:px-6 md:pb-10">
       <div className="mb-6">
         <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="h-4 w-4" /> {t("common.back")}
@@ -214,6 +214,6 @@ function PlansPage() {
       <p className="mt-10 text-center text-xs text-muted-foreground">
         {t("plans.disclaimer")}
       </p>
-    </div>
+    </main>
   );
 }

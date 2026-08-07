@@ -9,6 +9,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
+import { ListSkeleton } from "@/components/ui/skeletons";
+
 import { Inbox } from "lucide-react";
 import { toast } from "sonner";
 
@@ -22,7 +24,7 @@ function CompanyRequests() {
   const qc = useQueryClient();
   const respond = useServerFn(respondContactRequest);
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["company_requests", user?.id],
     enabled: !!user,
     queryFn: async () => {
@@ -44,8 +46,11 @@ function CompanyRequests() {
     <div className="mx-auto max-w-3xl px-4 py-10">
       <h1 className="text-3xl font-bold">{t("requests.title")}</h1>
       <div className="mt-6 space-y-3">
-        {(!data || data.length === 0) ? (
+        {isLoading ? (
+          <ListSkeleton count={3} withAvatar={false} />
+        ) : (!data || data.length === 0) ? (
           <EmptyState icon={<Inbox />} title={t("requests.empty")} description={t("empty.notificationsSub")} />
+
         ) : data.map((r: any) => (
           <Card key={r.id} className="p-4">
             <div className="flex items-center justify-between">

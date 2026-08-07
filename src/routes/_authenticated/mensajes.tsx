@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Inbox, Handshake, MessagesSquare, Check, CheckCheck, ImageOff, MoreVertical, ShieldCheck } from "lucide-react";
+import { Inbox, Handshake, MessagesSquare, Check, CheckCheck, ImageOff, MoreVertical, ShieldCheck, ChevronLeft } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { EntityAvatar } from "@/components/media/EntityAvatar";
 import { toast } from "sonner";
@@ -20,6 +20,8 @@ import { ReportDialog } from "@/components/moderation/ReportDialog";
 import { BlockUserDialog } from "@/components/moderation/BlockUserDialog";
 import { SecurityNoticeCard } from "@/components/moderation/SecurityNoticeCard";
 import { detectSecurityPatterns } from "@/lib/security-patterns";
+import { ConversationListSkeleton, ListSkeleton } from "@/components/ui/skeletons";
+
 
 export const Route = createFileRoute("/_authenticated/mensajes")({
   head: () => ({ meta: [{ title: "Messages | Capora" }, { name: "robots", content: "noindex, nofollow" }] }),
@@ -56,7 +58,7 @@ function Messages() {
   });
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8 pb-28">
+    <div className="mx-auto max-w-5xl px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">{t("messages.title")}</h1>
 
       <Tabs defaultValue="chats">
@@ -77,7 +79,8 @@ function Messages() {
         </TabsList>
 
         <TabsContent value="pending" className="mt-4 space-y-3">
-          {pending.length === 0 && (
+          {reqQuery.isLoading && <ListSkeleton count={3} withAvatar={false} />}
+          {!reqQuery.isLoading && pending.length === 0 && (
             <EmptyState icon={<Inbox />} title={t("messages.pendingEmpty")} description={t("empty.messagesSub")} />
           )}
           {pending.map((r: any) => (
@@ -102,7 +105,8 @@ function Messages() {
         </TabsContent>
 
         <TabsContent value="accepted" className="mt-4 space-y-3">
-          {accepted.length === 0 && (
+          {reqQuery.isLoading && <ListSkeleton count={2} withAvatar={false} />}
+          {!reqQuery.isLoading && accepted.length === 0 && (
             <EmptyState icon={<Handshake />} title={t("messages.acceptedEmpty")} description={t("empty.messagesSub")} />
           )}
           {accepted.map((r: any) => (
@@ -151,7 +155,7 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
   const listRef = useRef<HTMLDivElement>(null);
   const qc = useQueryClient();
 
-  const { data: convs } = useQuery({
+  const { data: convs, isLoading: loadingConvs } = useQuery({
     queryKey: ["conversations_rich", userId],
     enabled: !!userId,
     queryFn: async () => {
@@ -299,6 +303,15 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
 
   const activeConv = (convs ?? []).find((c: any) => c.id === active);
 
+  if (loadingConvs) {
+    return (
+      <div className="grid gap-4 md:grid-cols-[320px_1fr]">
+        <Card className="p-0"><ConversationListSkeleton /></Card>
+        <Card className="hidden h-[65vh] md:block" aria-hidden />
+      </div>
+    );
+  }
+
   if (!convs || convs.length === 0) {
     return (
       <EmptyState
@@ -313,16 +326,22 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
 
   return (
     <div className="grid gap-4 md:grid-cols-[320px_1fr]">
-      <Card className="p-0 max-h-[65vh] overflow-y-auto divide-y">
+      <Card
+        className={`p-0 max-h-[65vh] overflow-y-auto divide-y ${active ? "hidden md:block" : ""}`}
+      >
+
         {convs.map((c: any) => {
           const isActive = active === c.id;
           const ts = c.lastMessage ? new Date(c.lastMessage.created_at) : new Date(c.created_at);
           return (
             <button
               key={c.id}
+              type="button"
+              aria-current={isActive ? "true" : undefined}
               onClick={() => setActive(c.id)}
-              className={`w-full text-left px-3 py-3 flex gap-3 items-start ${isActive ? "bg-primary/10" : "hover:bg-muted"}`}
+              className={`w-full text-left px-3 py-3 flex gap-3 items-start transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset ${isActive ? "bg-primary/10" : "hover:bg-muted"}`}
             >
+
               <div className="relative h-12 w-12 shrink-0 rounded-md overflow-hidden bg-muted flex items-center justify-center">
                 {c.thumb ? (
                   <img src={c.thumb} alt="" className="h-full w-full object-cover" loading="lazy" />
@@ -355,17 +374,27 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
         })}
       </Card>
 
-      <Card className="flex flex-col h-[65vh]">
+      <Card className={`flex flex-col h-[65vh] ${active ? "" : "hidden md:flex"}`}>
         {!active ? (
           <div className="flex-1 flex items-center justify-center text-sm text-muted-foreground">{t("messages.selectHint")}</div>
         ) : (
           <>
             {activeConv && (
               <div className="border-b px-3 py-2 flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="md:hidden shrink-0"
+                  aria-label={t("common.back")}
+                  onClick={() => setActive(null)}
+                >
+                  <ChevronLeft aria-hidden className="h-4 w-4" />
+                </Button>
                 <EntityAvatar src={activeConv.otherAvatar} name={activeConv.otherName} kind={activeConv.otherKind} size={28} />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5">
                     <p className="text-sm font-medium truncate">{activeConv.otherName}</p>
+
                     {activeConv.otherVerified && (
                       <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700 dark:text-emerald-400">
                         <ShieldCheck className="h-3 w-3" />
@@ -381,7 +410,7 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" aria-label={"More options"}>
+                    <Button variant="ghost" size="icon" aria-label={t("common.moreOptions", "More options")}>
                       <MoreVertical className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
@@ -446,7 +475,7 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
             </div>
 
             <form onSubmit={onSend} className="border-t p-3 flex gap-2">
-              <Input placeholder={t("messages.writePlaceholder")} value={text} onChange={(e) => setText(e.target.value)} />
+              <Input placeholder={t("messages.writePlaceholder")} aria-label={t("messages.writePlaceholder")} value={text} onChange={(e) => setText(e.target.value)} />
               <Button type="submit">{t("common.send")}</Button>
             </form>
           </>

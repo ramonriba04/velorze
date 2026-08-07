@@ -10,6 +10,8 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { EntityAvatar } from "@/components/media/EntityAvatar";
 import { Heart, ImageOff } from "lucide-react";
 import { computeMatch, type MatchableInvestor, type MatchableProject } from "@/lib/matching";
+import { ProjectGridSkeleton } from "@/components/ui/skeletons";
+
 
 export const Route = createFileRoute("/_authenticated/inversor/favoritos")({
   component: Favorites,
@@ -69,10 +71,14 @@ function Favorites() {
 
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10 pb-28">
+    <div className="mx-auto max-w-5xl px-4 py-10">
       <h1 className="text-3xl font-bold">{t("favorites.title")}</h1>
 
-      {!isLoading && (!data || data.length === 0) ? (
+      {isLoading ? (
+        <div className="mt-6">
+          <ProjectGridSkeleton count={4} className="grid gap-4 sm:grid-cols-2" />
+        </div>
+      ) : (!data || data.length === 0) ? (
         <div className="mt-6">
           <EmptyState
             icon={<Heart />}
@@ -84,6 +90,7 @@ function Favorites() {
         </div>
       ) : (
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
+
           {data?.map(({ project, company, thumb, match }: any) => (
             <Link
               key={project.id}

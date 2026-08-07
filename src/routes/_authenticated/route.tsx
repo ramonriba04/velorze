@@ -13,10 +13,11 @@ export const Route = createFileRoute("/_authenticated")({
     return { user: data.user };
   },
   component: () => (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-dvh flex-col">
       <Header />
-      <main className="flex-1"><Outlet /></main>
+      <main className="flex-1 pb-20 md:pb-0"><Outlet /></main>
       <Footer />
     </div>
   ),
 });
+

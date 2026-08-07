@@ -7,6 +7,7 @@ import { upsertInvestorProfile } from "@/lib/profiles.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { useMyRole } from "@/hooks/useAuth";
 import { Card } from "@/components/ui/card";
+import { FormSkeleton } from "@/components/ui/skeletons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -96,7 +97,11 @@ function InvestorProfile() {
     }
   };
 
-  if (!user || isLoading) return <div className="p-10">{t("common.loading")}</div>;
+  if (!user || isLoading) return (
+      <div className="mx-auto max-w-2xl px-4 py-10">
+        <Card className="p-6"><FormSkeleton fields={5} /></Card>
+      </div>
+    );
 
   const completeness = investorCompleteness({
     display_name: current.display_name,

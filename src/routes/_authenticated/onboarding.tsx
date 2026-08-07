@@ -6,6 +6,7 @@ import { useMyRole } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { markOnboardingComplete } from "@/lib/account.functions";
 import { Card } from "@/components/ui/card";
+import { PageLoading } from "@/components/ui/skeletons";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Check, Circle, Sparkles } from "lucide-react";
@@ -160,7 +161,7 @@ function Onboarding() {
     }
   };
 
-  if (loading) return <div className="p-10 text-center text-muted-foreground">{t("common.loading")}</div>;
+  if (loading) return <PageLoading />;
   if (!role) return null;
 
   return (

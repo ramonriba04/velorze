@@ -21,7 +21,8 @@
     "admin": "Admin",
     "logout": "Log out",
     "settings": "Settings",
-    "discover": "Discover"
+    "discover": "Discover",
+    "primary": "Primary navigation"
   },
   "logout": {
     "title": "Log out?",
@@ -332,7 +333,8 @@
     "error": "An error occurred",
     "required": "Required",
     "optional": "(optional)",
-    "other": "Other"
+    "other": "Other",
+    "moreOptions": "More options"
   },
   "project": {
     "title": "Project title",
