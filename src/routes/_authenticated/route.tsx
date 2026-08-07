@@ -1,6 +1,7 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { Header, Footer } from "@/components/layout/Header";
+import { AppTour } from "@/components/onboarding/AppTour";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/_authenticated")({
       <Header />
       <main className="flex-1 pb-20 md:pb-0"><Outlet /></main>
       <Footer />
+      <AppTour />
     </div>
   ),
 });

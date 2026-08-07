@@ -301,21 +301,26 @@
       "s4Title": "Explore opportunities",
       "s4Desc": "Browse projects manually using filters.",
       "s4Cta": "Explore"
-    }
+    },
+    "doneTitle": "🎉 Your profile is ready",
+    "doneSub": "You can start discovering compatible opportunities now.",
+    "doneCta": "Go to dashboard"
   },
   "empty": {
     "projects": "No opportunities published yet.",
     "projectsSub": "Check back soon or complete your profile to get recommendations.",
-    "favorites": "You haven't saved any projects yet.",
-    "favoritesSub": "Explore opportunities and save the ones you like.",
-    "messages": "You don't have any conversations yet.",
-    "messagesSub": "Once a company accepts your request, you'll chat here.",
+    "favorites": "Save projects to quickly find them later.",
+    "favoritesSub": "Tap the heart on any project to keep it here.",
+    "messages": "Your conversations will appear here.",
+    "messagesSub": "Once you connect with someone, you can talk in this space.",
     "notifications": "No notifications.",
-    "notificationsSub": "We'll let you know when something important happens.",
+    "notificationsSub": "We'll notify you about requests, matches and verifications.",
     "exploreCta": "Explore projects",
     "startConnection": "Start a connection",
     "discoverCta": "Discover projects",
-    "completeProfileCta": "Complete your profile"
+    "completeProfileCta": "Complete your profile",
+    "recommended": "We haven't found compatible projects yet.",
+    "recommendedSub": "Complete your profile or explore projects manually."
   },
   "common": {
     "save": "Save",
@@ -339,7 +344,8 @@
     "required": "Required",
     "optional": "(optional)",
     "other": "Other",
-    "moreOptions": "More options"
+    "moreOptions": "More options",
+    "undo": "Undo"
   },
   "project": {
     "title": "Project title",
@@ -510,8 +516,8 @@
   "home": {
     "welcomeBack": "Welcome back",
     "profileComplete": "Profile complete",
-    "noRecommendations": "Complete your profile to unlock recommendations",
-    "noRecommendationsSub": "We need your sectors, ticket and geography to suggest compatible opportunities.",
+    "noRecommendations": "We haven't found compatible projects yet.",
+    "noRecommendationsSub": "Complete your profile or explore projects manually.",
     "completeProfileCta": "Complete profile",
     "noMatchesYetTitle": "No compatible opportunities yet",
     "noMatchesYetSub": "We'll keep looking as new projects are published.",
@@ -536,7 +542,11 @@
     "add": "Save to favorites",
     "remove": "Remove from favorites",
     "save": "Save",
-    "saved": "Saved"
+    "saved": "Saved",
+    "addedToast": "❤️ Added to favorites",
+    "addedToastSub": "You'll find it in your favorites list.",
+    "removedToast": "Removed from favorites",
+    "removedToastSub": "You can undo this for a few seconds."
   },
   "admin": {
     "title": "Admin panel",
@@ -994,5 +1004,48 @@
     "projects": "Published opportunities",
     "noProjects": "No public opportunities",
     "noProjectsSub": "This publisher has no published projects yet."
+  },
+  "tour": {
+    "title": "Quick tour",
+    "skip": "Skip tour",
+    "next": "Next",
+    "done": "Get started",
+    "step": {
+      "home": {
+        "title": "🏠 Home",
+        "desc": "Recommendations generated using AI compatibility."
+      },
+      "explore": {
+        "title": "🔍 Explore",
+        "desc": "Manual search with sector, country and stage filters."
+      },
+      "favorites": {
+        "title": "❤️ Favorites",
+        "desc": "The projects you saved to review later."
+      },
+      "messages": {
+        "title": "💬 Messages",
+        "desc": "Your conversations with investors and publishers."
+      },
+      "notifications": {
+        "title": "🔔 Notifications",
+        "desc": "Important activity: requests, matches and verifications."
+      }
+    },
+    "restartTitle": "Application tour",
+    "restartSub": "Show the tour of the main areas again.",
+    "restart": "Restart tour",
+    "restarted": "The tour will be shown again."
+  },
+  "toast": {
+    "profileSaved": "✅ Changes saved successfully",
+    "profileSavedSub": "Your profile is up to date.",
+    "projectPublished": "🎉 Your project is now live",
+    "projectPublishedSub": "Compatible investors can now discover it.",
+    "projectSaved": "✅ Project saved",
+    "projectSavedSub": "Publish it when it is ready.",
+    "verified": "✅ Your identity has been verified",
+    "verifiedSub": "You can now publish projects.",
+    "requestAnswered": "✅ Request updated"
   }
 }

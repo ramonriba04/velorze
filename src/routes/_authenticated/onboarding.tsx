@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
@@ -5,11 +6,12 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMyRole } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { markOnboardingComplete } from "@/lib/account.functions";
+import { requestAppTour } from "@/components/onboarding/AppTour";
 import { Card } from "@/components/ui/card";
 import { PageLoading } from "@/components/ui/skeletons";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Check, Circle, Sparkles } from "lucide-react";
+import { Check, Circle, Sparkles, PartyPopper } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/onboarding")({
   component: Onboarding,
@@ -29,6 +31,7 @@ function Onboarding() {
   const { user, role, loading } = useMyRole();
   const navigate = useNavigate();
   const finish = useServerFn(markOnboardingComplete);
+  const [finished, setFinished] = useState(false);
 
   const isCompany = role === "empresa";
 
@@ -154,15 +157,37 @@ function Onboarding() {
     } catch {
       // non-blocking
     }
-    if (skip || !isCompany) {
+    requestAppTour();
+    if (skip) {
       navigate({ to: isCompany ? "/empresa" : "/inversor" });
-    } else {
-      navigate({ to: "/empresa" });
+      return;
     }
+    setFinished(true);
   };
 
   if (loading) return <PageLoading />;
   if (!role) return null;
+
+  if (finished) {
+    return (
+      <div className="mx-auto max-w-md p-4 py-16 sm:p-6">
+        <Card className="space-y-4 p-8 text-center">
+          <PartyPopper aria-hidden className="mx-auto h-10 w-10 text-primary" />
+          <h1 className="text-2xl font-semibold tracking-tight">
+            {t("onboarding.doneTitle")}
+          </h1>
+          <p className="text-sm text-muted-foreground">{t("onboarding.doneSub")}</p>
+          <Button
+            className="w-full"
+            onClick={() => navigate({ to: isCompany ? "/empresa" : "/inversor" })}
+          >
+            {t("onboarding.doneCta")}
+          </Button>
+        </Card>
+      </div>
+    );
+  }
+
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 p-4 sm:p-6">

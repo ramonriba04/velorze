@@ -123,7 +123,9 @@ function VerificationPage() {
           request_manual: requestManual,
         },
       });
-      toast.success(res.auto ? t("verification.autoVerified") : t("verification.submitted"));
+      res.auto
+        ? toast.success(t("toast.verified"), { description: t("toast.verifiedSub") })
+        : toast.success(t("verification.submitted"));
       setFile(null);
       refetch();
     } catch (err) {

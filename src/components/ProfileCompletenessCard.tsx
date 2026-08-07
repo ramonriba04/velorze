@@ -5,10 +5,14 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 
+type Check = { key: string; ok: boolean; required?: boolean };
+
 type Props = {
   pct: number;
   complete: boolean;
   missing: string[]; // i18n keys under completeness.field.*
+  /** Full checklist (done + pending). Falls back to `missing` when omitted. */
+  checks?: Check[];
   ctaTo: "/empresa/perfil" | "/inversor/perfil";
   ctaCopy: string; // already translated short blurb
   compact?: boolean;
@@ -21,10 +25,13 @@ function statusBadge(pct: number, t: (k: string) => string) {
 }
 
 export function ProfileCompletenessCard({
-  pct, complete, missing, ctaTo, ctaCopy, compact,
+  pct, complete, missing, checks, ctaTo, ctaCopy, compact,
 }: Props) {
   const { t } = useTranslation();
   const badge = statusBadge(pct, t);
+  const list: Check[] = checks?.length
+    ? checks
+    : missing.map((key) => ({ key, ok: false }));
 
   return (
     <Card className={compact ? "p-4" : "p-5"}>
@@ -43,16 +50,34 @@ export function ProfileCompletenessCard({
         </span>
       </div>
       <Progress value={pct} className="mt-3 h-2" />
-      {!complete && missing.length > 0 && (
+
+      {list.length > 0 && (
         <ul className="mt-3 space-y-1 text-xs">
-          {missing.map((k) => (
-            <li key={k} className="flex items-center gap-2 text-muted-foreground">
-              <Circle className="h-3.5 w-3.5 text-muted-foreground" />
-              {t(`completeness.field.${k}`)}
+          {list.map((c) => (
+            <li key={c.key}>
+              {c.ok ? (
+                <span className="flex items-center gap-2 text-muted-foreground">
+                  <CheckCircle2 aria-hidden className="h-3.5 w-3.5 text-success" />
+                  {t(`completeness.field.${c.key}`)}
+                </span>
+              ) : (
+                <Link
+                  to={ctaTo}
+                  hash={c.key}
+                  className="flex items-center gap-2 rounded text-muted-foreground transition hover:text-foreground"
+                >
+                  <Circle aria-hidden className="h-3.5 w-3.5" />
+                  <span className="underline-offset-2 hover:underline">
+                    {t(`completeness.field.${c.key}`)}
+                  </span>
+                  <ArrowRight aria-hidden className="h-3 w-3 opacity-60" />
+                </Link>
+              )}
             </li>
           ))}
         </ul>
       )}
+
       {complete && (
         <div className="mt-3 flex items-center gap-2 text-xs text-success">
           <CheckCircle2 className="h-3.5 w-3.5" />

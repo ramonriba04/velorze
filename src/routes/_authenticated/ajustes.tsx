@@ -22,6 +22,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { requestAppTour } from "@/components/onboarding/AppTour";
 
 export const Route = createFileRoute("/_authenticated/ajustes")({
   head: () => ({ meta: [{ title: "Settings | Capora" }, { name: "robots", content: "noindex, nofollow" }] }),
@@ -153,6 +154,24 @@ function Settings() {
           </Select>
         </div>
       </Card>
+
+      <Card className="space-y-3 p-6">
+        <div>
+          <h2 className="text-lg font-semibold">{t("tour.restartTitle")}</h2>
+          <p className="text-sm text-muted-foreground">{t("tour.restartSub")}</p>
+        </div>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => {
+            requestAppTour();
+            toast.success(t("tour.restarted"));
+          }}
+        >
+          {t("tour.restart")}
+        </Button>
+      </Card>
+
 
       <Card className="space-y-4 p-6">
         <h2 className="text-lg font-semibold">{t("settings.password")}</h2>
