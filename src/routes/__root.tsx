@@ -7,6 +7,9 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
+import { Compass } from "lucide-react";
+
 
 import appCss from "../styles.css?url";
 import i18n, { detectClientLanguage } from "../lib/i18n";
