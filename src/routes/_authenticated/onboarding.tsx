@@ -154,15 +154,37 @@ function Onboarding() {
     } catch {
       // non-blocking
     }
-    if (skip || !isCompany) {
+    requestAppTour();
+    if (skip) {
       navigate({ to: isCompany ? "/empresa" : "/inversor" });
-    } else {
-      navigate({ to: "/empresa" });
+      return;
     }
+    setFinished(true);
   };
 
   if (loading) return <PageLoading />;
   if (!role) return null;
+
+  if (finished) {
+    return (
+      <div className="mx-auto max-w-md p-4 py-16 sm:p-6">
+        <Card className="space-y-4 p-8 text-center">
+          <PartyPopper aria-hidden className="mx-auto h-10 w-10 text-primary" />
+          <h1 className="text-2xl font-semibold tracking-tight">
+            {t("onboarding.doneTitle")}
+          </h1>
+          <p className="text-sm text-muted-foreground">{t("onboarding.doneSub")}</p>
+          <Button
+            className="w-full"
+            onClick={() => navigate({ to: isCompany ? "/empresa" : "/inversor" })}
+          >
+            {t("onboarding.doneCta")}
+          </Button>
+        </Card>
+      </div>
+    );
+  }
+
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 p-4 sm:p-6">
