@@ -204,7 +204,13 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
           ? (other?.avatar_url ?? pMap[otherId]?.avatar_url ?? null)
           : (other?.logo_url ?? null);
         const thumb = c.project_id ? (thumbMap[c.project_id] ?? c.projects?.cover_url ?? null) : null;
-        const otherVerified = !isCompany && cMap[otherId]?.verification_status === "verified";
+        const otherCompany = cMap[otherId];
+        const otherVerified =
+          !isCompany &&
+          !!otherCompany &&
+          (otherCompany.verification_status === "verified" ||
+            ["basic", "trusted", "manual"].includes(otherCompany.trust_level ?? "unverified"));
+        const otherEntityType = otherCompany?.entity_type ?? null;
         return {
           ...c,
           otherId,
@@ -212,6 +218,7 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
           otherAvatar,
           otherKind: isCompany ? "user" as const : "company" as const,
           otherVerified,
+          otherEntityType,
           otherSuspended: !!pMap[otherId]?.suspended_at,
           thumb,
           lastMessage: lastMsg[c.id] ?? null,
