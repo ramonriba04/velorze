@@ -211,10 +211,12 @@ export function ProjectForm({ mode }: { mode: "create" | "edit" }) {
           pct={completeness.pct}
           complete={completeness.complete}
           missing={completeness.missingRequired}
+          checks={completeness.checks}
           ctaTo="/empresa/perfil"
           ctaCopy={t("completeness.company.cta")}
         />
       )}
+
 
       <Card className="p-6">
         <div className="flex items-center justify-between gap-3">
