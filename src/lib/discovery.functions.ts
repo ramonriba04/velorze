@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
+import { blockedIds } from "./blocks.server";
 import {
   computeMatch,
   type MatchableInvestor,
@@ -20,13 +21,6 @@ async function getRole(ctx: { supabase: any; userId: string }) {
 }
 
 
-async function blockedIds(ctx: { supabase: any; userId: string }): Promise<Set<string>> {
-  const { data } = await ctx.supabase.rpc("blocked_with_me", { _user_id: ctx.userId });
-  const ids = ((data as any[]) ?? [])
-    .map((row: any) => (typeof row === "string" ? row : row?.blocked_with_me))
-    .filter(Boolean);
-  return new Set<string>(ids);
-}
 
 export const getDiscoveryFeed = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
