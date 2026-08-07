@@ -65,7 +65,7 @@ export function ImageUpload({ value, onChange, userId, kind, shape = "square", l
       <div className="flex items-center gap-3">
         <div className={`relative h-20 w-20 ${radius} bg-muted overflow-hidden border border-border flex items-center justify-center`}>
           {value ? (
-            <img src={value} alt="" className="h-full w-full object-cover" />
+            <img src={value} alt="" loading="lazy" className="h-full w-full object-cover" />
           ) : (
             <ImagePlus className="h-6 w-6 text-muted-foreground" />
           )}

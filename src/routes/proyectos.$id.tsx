@@ -120,6 +120,8 @@ function ProjectDetail() {
                   <img
                     src={galleryItems[activeImg]?.url ?? cover ?? ""}
                     alt={data.title}
+                    fetchPriority="high"
+                    decoding="async"
                     className="w-full aspect-video object-cover transition-opacity"
                   />
                   {hasMulti && (
