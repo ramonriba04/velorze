@@ -7,6 +7,8 @@ import { useMyRole } from "@/hooks/useAuth";
 import { deleteMyAccount } from "@/lib/account.functions";
 import { useMyPlan } from "@/hooks/usePlan";
 import { PlanBadge } from "@/components/PlanBadge";
+import { NotificationPreferencesCard } from "@/components/settings/NotificationPreferencesCard";
+
 import { UpgradeDialog } from "@/components/UpgradeDialog";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
