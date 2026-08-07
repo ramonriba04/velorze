@@ -298,8 +298,6 @@ function ChatsPanel({ userId, isCompany }: { userId?: string; isCompany: boolean
   };
 
   const activeConv = (convs ?? []).find((c: any) => c.id === active);
-  const lastIncoming = [...(messages ?? [])].reverse().find((m: any) => m.sender_id !== userId);
-  const secHits = lastIncoming ? detectSecurityPatterns(lastIncoming.body ?? "") : [];
 
   if (!convs || convs.length === 0) {
     return (
