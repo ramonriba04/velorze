@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
@@ -5,11 +6,12 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMyRole } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { markOnboardingComplete } from "@/lib/account.functions";
+import { requestAppTour } from "@/components/onboarding/AppTour";
 import { Card } from "@/components/ui/card";
 import { PageLoading } from "@/components/ui/skeletons";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Check, Circle, Sparkles } from "lucide-react";
+import { Check, Circle, Sparkles, PartyPopper } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/onboarding")({
   component: Onboarding,
