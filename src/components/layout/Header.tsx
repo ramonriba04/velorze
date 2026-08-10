@@ -121,7 +121,7 @@ export function Header() {
     <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background/85 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link to={logoTo} aria-label="Velorze" className="flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-          <div aria-hidden className="h-8 w-8 rounded-lg gradient-primary shadow-elegant" />
+          <img aria-hidden src="/favicon.png" alt="" className="h-8 w-8 rounded-lg object-contain" />
           <span className="text-lg font-semibold tracking-tight">Velorze</span>
         </Link>
 
