@@ -8,9 +8,7 @@ import { createContactRequest } from "@/lib/contact.functions";
 import { useFavorites } from "@/hooks/useFavorite";
 import { supabase } from "@/integrations/supabase/client";
 import { useMyRole } from "@/hooks/useAuth";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { EntityAvatar } from "@/components/media/EntityAvatar";
 import { EntityTypeBadge } from "@/components/EntityTypeBadge";
@@ -26,18 +24,28 @@ export const Route = createFileRoute("/_authenticated/inversor/")({
   component: InvestorDashboard,
 });
 
-function scoreColor(s: number) {
-  if (s >= 90) return "bg-success text-success-foreground";
-  if (s >= 70) return "bg-primary text-primary-foreground";
-  if (s >= 50) return "bg-warning text-warning-foreground";
-  return "bg-muted text-muted-foreground";
+function scoreStyle(s: number) {
+  if (s >= 90) return { pill: "bg-emerald-50 text-emerald-700 border border-emerald-200", dot: "bg-emerald-500" };
+  if (s >= 70) return { pill: "bg-blue-50 text-blue-700 border border-blue-200", dot: "bg-blue-500" };
+  if (s >= 50) return { pill: "bg-amber-50 text-amber-700 border border-amber-200", dot: "bg-amber-500" };
+  return { pill: "bg-gray-100 text-gray-500 border border-gray-200", dot: "bg-gray-400" };
+}
+
+function MatchScorePill({ score, label }: { score: number; label: string }) {
+  const { pill, dot } = scoreStyle(score);
+  return (
+    <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full shrink-0 ${pill}`}>
+      <span className={`h-1.5 w-1.5 rounded-full ${dot}`} />
+      {score}% {label}
+    </span>
+  );
 }
 
 function InvestorDashboard() {
   const { t } = useTranslation();
   const { user } = useMyRole();
   const fetcher = useServerFn(getRecommendedProjects);
-  
+
   const reqFn = useServerFn(createContactRequest);
   const qc = useQueryClient();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
@@ -48,7 +56,6 @@ function InvestorDashboard() {
   });
 
   const favorites = useFavorites();
-
 
   const { data: profile } = useQuery({
     queryKey: ["investor_profile_summary", user?.id],
@@ -106,58 +113,66 @@ function InvestorDashboard() {
   const compatibleItems = (data?.items ?? []).filter((i: any) => (i.match?.score ?? 0) >= 40);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+
       {/* Welcome */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-4">
         <EntityAvatar src={profile?.avatar_url} name={greetingName} size={48} />
         <div className="min-w-0">
-          <p className="text-xs text-muted-foreground">{t("home.welcomeBack")}</p>
-          <h1 className="text-2xl sm:text-3xl font-bold truncate">{greetingName || t("nav.profile")}</h1>
+          <p className="text-xs text-gray-500 font-medium tracking-wide uppercase">{t("home.welcomeBack")}</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 truncate">{greetingName || t("nav.profile")}</h1>
         </div>
       </div>
 
       {/* Stats row */}
       <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-3">
         <Link to="/inversor/favoritos">
-          <Card className="p-4 hover:shadow-elegant transition-shadow">
-            <div className="flex items-center gap-2 text-muted-foreground text-xs"><Heart className="h-4 w-4" />{t("nav.favorites")}</div>
-            <p className="mt-1 text-2xl font-semibold">{counts?.favorites ?? 0}</p>
-          </Card>
+          <div className="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md hover:border-gray-300 transition-all duration-200">
+            <div className="flex items-center gap-2 text-gray-500 text-xs font-medium">
+              <Heart className="h-3.5 w-3.5" />
+              {t("nav.favorites")}
+            </div>
+            <p className="mt-2 text-2xl font-semibold text-slate-900">{counts?.favorites ?? 0}</p>
+          </div>
         </Link>
         <Link to="/mensajes">
-          <Card className="p-4 hover:shadow-elegant transition-shadow">
-            <div className="flex items-center gap-2 text-muted-foreground text-xs"><MessageCircle className="h-4 w-4" />{t("nav.messages")}</div>
-            <p className="mt-1 text-2xl font-semibold">{counts?.conversations ?? 0}</p>
-          </Card>
+          <div className="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md hover:border-gray-300 transition-all duration-200">
+            <div className="flex items-center gap-2 text-gray-500 text-xs font-medium">
+              <MessageCircle className="h-3.5 w-3.5" />
+              {t("nav.messages")}
+            </div>
+            <p className="mt-2 text-2xl font-semibold text-slate-900">{counts?.conversations ?? 0}</p>
+          </div>
         </Link>
         {completion < 100 && (
           <Link to="/inversor/perfil" className="col-span-2 sm:col-span-1">
-            <Card className="p-4 hover:shadow-elegant transition-shadow">
-              <div className="flex items-center justify-between text-xs text-muted-foreground">
+            <div className="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md hover:border-gray-300 transition-all duration-200">
+              <div className="flex items-center justify-between text-xs text-gray-500 font-medium">
                 <span>{t("home.profileComplete")}</span>
-                <span className="font-medium text-foreground">{completion}%</span>
+                <span className="font-semibold text-slate-900">{completion}%</span>
               </div>
-              <Progress value={completion} className="mt-2 h-2" />
-            </Card>
+              <Progress value={completion} className="mt-3 h-1.5" />
+            </div>
           </Link>
         )}
       </div>
 
       {/* Recommendations header */}
-      <div className="mt-10 flex items-center justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-primary" />
-          <h2 className="text-xl font-semibold">{t("project.recommended")}</h2>
-          <Badge className="bg-primary text-primary-foreground hover:bg-primary">
+      <div className="mt-12 flex items-center justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-2.5">
+          <Sparkles className="h-4 w-4 text-blue-600" />
+          <h2 className="text-lg font-semibold text-slate-900">{t("project.recommended")}</h2>
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
             {t("project.recommendedBadge")}
-          </Badge>
+          </span>
         </div>
         <Link to="/proyectos">
-          <Button variant="outline" size="sm">{t("project.exploreMore")}</Button>
+          <Button variant="outline" size="sm" className="text-xs">{t("project.exploreMore")}</Button>
         </Link>
       </div>
-      <p className="text-sm text-muted-foreground mt-1">{t("project.recommendedSub")}</p>
+      <p className="text-sm text-gray-500 mt-1">{t("project.recommendedSub")}</p>
 
+      {/* Project grid */}
       <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {isLoading && (
           <div className="col-span-full">
@@ -165,28 +180,27 @@ function InvestorDashboard() {
           </div>
         )}
 
-
         {!isLoading && !hasProfile && (
-          <Card className="md:col-span-2 lg:col-span-3 p-10 text-center border-dashed">
-            <Compass className="mx-auto h-10 w-10 text-muted-foreground" />
-            <h3 className="mt-3 font-semibold">{t("home.noRecommendations")}</h3>
-            <p className="mt-1 text-sm text-muted-foreground max-w-md mx-auto">{t("home.noRecommendationsSub")}</p>
-            <div className="mt-4 flex justify-center gap-2">
+          <div className="md:col-span-2 lg:col-span-3 bg-white border border-gray-200 border-dashed rounded-xl p-10 text-center">
+            <Compass className="mx-auto h-8 w-8 text-gray-400" />
+            <h3 className="mt-3 font-semibold text-slate-900">{t("home.noRecommendations")}</h3>
+            <p className="mt-1 text-sm text-gray-500 max-w-md mx-auto">{t("home.noRecommendationsSub")}</p>
+            <div className="mt-5 flex justify-center gap-2">
               <Link to="/inversor/perfil"><Button size="sm">{t("home.completeProfileCta")}</Button></Link>
               <Link to="/proyectos"><Button size="sm" variant="outline">{t("project.exploreMore")}</Button></Link>
             </div>
-          </Card>
+          </div>
         )}
 
         {!isLoading && hasProfile && compatibleItems.length === 0 && (
-          <Card className="md:col-span-2 lg:col-span-3 p-10 text-center border-dashed">
-            <Sparkles className="mx-auto h-10 w-10 text-muted-foreground" />
-            <h3 className="mt-3 font-semibold">{t("home.noMatchesYetTitle")}</h3>
-            <p className="mt-1 text-sm text-muted-foreground max-w-md mx-auto">{t("home.noMatchesYetSub")}</p>
-            <div className="mt-4 flex justify-center gap-2">
+          <div className="md:col-span-2 lg:col-span-3 bg-white border border-gray-200 border-dashed rounded-xl p-10 text-center">
+            <Sparkles className="mx-auto h-8 w-8 text-gray-400" />
+            <h3 className="mt-3 font-semibold text-slate-900">{t("home.noMatchesYetTitle")}</h3>
+            <p className="mt-1 text-sm text-gray-500 max-w-md mx-auto">{t("home.noMatchesYetSub")}</p>
+            <div className="mt-5 flex justify-center gap-2">
               <Link to="/proyectos"><Button size="sm">{t("project.exploreMore")}</Button></Link>
             </div>
-          </Card>
+          </div>
         )}
 
         {!isLoading && hasProfile && compatibleItems.map(({ project, match }: any) => {
@@ -200,53 +214,72 @@ function InvestorDashboard() {
             else if (r.startsWith("Tipo ")) chips.push({ key: "type", label: t(`investmentType.${r.replace("Tipo ", "")}`) });
           });
           return (
-            <Card key={project.id} className="overflow-hidden flex flex-col">
+            <div
+              key={project.id}
+              className="bg-white border border-gray-200 rounded-xl overflow-hidden flex flex-col shadow-sm hover:shadow-md hover:border-gray-300 transition-all duration-200"
+            >
               {project.cover_url && (
-                <div className="aspect-video bg-muted">
+                <div className="aspect-video bg-gray-100">
                   <img src={project.cover_url} alt={project.title} className="h-full w-full object-cover" loading="lazy" />
                 </div>
               )}
-              <div className="p-5 flex flex-col gap-3 flex-1">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-2 min-w-0">
+
+              <div className="p-6 flex flex-col gap-4 flex-1">
+
+                {/* Header: company info + match score */}
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-2.5 min-w-0">
                     <EntityAvatar src={company?.logo_url} name={company?.legal_name} kind="company" size={32} />
                     <div className="min-w-0">
-                      <h3 className="font-semibold text-base leading-tight truncate">{project.title}</h3>
-                      <p className="text-xs text-muted-foreground truncate">{company?.legal_name ?? ""}</p>
+                      <h3 className="font-semibold text-slate-900 text-sm leading-tight truncate">{project.title}</h3>
+                      <p className="text-xs text-gray-500 truncate mt-0.5">{company?.legal_name ?? ""}</p>
                     </div>
                   </div>
-                  <Badge className={scoreColor(match.score)}>{match.score}% {t("project.match").toLowerCase()}</Badge>
+                  <MatchScorePill score={match.score} label={t("project.match").toLowerCase()} />
                 </div>
-                <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
-                  <EntityTypeBadge type={company?.entity_type} size="xs" />
-                  <span className="inline-flex items-center gap-1"><TrendingUp className="h-3 w-3" />{project.sector}</span>
-                  <span className="inline-flex items-center gap-1"><MapPin className="h-3 w-3" />{project.country}</span>
-                  <Badge variant="outline">{t(`stage.${project.stage}`)}</Badge>
-                  <Badge variant="outline">{t(`investmentType.${project.investment_type}`)}</Badge>
-                </div>
-                <p className="text-sm text-muted-foreground line-clamp-3">{project.description}</p>
 
+                {/* Tags */}
+                <div className="flex flex-wrap gap-1.5">
+                  <EntityTypeBadge type={company?.entity_type} size="xs" />
+                  <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-700 text-xs px-2 py-0.5 rounded-full font-medium">
+                    <TrendingUp className="h-3 w-3" />{project.sector}
+                  </span>
+                  <span className="inline-flex items-center gap-1 bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full font-medium">
+                    <MapPin className="h-3 w-3" />{project.country}
+                  </span>
+                  <span className="inline-flex items-center bg-purple-50 text-purple-700 text-xs px-2 py-0.5 rounded-full font-medium">
+                    {t(`stage.${project.stage}`)}
+                  </span>
+                  <span className="inline-flex items-center bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full font-medium">
+                    {t(`investmentType.${project.investment_type}`)}
+                  </span>
+                </div>
+
+                {/* Description */}
+                <p className="text-sm text-gray-600 line-clamp-3 leading-relaxed">{project.description}</p>
+
+                {/* Why match (expandable) */}
                 {chips.length > 0 && (
                   <div>
                     <button
                       type="button"
                       onClick={() => setExpanded((e) => ({ ...e, [project.id]: !e[project.id] }))}
-                      className="text-xs text-primary inline-flex items-center gap-1 hover:underline"
+                      className="text-xs text-blue-600 font-medium inline-flex items-center gap-1 hover:text-blue-800 transition-colors"
                       aria-expanded={isOpen}
                     >
                       {t("project.whyMatch")}
                       {isOpen ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
                     </button>
                     {isOpen && (
-                      <div className="mt-2 rounded-md border bg-primary/5 p-2">
-                        <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                      <div className="mt-2 rounded-lg bg-emerald-50 border border-emerald-100 p-3">
+                        <p className="text-[10px] uppercase tracking-widest text-emerald-600 font-semibold">
                           {t("project.matchesLabel")}
                         </p>
-                        <div className="mt-1 flex flex-wrap gap-1">
+                        <div className="mt-1.5 flex flex-wrap gap-1.5">
                           {chips.map((c) => (
-                            <Badge key={c.key + c.label} variant="secondary" className="text-xs">
+                            <span key={c.key + c.label} className="inline-flex items-center gap-1 bg-white text-emerald-700 border border-emerald-200 text-xs px-2 py-0.5 rounded-full font-medium">
                               ✓ {c.label}
-                            </Badge>
+                            </span>
                           ))}
                         </div>
                       </div>
@@ -254,24 +287,25 @@ function InvestorDashboard() {
                   </div>
                 )}
 
-                <div className="mt-auto flex gap-2 pt-2">
+                {/* Actions */}
+                <div className="mt-auto flex gap-2 pt-3 border-t border-gray-100">
                   <Link to="/proyectos/$id" params={{ id: project.id }} className="flex-1">
-                    <Button variant="outline" size="sm" className="w-full">{t("project.viewProject")}</Button>
+                    <Button variant="outline" size="sm" className="w-full text-xs h-9">{t("project.viewProject")}</Button>
                   </Link>
                   <Button
                     size="icon"
                     variant="ghost"
-                    className="min-h-11 min-w-11"
+                    className="h-9 w-9 shrink-0"
                     aria-label={favorites.isFavorite(project.id) ? t("favorites.remove") : t("favorites.add")}
                     aria-pressed={favorites.isFavorite(project.id)}
                     onClick={() => favorites.toggle(project.id)}
                   >
-                    <Heart aria-hidden className={`h-4 w-4 ${favorites.isFavorite(project.id) ? "fill-current text-primary" : ""}`} />
-
+                    <Heart aria-hidden className={`h-4 w-4 ${favorites.isFavorite(project.id) ? "fill-rose-500 text-rose-500" : "text-gray-400"}`} />
                   </Button>
                   <Button
                     size="icon"
-                    className="min-h-11 min-w-11"
+                    variant="outline"
+                    className="h-9 w-9 shrink-0"
                     aria-label={t("project.contactCompany")}
                     onClick={() => reqMut.mutate(project.id)}
                   >
@@ -280,15 +314,15 @@ function InvestorDashboard() {
                 </div>
 
               </div>
-            </Card>
+            </div>
           );
         })}
       </div>
 
       {!isLoading && hasProfile && compatibleItems.length > 0 && (
-        <div className="mt-8 flex justify-center">
+        <div className="mt-10 flex justify-center">
           <Link to="/proyectos">
-            <Button variant="outline">{t("project.exploreMore")}</Button>
+            <Button variant="outline" className="text-sm">{t("project.exploreMore")}</Button>
           </Link>
         </div>
       )}
