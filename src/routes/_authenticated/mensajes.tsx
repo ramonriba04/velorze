@@ -24,7 +24,7 @@ import { ConversationListSkeleton, ListSkeleton } from "@/components/ui/skeleton
 
 
 export const Route = createFileRoute("/_authenticated/mensajes")({
-  head: () => ({ meta: [{ title: "Messages | Capora" }, { name: "robots", content: "noindex, nofollow" }] }),
+  head: () => ({ meta: [{ title: "Messages | Velorze" }, { name: "robots", content: "noindex, nofollow" }] }),
   component: Messages,
 });
 

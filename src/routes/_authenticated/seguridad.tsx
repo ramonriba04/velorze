@@ -19,7 +19,7 @@ import { ListSkeleton } from "@/components/ui/skeletons";
 
 
 export const Route = createFileRoute("/_authenticated/seguridad")({
-  head: () => ({ meta: [{ title: "Seguridad | Capora" }, { name: "robots", content: "noindex, nofollow" }] }),
+  head: () => ({ meta: [{ title: "Seguridad | Velorze" }, { name: "robots", content: "noindex, nofollow" }] }),
   component: Safety,
 });
 

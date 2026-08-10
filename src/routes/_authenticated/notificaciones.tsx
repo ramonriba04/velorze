@@ -14,7 +14,7 @@ import {
 export const Route = createFileRoute("/_authenticated/notificaciones")({
   head: () => ({
     meta: [
-      { title: "Notificaciones | Capora" },
+      { title: "Notificaciones | Velorze" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
