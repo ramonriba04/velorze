@@ -5,8 +5,8 @@ import { Card } from "@/components/ui/card";
 
 export const Route = createFileRoute("/cookies")({
   head: () => ({ meta: [
-    { title: "Política de cookies — Capora" },
-    { name: "description", content: "Uso de cookies en la plataforma Capora." },
+    { title: "Política de cookies — Velorze" },
+    { name: "description", content: "Uso de cookies en la plataforma Velorze." },
   ] }),
   component: Page,
 });

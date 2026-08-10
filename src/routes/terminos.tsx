@@ -5,8 +5,8 @@ import { Card } from "@/components/ui/card";
 
 export const Route = createFileRoute("/terminos")({
   head: () => ({ meta: [
-    { title: "Términos y condiciones — Capora" },
-    { name: "description", content: "Términos de uso de la plataforma Capora." },
+    { title: "Términos y condiciones — Velorze" },
+    { name: "description", content: "Términos de uso de la plataforma Velorze." },
   ] }),
   component: Page,
 });

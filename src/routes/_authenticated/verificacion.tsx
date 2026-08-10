@@ -19,7 +19,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 export const Route = createFileRoute("/_authenticated/verificacion")({
   head: () => ({
     meta: [
-      { title: "Verificación | Capora" },
+      { title: "Verificación | Velorze" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),

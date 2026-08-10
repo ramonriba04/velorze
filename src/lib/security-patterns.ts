@@ -138,8 +138,8 @@ const RULES: Rule[] = [
     label: "Off-platform contact",
     patterns: [
       /(?:sigamos|continuemos|hablemos|seguimos)\s+(?:esto\s+)?(?:por|en)\s+(?:fuera|otro|privado|otra plataforma)/i,
-      /fuera de capora/i,
-      /outside (?:of )?capora/i,
+      /fuera de velorze/i,
+      /outside (?:of )?velorze/i,
       /let'?s (?:continue|talk|move) (?:this )?(?:outside|off[- ]platform|elsewhere)/i,
       /off[- ]platform/i,
       /mi (?:correo|email|tel[eé]fono) (?:es|personal)/i,

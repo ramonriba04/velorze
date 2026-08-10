@@ -13,10 +13,10 @@ import type { PlanCode } from "@/lib/plans";
 export const Route = createFileRoute("/planes")({
   head: () => ({
     meta: [
-      { title: "Plans | Capora" },
-      { name: "description", content: "Explore Capora Free, Pro and Business plans — visibility, active projects and advanced analytics." },
-      { property: "og:title", content: "Plans | Capora" },
-      { property: "og:description", content: "Explore Capora Free, Pro and Business plans — visibility, active projects and advanced analytics." },
+      { title: "Plans | Velorze" },
+      { name: "description", content: "Explore Velorze Free, Pro and Business plans — visibility, active projects and advanced analytics." },
+      { property: "og:title", content: "Plans | Velorze" },
+      { property: "og:description", content: "Explore Velorze Free, Pro and Business plans — visibility, active projects and advanced analytics." },
       { property: "og:url", content: "https://capora-ai-connect.lovable.app/planes" },
     ],
     links: [{ rel: "canonical", href: "https://capora-ai-connect.lovable.app/planes" }],

@@ -6,8 +6,8 @@ import { Mail } from "lucide-react";
 
 export const Route = createFileRoute("/contacto")({
   head: () => ({ meta: [
-    { title: "Contacto — Capora" },
-    { name: "description", content: "Ponte en contacto con el equipo de Capora." },
+    { title: "Contacto — Velorze" },
+    { name: "description", content: "Ponte en contacto con el equipo de Velorze." },
   ] }),
   component: Page,
 });
@@ -21,8 +21,8 @@ function Page() {
         <Card className="p-8">
           <h1 className="text-3xl font-bold">{t("contact.title")}</h1>
           <p className="mt-4 text-muted-foreground leading-relaxed">{t("contact.body")}</p>
-          <a href="mailto:hola@capora.app" className="mt-6 inline-flex items-center gap-2 text-primary hover:underline">
-            <Mail className="h-4 w-4" /> hola@capora.app
+          <a href="mailto:help@velorze.com" className="mt-6 inline-flex items-center gap-2 text-primary hover:underline">
+            <Mail className="h-4 w-4" /> help@velorze.com
           </a>
         </Card>
       </main>

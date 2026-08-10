@@ -27,8 +27,8 @@ export const Route = createFileRoute("/auth")({
     const isSignup = (match.search as { mode?: string })?.mode === "signup";
     return {
       meta: [
-        { title: isSignup ? "Create account | Capora" : "Login | Capora" },
-        { name: "description", content: "Access your Capora account to discover investment opportunities." },
+        { title: isSignup ? "Create account | Velorze" : "Login | Velorze" },
+        { name: "description", content: "Access your Velorze account to discover investment opportunities." },
         { name: "robots", content: "noindex, nofollow" },
       ],
     };

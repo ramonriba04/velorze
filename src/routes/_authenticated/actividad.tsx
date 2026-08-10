@@ -21,7 +21,7 @@ import { groupActivity, type ActivityItem, type ActivityKind } from "@/lib/activ
 
 export const Route = createFileRoute("/_authenticated/actividad")({
   head: () => ({
-    meta: [{ title: "Actividad | Capora" }, { name: "robots", content: "noindex, nofollow" }],
+    meta: [{ title: "Actividad | Velorze" }, { name: "robots", content: "noindex, nofollow" }],
   }),
   component: ActivityHistory,
 });

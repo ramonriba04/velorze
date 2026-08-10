@@ -8,8 +8,8 @@ import {
 export const Route = createFileRoute("/ayuda")({
   head: () => ({
     meta: [
-      { title: "Ayuda — Capora" },
-      { name: "description", content: "Preguntas frecuentes sobre cómo usar Capora: matching, contactos, privacidad y cuenta." },
+      { title: "Ayuda — Velorze" },
+      { name: "description", content: "Preguntas frecuentes sobre cómo usar Velorze: matching, contactos, privacidad y cuenta." },
     ],
   }),
   component: HelpCenter,

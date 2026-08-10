@@ -1,6 +1,6 @@
 {
   "brand": {
-    "name": "Capora",
+    "name": "Velorze",
     "tagline": "Intelligent marketplace connecting projects and investors."
   },
   "nav": {
@@ -32,13 +32,13 @@
   },
   "landing": {
     "heroTitle": "Connect your project with the right investors",
-    "heroSubtitle": "Capora is an intelligent marketplace helping companies, startups and project creators discover relevant opportunities through compatibility matching.",
+    "heroSubtitle": "Velorze is an intelligent marketplace helping companies, startups and project creators discover relevant opportunities through compatibility matching.",
     "ctaInvestor": "I'm an investor",
     "ctaCompany": "I'm a company",
     "ctaPrimary": "Get started free",
     "ctaSecondary": "See how it works",
     "trust": "Discovery platform. We don't handle money or provide financial advice.",
-    "howTitle": "How Capora works",
+    "howTitle": "How Velorze works",
     "howSub": "A calm, structured path from profile to conversation.",
     "step1Title": "Publish your project",
     "step1Desc": "Create a profile, publish your opportunity and receive qualified interest.",
@@ -54,7 +54,7 @@
     "feature3Title": "Project discovery",
     "feature3Desc": "Browse and filter opportunities aligned with your thesis.",
     "finalCta": "Ready to discover your next opportunity?",
-    "finalCtaDesc": "Join Capora and start exploring meaningful connections.",
+    "finalCtaDesc": "Join Velorze and start exploring meaningful connections.",
     "badge": "Smart investment matching",
     "ctaExplore": "Explore opportunities",
     "ctaPublish": "Publish opportunity",
@@ -75,16 +75,16 @@
     "feature5Title": "Professional profiles",
     "feature5Desc": "Clean, structured profiles for companies and investors.",
     "showcaseTitle": "Sample opportunities",
-    "showcaseSub": "A glimpse of how projects appear inside Capora.",
+    "showcaseSub": "A glimpse of how projects appear inside Velorze.",
     "showcaseView": "View",
     "trustTitle": "Created to connect projects with compatible capital",
-    "trustSub": "Capora is a discovery platform — not a broker, fund or advisor.",
+    "trustSub": "Velorze is a discovery platform — not a broker, fund or advisor.",
     "trust1": "No commissions",
     "trust2": "No investment advice",
     "trust3": "No capital management",
     "trust4": "Focused on quality discovery",
     "plansTitle": "Plans preview",
-    "plansSub": "Capora is fully free today. New plans will arrive in a future release.",
+    "plansSub": "Velorze is fully free today. New plans will arrive in a future release.",
     "planFree": "Free",
     "planPro": "Pro",
     "planBusiness": "Business",
@@ -92,10 +92,10 @@
     "faqTitle": "Frequently asked questions",
     "faq1Q": "How does matching work?",
     "faq1A": "We score compatibility from 0 to 100 based on sector, stage, ticket size, country and investment type.",
-    "faq2Q": "Does Capora manage investments?",
-    "faq2A": "No. Capora is a discovery and connection platform. We never hold funds or execute transactions.",
+    "faq2Q": "Does Velorze manage investments?",
+    "faq2A": "No. Velorze is a discovery and connection platform. We never hold funds or execute transactions.",
     "faq3Q": "Can individuals publish too?",
-    "faq3A": "Yes. Capora allows both companies and individuals to publish opportunities.",
+    "faq3A": "Yes. Velorze allows both companies and individuals to publish opportunities.",
     "faq4Q": "Do I need to pay?",
     "faq4A": "No. All features are currently free. Paid plans will be optional in the future.",
     "faq5Q": "How does contact work?",
@@ -116,9 +116,9 @@
   },
   "auth": {
     "loginTitle": "Welcome back",
-    "loginSub": "Access your Capora account",
+    "loginSub": "Access your Velorze account",
     "signupTitle": "Create your account",
-    "signupSub": "Join Capora in under a minute",
+    "signupSub": "Join Velorze in under a minute",
     "email": "Email",
     "password": "Password",
     "fullName": "Full name",
@@ -128,7 +128,7 @@
     "or": "or",
     "switchToSignup": "No account? Create one",
     "switchToLogin": "Already have an account? Log in",
-    "roleTitle": "How will you use Capora?",
+    "roleTitle": "How will you use Velorze?",
     "roleSub": "This shapes your experience on the platform.",
     "roleCompany": "Company / Project",
     "roleCompanyDesc": "Companies, startups and individuals.",
@@ -178,15 +178,15 @@
   },
   "privacy": {
     "title": "Privacy Policy",
-    "body": "At Capora we handle your personal data responsibly and in accordance with applicable regulations (GDPR).\n\nData we collect: name, email, profile photo, the company or investor data you choose to share, and basic technical data (language, device).\n\nUse: to power the matching service, show your profile to other users when you allow contact, improve the platform, and send service notifications.\n\nWe share data only with: infrastructure providers (hosting, authentication, storage) under contract.\n\nRights: access, rectification, deletion, objection and portability. You can exercise them from Settings or by emailing hola@capora.app.\n\nRetention: while your account is active. When you delete your account we remove your personal data within a reasonable timeframe, unless legally required to retain it."
+    "body": "At Velorze we handle your personal data responsibly and in accordance with applicable regulations (GDPR).\n\nData we collect: name, email, profile photo, the company or investor data you choose to share, and basic technical data (language, device).\n\nUse: to power the matching service, show your profile to other users when you allow contact, improve the platform, and send service notifications.\n\nWe share data only with: infrastructure providers (hosting, authentication, storage) under contract.\n\nRights: access, rectification, deletion, objection and portability. You can exercise them from Settings or by emailing help@velorze.com.\n\nRetention: while your account is active. When you delete your account we remove your personal data within a reasonable timeframe, unless legally required to retain it."
   },
   "terms": {
     "title": "Terms and Conditions",
-    "body": "Capora is a discovery and matching platform that connects projects with investors. We do not process payments, manage investments, act as financial intermediaries or provide advice of any kind.\n\nBy creating an account you accept these Terms of Use, the Privacy Policy and the Cookie Policy. We keep a record of your acceptance (date, IP and version) for compliance purposes.\n\nProject publishers must complete a verification process. Capora reserves the right to approve or reject verifications at its discretion.\n\nYou agree to: provide truthful information, respect other users, not use the platform for unlawful activities, and take full responsibility for your investment decisions.\n\nLimitation of liability — Capora does NOT guarantee: (i) the accuracy of identities, (ii) the financial solvency of publishers, (iii) the success of any project, (iv) the outcome of any investment, or (v) user behaviour. Capora does not provide financial, legal or tax advice.\n\nWe may suspend accounts that breach these terms. Use of the service is governed by Spanish law."
+    "body": "Velorze is a discovery and matching platform that connects projects with investors. We do not process payments, manage investments, act as financial intermediaries or provide advice of any kind.\n\nBy creating an account you accept these Terms of Use, the Privacy Policy and the Cookie Policy. We keep a record of your acceptance (date, IP and version) for compliance purposes.\n\nProject publishers must complete a verification process. Velorze reserves the right to approve or reject verifications at its discretion.\n\nYou agree to: provide truthful information, respect other users, not use the platform for unlawful activities, and take full responsibility for your investment decisions.\n\nLimitation of liability — Velorze does NOT guarantee: (i) the accuracy of identities, (ii) the financial solvency of publishers, (iii) the success of any project, (iv) the outcome of any investment, or (v) user behaviour. Velorze does not provide financial, legal or tax advice.\n\nWe may suspend accounts that breach these terms. Use of the service is governed by Spanish law."
   },
   "cookies": {
     "title": "Cookie Policy",
-    "body": "Capora uses cookies strictly necessary for service operation (session, language, security). These are always loaded.\n\nAnalytics and marketing cookies are only activated with your explicit consent, which you can grant, decline or customise from the cookie banner. Your choice is stored on this device and you can change it any time by clearing cookies in your browser.\n\nWe do not load analytics or cross-site tracking before your consent."
+    "body": "Velorze uses cookies strictly necessary for service operation (session, language, security). These are always loaded.\n\nAnalytics and marketing cookies are only activated with your explicit consent, which you can grant, decline or customise from the cookie banner. Your choice is stored on this device and you can change it any time by clearing cookies in your browser.\n\nWe do not load analytics or cross-site tracking before your consent."
   },
   "contact": {
     "title": "Contact",
@@ -267,7 +267,7 @@
   },
   "onboarding": {
     "badge": "Getting started",
-    "title": "Welcome to Capora",
+    "title": "Welcome to Velorze",
     "sub": "Complete these steps to get the most out of the platform.",
     "progress": "Your progress",
     "stepLabel": "Step {{n}}",
@@ -602,11 +602,11 @@
   },
   "trust": {
     "verifiedBadge": "Verified publisher",
-    "verifiedTitle": "Identity reviewed by the Capora team"
+    "verifiedTitle": "Identity reviewed by the Velorze team"
   },
   "legal": {
     "title": "Legal notice",
-    "body": "Capora is solely a platform that connects companies with investors. It does not process payments, manage investments, act as a financial intermediary, or provide financial advice. The recommendations generated by the system are purely informational. Users are responsible for performing their own due diligence before making any investment decision.\n\nIdentity verification reduces fraud risk but does not guarantee the legitimacy of every investment opportunity published on Capora. Users remain responsible for carrying out their own due diligence before investing or transferring money."
+    "body": "Velorze is solely a platform that connects companies with investors. It does not process payments, manage investments, act as a financial intermediary, or provide financial advice. The recommendations generated by the system are purely informational. Users are responsible for performing their own due diligence before making any investment decision.\n\nIdentity verification reduces fraud risk but does not guarantee the legitimacy of every investment opportunity published on Velorze. Users remain responsible for carrying out their own due diligence before investing or transferring money."
   },
   "disclaimer": "Intelligent marketplace connecting projects and investors.",
   "media": {
@@ -751,18 +751,18 @@
   },
   "upgrade": {
     "title": "Upgrade coming soon",
-    "desc1": "Capora will introduce plans in a future release.",
+    "desc1": "Velorze will introduce plans in a future release.",
     "desc2": "For now all features remain available under Free.",
     "gotIt": "Got it",
     "viewPlans": "View plans"
   },
   "planes": {
-    "title": "Capora plans",
+    "title": "Velorze plans",
     "sub": "Pick the plan that fits your project. Visibility, analytics and tools to grow.",
     "freeNotice": "All users are on Free for now. Paid plans are on the way.",
     "priceTba": "Price coming soon",
     "investorTitle": "Plans are for publishers only",
-    "investorSub": "Investors use Capora for free. You don't need a paid plan.",
+    "investorSub": "Investors use Velorze for free. You don't need a paid plan.",
     "feat": {
       "free": {
         "1": "1 active project",
@@ -884,7 +884,7 @@
   },
   "safety": {
     "title": "Safety & privacy",
-    "sub": "Manage your blocks and control your Capora experience.",
+    "sub": "Manage your blocks and control your Velorze experience.",
     "manage": "Manage",
     "settingsHint": "View and remove blocked users.",
     "blockedUsers": "Blocked users",
@@ -935,14 +935,14 @@
       }
     },
     "notice": {
-      "title": "Capora safety notice",
+      "title": "Velorze safety notice",
       "body1": "We detected financial information or contact details in this message.",
       "body2": "Before making any payment or sharing sensitive information, make sure you have fully verified the other party.",
-      "verified": "Publisher verified by Capora.",
+      "verified": "Publisher verified by Velorze.",
       "unverified": "This user has not verified their identity yet.",
       "learnMore": "Learn more",
       "dismiss": "Close",
-      "body3": "Capora does not take part in transactions between users and recommends proceeding with caution."
+      "body3": "Velorze does not take part in transactions between users and recommends proceeding with caution."
     },
     "verified": {
       "company": "Verified company",
@@ -953,7 +953,7 @@
   "notifPrefs": {
     "title": "Email notifications",
     "sub": "Choose which alerts you want in your inbox.",
-    "master": "Receive emails from Capora",
+    "master": "Receive emails from Velorze",
     "masterHint": "If you turn this off you won't receive any alert emails (except account security ones).",
     "saved": "Preferences saved",
     "pending": "Emails will go live soon. Your preferences are already saved.",

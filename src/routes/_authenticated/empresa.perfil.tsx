@@ -21,7 +21,7 @@ import { toast } from "sonner";
 import { COUNTRIES, COMPANY_TYPES, ENTITY_TYPES } from "@/lib/taxonomy";
 
 export const Route = createFileRoute("/_authenticated/empresa/perfil")({
-  head: () => ({ meta: [{ title: "Profile | Capora" }, { name: "robots", content: "noindex, nofollow" }] }),
+  head: () => ({ meta: [{ title: "Profile | Velorze" }, { name: "robots", content: "noindex, nofollow" }] }),
   component: CompanyProfilePage,
 });
 

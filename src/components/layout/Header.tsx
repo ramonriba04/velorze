@@ -120,9 +120,9 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background/85 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link to={logoTo} aria-label="Capora" className="flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        <Link to={logoTo} aria-label="Velorze" className="flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
           <div aria-hidden className="h-8 w-8 rounded-lg gradient-primary shadow-elegant" />
-          <span className="text-lg font-semibold tracking-tight">Capora</span>
+          <span className="text-lg font-semibold tracking-tight">Velorze</span>
         </Link>
 
 
@@ -183,7 +183,7 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         <p className="text-xs text-muted-foreground">{t("disclaimer")}</p>
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
-          <span>© {new Date().getFullYear()} Capora. {t("footer.rights")}</span>
+          <span>© {new Date().getFullYear()} Velorze. {t("footer.rights")}</span>
           <div className="flex flex-wrap gap-4">
             <Link to="/privacidad" className="hover:text-foreground">{t("footer.privacy")}</Link>
             <Link to="/terminos" className="hover:text-foreground">{t("footer.terms")}</Link>

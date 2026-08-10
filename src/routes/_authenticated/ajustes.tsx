@@ -25,7 +25,7 @@ import { toast } from "sonner";
 import { requestAppTour } from "@/components/onboarding/AppTour";
 
 export const Route = createFileRoute("/_authenticated/ajustes")({
-  head: () => ({ meta: [{ title: "Settings | Capora" }, { name: "robots", content: "noindex, nofollow" }] }),
+  head: () => ({ meta: [{ title: "Settings | Velorze" }, { name: "robots", content: "noindex, nofollow" }] }),
   component: Settings,
 });
 

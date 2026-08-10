@@ -33,9 +33,9 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Capora — Intelligent investment marketplace" },
+      { title: "Velorze — Intelligent investment marketplace" },
       { name: "description", content: "Connect projects with the right investors through intelligent compatibility matching." },
-      { property: "og:title", content: "Capora — Intelligent investment marketplace" },
+      { property: "og:title", content: "Velorze — Intelligent investment marketplace" },
       { property: "og:description", content: "Connect projects with the right investors through intelligent compatibility matching." },
       { property: "og:url", content: "https://capora-ai-connect.lovable.app/" },
     ],

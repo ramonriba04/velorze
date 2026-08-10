@@ -27,20 +27,20 @@ export const Route = createFileRoute("/publisher/$slug")({
     const p = loaderData?.publisher;
     if (!p) {
       return {
-        meta: [{ title: "Perfil no disponible | Capora" }, { name: "robots", content: "noindex" }],
+        meta: [{ title: "Perfil no disponible | Velorze" }, { name: "robots", content: "noindex" }],
         links: [{ rel: "canonical", href: url }],
       };
     }
-    const title = `${p.legal_name} | Capora`;
+    const title = `${p.legal_name} | Velorze`;
     const description = clampText(
-      p.description || `${p.legal_name} publica oportunidades de inversión en Capora.`,
+      p.description || `${p.legal_name} publica oportunidades de inversión en Velorze.`,
     );
     const image = ogImage(p.logo_url);
     return {
       meta: [
         { title },
         { name: "description", content: description },
-        { property: "og:site_name", content: "Capora" },
+        { property: "og:site_name", content: "Velorze" },
         { property: "og:title", content: p.legal_name },
         { property: "og:description", content: description },
         { property: "og:type", content: "profile" },

@@ -25,17 +25,17 @@ export const Route = createFileRoute("/project/$slug")({
     if (!project) {
       return {
         meta: [
-          { title: "Proyecto no disponible | Capora" },
+          { title: "Proyecto no disponible | Velorze" },
           { name: "robots", content: "noindex" },
         ],
         links: [{ rel: "canonical", href: url }],
       };
     }
     const publisher = loaderData?.publisherName;
-    const title = `${project.title} | Capora`;
+    const title = `${project.title} | Velorze`;
     const description = clampText(
       publisher
-        ? `${clampText(project.description, 110)} — ${publisher} en Capora.`
+        ? `${clampText(project.description, 110)} — ${publisher} en Velorze.`
         : project.description,
     );
     const image = ogImage(project.cover_url);
@@ -43,7 +43,7 @@ export const Route = createFileRoute("/project/$slug")({
       meta: [
         { title },
         { name: "description", content: description },
-        { property: "og:site_name", content: "Capora" },
+        { property: "og:site_name", content: "Velorze" },
         { property: "og:title", content: project.title },
         { property: "og:description", content: description },
         { property: "og:type", content: "article" },
@@ -71,7 +71,7 @@ export const Route = createFileRoute("/project/$slug")({
             url,
             ...(image ? { image } : {}),
             ...(publisher ? { author: { "@type": "Organization", name: publisher } } : {}),
-            publisher: { "@type": "Organization", name: "Capora" },
+            publisher: { "@type": "Organization", name: "Velorze" },
           }),
         },
       ],

@@ -5,8 +5,8 @@ import { Card } from "@/components/ui/card";
 
 export const Route = createFileRoute("/privacidad")({
   head: () => ({ meta: [
-    { title: "Política de privacidad — Capora" },
-    { name: "description", content: "Cómo Capora recopila, usa y protege tus datos personales." },
+    { title: "Política de privacidad — Velorze" },
+    { name: "description", content: "Cómo Velorze recopila, usa y protege tus datos personales." },
   ] }),
   component: Page,
 });
