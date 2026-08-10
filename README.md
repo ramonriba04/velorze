@@ -1,12 +1,12 @@
 # Velorze
 
-CAPORA
+VELORZE
 
-quiero crear una plataforma web llamada Capora, un marketplace inteligente que conecta empresas que buscan inversión con inversores privados y corporativos mediante un sistema de recomendaciones basado en IA.
+quiero crear una plataforma web llamada Velorze, un marketplace inteligente que conecta empresas que buscan inversión con inversores privados y corporativos mediante un sistema de recomendaciones basado en IA.
 
 🧭 OBJETIVO DEL PRODUCTO
 
-Capora es una plataforma de conexión entre empresas e inversores.
+Velorze es una plataforma de conexión entre empresas e inversores.
 
 IMPORTANTE:
 
@@ -98,7 +98,7 @@ Nivel de riesgo (bajo, medio, alto)
 
 Descripción libre de intereses
 
-🤖 SISTEMA DE MATCHING (CORE DE CAPORA)
+🤖 SISTEMA DE MATCHING (CORE DE CVELORZE)
 
 Implementa un sistema de recomendación inteligente que:
 
@@ -141,7 +141,7 @@ Se habilita chat interno básico entre ambos usuarios
 
 📊 PANTALLAS NECESARIAS
 
-Landing page de Capora
+Landing page de Velorze
 
 Registro / Login
 
@@ -203,7 +203,7 @@ Solo conectar usuarios
 
 🎯 OBJETIVO DEL MVP
 
-Crear una primera versión funcional de Capora que permita:
+Crear una primera versión funcional de Velorze que permita:
 
 Publicar proyectos de inversión
 
@@ -217,11 +217,11 @@ El objetivo es validar si existe interés real en un marketplace de inversión c
 
 🚀 VISIÓN DEL PRODUCTO
 
-Capora es una plataforma tipo “LinkedIn de inversión privada”, donde los inversores descubren oportunidades relevantes automáticamente y las empresas encuentran capital potencial de forma más eficiente mediante inteligencia artificial.
+Velorze es una plataforma tipo “LinkedIn de inversión privada”, donde los inversores descubren oportunidades relevantes automáticamente y las empresas encuentran capital potencial de forma más eficiente mediante inteligencia artificial.
 
 Si quieres, el siguiente paso puedo ayudarte a:
 
-diseñar el logo de Capora
+diseñar el logo de Velorze
 
 definir colores y branding
 
