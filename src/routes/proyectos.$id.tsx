@@ -21,7 +21,7 @@ export const Route = createFileRoute("/proyectos/$id")({
       : `${SITE_URL}/proyectos/${params.id}`;
     if (!project) {
       return {
-        meta: [{ title: "Proyecto | Capora" }, { name: "robots", content: "noindex" }],
+        meta: [{ title: "Proyecto | Velorze" }, { name: "robots", content: "noindex" }],
         links: [{ rel: "canonical", href: canonical }],
       };
     }
@@ -29,9 +29,9 @@ export const Route = createFileRoute("/proyectos/$id")({
     const image = ogImage(project.cover_url);
     return {
       meta: [
-        { title: `${project.title} | Capora` },
+        { title: `${project.title} | Velorze` },
         { name: "description", content: description },
-        { property: "og:site_name", content: "Capora" },
+        { property: "og:site_name", content: "Velorze" },
         { property: "og:title", content: project.title },
         { property: "og:description", content: description },
         { property: "og:type", content: "article" },

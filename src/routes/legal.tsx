@@ -4,7 +4,7 @@ import { Header, Footer } from "@/components/layout/Header";
 import { Card } from "@/components/ui/card";
 
 export const Route = createFileRoute("/legal")({
-  head: () => ({ meta: [{ title: "Aviso legal — Capora" }] }),
+  head: () => ({ meta: [{ title: "Aviso legal — Velorze" }] }),
   component: Legal,
 });
 

@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 
 export const Route = createFileRoute("/auth/restablecer")({
-  head: () => ({ meta: [{ title: "Restablecer contraseña — Capora" }] }),
+  head: () => ({ meta: [{ title: "Restablecer contraseña — Velorze" }] }),
   component: ResetPasswordPage,
 });
 

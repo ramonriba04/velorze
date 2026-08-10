@@ -22,7 +22,7 @@ import { CookieBanner } from "@/components/CookieBanner";
 
 const SITE_URL = "https://capora-ai-connect.lovable.app";
 const OG_IMAGE = `${SITE_URL}/__l5e/assets-v1/a56efdb2-a5ec-4e38-86c0-563dfbd9bd43/og-capora.jpg`;
-const DEFAULT_TITLE = "Capora — Marketplace inteligente de inversión";
+const DEFAULT_TITLE = "Velorze — Marketplace inteligente de inversión";
 const DEFAULT_DESC = "Conecta proyectos con los inversores adecuados mediante matching inteligente de compatibilidad.";
 
 function NotFoundComponent() {
@@ -89,11 +89,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "theme-color", content: "#0b2545" },
-      { name: "apple-mobile-web-app-title", content: "Capora" },
-      { name: "application-name", content: "Capora" },
+      { name: "apple-mobile-web-app-title", content: "Velorze" },
+      { name: "application-name", content: "Velorze" },
       { title: DEFAULT_TITLE },
       { name: "description", content: DEFAULT_DESC },
-      { property: "og:site_name", content: "Capora" },
+      { property: "og:site_name", content: "Velorze" },
       { property: "og:type", content: "website" },
       { property: "og:title", content: DEFAULT_TITLE },
       { property: "og:description", content: DEFAULT_DESC },
