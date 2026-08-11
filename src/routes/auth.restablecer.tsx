@@ -5,9 +5,11 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Header, Footer } from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
+import { Loader2 } from "lucide-react";
+import { PasswordInput } from "@/components/auth/PasswordInput"; // #12
+import { PasswordChecklist, isPasswordValid } from "@/components/auth/PasswordChecklist"; // #1 #13
 
 export const Route = createFileRoute("/auth/restablecer")({
   head: () => ({ meta: [{ title: "Restablecer contraseña — Velorze" }] }),
@@ -24,33 +26,43 @@ function ResetPasswordPage() {
   const [invalid, setInvalid] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    // Supabase puts the recovery token in the URL hash and emits PASSWORD_RECOVERY
+    // #4 — subscribe first so we never miss the PASSWORD_RECOVERY event that fires
+    // when Supabase finishes processing the hash token (may happen after getSession resolves).
     const { data: sub } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "PASSWORD_RECOVERY") setReady(true);
+      if (event === "PASSWORD_RECOVERY") {
+        setReady(true);
+        setInvalid(false);
+      }
+      // If the SDK processed the token and emitted SIGNED_OUT, the token was invalid/expired.
+      if (event === "SIGNED_OUT") {
+        setInvalid(true);
+      }
     });
-    // Fallback: if there's already a session (link processed), allow updating
+
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) setReady(true);
-      else {
-        // No hash recovery token + no session => invalid/expired link
+      if (data.session) {
+        setReady(true);
+      } else {
+        // #4 — only mark invalid when the URL carries no recovery token at all.
+        // If it does, we wait for the PASSWORD_RECOVERY event above.
         const hash = window.location.hash;
         if (!hash.includes("type=recovery")) setInvalid(true);
       }
     });
+
     return () => sub.subscription.unsubscribe();
   }, []);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password.length < 6) return toast.error(t("reset.tooShort"));
+    // #1 — enforce the same rules as signup (≥8 chars, upper, lower, digit)
+    if (!isPasswordValid(password)) return toast.error(t("auth.pw.requirements"));
     if (password !== confirm) return toast.error(t("reset.mismatch"));
     setLoading(true);
     try {
       const { error } = await supabase.auth.updateUser({ password });
       if (error) throw error;
       toast.success(t("reset.success"));
-      // Keep the session: user is auto-logged in after reset and lands in app.
       navigate({ to: "/app" });
     } catch (err) {
       toast.error((err as Error).message);
@@ -69,17 +81,41 @@ function ResetPasswordPage() {
             <p className="mt-1 text-sm text-muted-foreground">{t("reset.sub")}</p>
             {invalid ? (
               <p className="mt-6 text-sm text-destructive">{t("reset.invalid")}</p>
+            ) : !ready ? (
+              // #11 — explain why the button is disabled instead of silently disabling it
+              <div className="mt-6 flex items-center gap-2 text-sm text-muted-foreground">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>{t("reset.validating")}</span>
+              </div>
             ) : (
               <form onSubmit={onSubmit} className="mt-6 space-y-4">
                 <div>
                   <Label htmlFor="pw">{t("reset.newPassword")}</Label>
-                  <Input id="pw" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} />
+                  {/* #12 — show/hide toggle for consistency with signup */}
+                  <PasswordInput
+                    id="pw"
+                    autoComplete="new-password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  {/* #13 — show password rules so users know what's required */}
+                  <PasswordChecklist value={password} />
                 </div>
                 <div>
                   <Label htmlFor="pw2">{t("reset.confirmPassword")}</Label>
-                  <Input id="pw2" type="password" required minLength={6} value={confirm} onChange={(e) => setConfirm(e.target.value)} />
+                  <PasswordInput
+                    id="pw2"
+                    autoComplete="new-password"
+                    required
+                    value={confirm}
+                    onChange={(e) => setConfirm(e.target.value)}
+                  />
+                  {confirm.length > 0 && confirm !== password && (
+                    <p className="mt-1 text-xs text-destructive">{t("auth.pw.mismatch")}</p>
+                  )}
                 </div>
-                <Button type="submit" disabled={loading || !ready} className="w-full">
+                <Button type="submit" disabled={loading} className="w-full">
                   {t("reset.update")}
                 </Button>
               </form>
