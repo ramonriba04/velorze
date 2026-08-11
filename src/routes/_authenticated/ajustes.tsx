@@ -5,6 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { useMyRole } from "@/hooks/useAuth";
 import { deleteMyAccount } from "@/lib/account.functions";
+import { isPasswordValid } from "@/components/auth/PasswordChecklist"; // #1
 import { useMyPlan } from "@/hooks/usePlan";
 import { PlanBadge } from "@/components/PlanBadge";
 import { NotificationPreferencesCard } from "@/components/settings/NotificationPreferencesCard";
@@ -66,7 +67,8 @@ function Settings() {
 
   const updatePassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password.length < 6) return toast.error(t("reset.tooShort"));
+    // #1 — same rules as signup (≥8 chars, upper, lower, digit); was incorrectly allowing ≥6
+    if (!isPasswordValid(password)) return toast.error(t("auth.pw.requirements"));
     if (password !== confirm) return toast.error(t("reset.mismatch"));
     setPwLoading(true);
     try {
@@ -86,6 +88,7 @@ function Settings() {
     setDeleting(true);
     try {
       await removeAccount({ data: undefined as any });
+      localStorage.removeItem("capora_pending_role"); // #7 — clean up stale role key
       await supabase.auth.signOut();
       window.location.href = "/";
     } catch (err: any) {

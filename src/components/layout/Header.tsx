@@ -105,6 +105,7 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const signOut = async () => {
     setOpen(false);
+    localStorage.removeItem("capora_pending_role"); // #7 — prevent stale role being assigned to next user on same browser
     await supabase.auth.signOut();
     window.location.href = "/";
   };

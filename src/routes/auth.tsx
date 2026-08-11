@@ -21,6 +21,27 @@ const SearchSchema = z.object({
   role: z.enum(["empresa", "inversor"]).optional(),
 });
 
+// #16 — single source of truth for accepted policy versions
+const CONSENT_VERSIONS = {
+  terms_version: "2026-06-28",
+  privacy_version: "2026-06-28",
+  cookies_version: "2026-06-28",
+} as const;
+
+// #8 — map raw Supabase error messages to friendly ones
+function mapAuthError(err: unknown): string {
+  const raw = ((err as Error)?.message ?? "").toLowerCase();
+  if (raw.includes("invalid login credentials") || raw.includes("invalid credentials"))
+    return "Email o contraseña incorrectos.";
+  if (raw.includes("user already registered") || raw.includes("already been registered"))
+    return "Ya existe una cuenta con este email.";
+  if (raw.includes("rate limit") || raw.includes("email rate limit"))
+    return "Demasiados intentos. Espera un momento e inténtalo de nuevo.";
+  if (raw.includes("network") || raw.includes("fetch failed"))
+    return "Error de red. Comprueba tu conexión e inténtalo de nuevo.";
+  return (err as Error)?.message || "Error de autenticación.";
+}
+
 export const Route = createFileRoute("/auth")({
   validateSearch: (s) => SearchSchema.parse(s),
   head: ({ match }) => {
@@ -52,6 +73,8 @@ function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [needsVerification, setNeedsVerification] = useState<string | null>(null);
   const [loginUnverifiedEmail, setLoginUnverifiedEmail] = useState<string | null>(null);
+  // #9 — cooldown in seconds after clicking resend
+  const [resendCooldown, setResendCooldown] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -60,6 +83,13 @@ function AuthPage() {
     });
     return () => { cancelled = true; };
   }, [navigate]);
+
+  // #9 — tick down resend cooldown every second
+  useEffect(() => {
+    if (resendCooldown <= 0) return;
+    const timer = setTimeout(() => setResendCooldown((c) => c - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [resendCooldown]);
 
   const pwValid = isPasswordValid(password);
   const pwMatch = password.length > 0 && password === confirmPw;
@@ -75,7 +105,8 @@ function AuthPage() {
         } catch {
           // role may already exist or be assigned by /app
         }
-      } else if (typeof window !== "undefined") {
+      } else {
+        // #17 — no SSR guard needed; afterAuth only runs in the browser
         localStorage.setItem("capora_pending_role", role);
       }
     } catch (e) {
@@ -94,8 +125,9 @@ function AuthPage() {
       });
       if (error) throw error;
       toast.success(t("auth.verify.resent"));
+      setResendCooldown(60); // #9 — prevent spam; re-enables after 60s
     } catch (err) {
-      toast.error((err as Error).message);
+      toast.error(mapAuthError(err));
     } finally {
       setLoading(false);
     }
@@ -103,24 +135,20 @@ function AuthPage() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // #2 — validate before setting loading so the button never flashes disabled during instant checks
+    if (mode === "signup") {
+      if (!pwValid) { toast.error(t("auth.pw.requirements")); return; }
+      // #10 — mismatch is already shown inline; no toast needed here
+      if (!pwMatch) return;
+      if (!acceptedLegal) { toast.error(t("consent.required")); return; }
+    }
+
     setLoading(true);
     try {
       if (mode === "signup") {
-        if (!pwValid) {
-          toast.error(t("auth.pw.requirements"));
-          return;
-        }
-        if (!pwMatch) {
-          toast.error(t("auth.pw.mismatch"));
-          return;
-        }
-        if (!acceptedLegal) {
-          toast.error(t("consent.required"));
-          return;
-        }
-        if (typeof window !== "undefined") {
-          localStorage.setItem("capora_pending_role", role);
-        }
+        // #17 — localStorage is always available here (client-only event handler)
+        localStorage.setItem("capora_pending_role", role);
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
@@ -134,10 +162,8 @@ function AuthPage() {
         try {
           await consent({
             data: {
-              terms_version: "2026-06-28",
-              privacy_version: "2026-06-28",
-              cookies_version: "2026-06-28",
-              user_agent: typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 500) : null,
+              ...CONSENT_VERSIONS, // #16
+              user_agent: navigator.userAgent.slice(0, 500),
             },
           });
         } catch (e) {
@@ -164,7 +190,7 @@ function AuthPage() {
       }
     } catch (err) {
       console.error("auth error", err);
-      toast.error((err as Error).message || "Authentication error");
+      toast.error(mapAuthError(err)); // #8
     } finally {
       setLoading(false);
     }
@@ -173,7 +199,10 @@ function AuthPage() {
   const onGoogle = async () => {
     setLoading(true);
     try {
-      if (mode === "signup") localStorage.setItem("capora_pending_role", role);
+      // #15 — always store pending role so new Google users (even on the login tab)
+      // get a role auto-assigned in /app instead of hitting the role-picker with no context.
+      // Existing users are unaffected: app.tsx only assigns from localStorage when !role.
+      localStorage.setItem("capora_pending_role", role);
       const result = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: `${window.location.origin}/app`,
       });
@@ -182,7 +211,7 @@ function AuthPage() {
         await afterAuth();
       }
     } catch (err) {
-      toast.error((err as Error).message);
+      toast.error(mapAuthError(err)); // #8
     } finally {
       setLoading(false);
     }
@@ -206,11 +235,11 @@ function AuthPage() {
               <div className="mt-6 flex flex-col gap-2">
                 <Button
                   onClick={() => resendVerification(needsVerification)}
-                  disabled={loading}
+                  disabled={loading || resendCooldown > 0}
                   variant="outline"
                   className="w-full"
                 >
-                  {t("auth.verify.resend")}
+                  {resendCooldown > 0 ? `${t("auth.verify.resend")} (${resendCooldown}s)` : t("auth.verify.resend")}
                 </Button>
                 <Button
                   onClick={() => {
@@ -314,10 +343,10 @@ function AuthPage() {
                   <button
                     type="button"
                     onClick={() => resendVerification(loginUnverifiedEmail)}
-                    disabled={loading}
-                    className="mt-1 font-medium underline"
+                    disabled={loading || resendCooldown > 0}
+                    className="mt-1 font-medium underline disabled:opacity-50"
                   >
-                    {t("auth.verify.resend")}
+                    {resendCooldown > 0 ? `${t("auth.verify.resend")} (${resendCooldown}s)` : t("auth.verify.resend")}
                   </button>
                 </div>
               )}
@@ -360,7 +389,13 @@ function AuthPage() {
 
             <button
               type="button"
-              onClick={() => { setMode(mode === "login" ? "signup" : "login"); setLoginUnverifiedEmail(null); }}
+              onClick={() => {
+                setMode(mode === "login" ? "signup" : "login");
+                setLoginUnverifiedEmail(null);
+                // #14 — clear passwords so they don't leak across modes
+                setPassword("");
+                setConfirmPw("");
+              }}
               className="mt-5 w-full text-center text-sm text-muted-foreground hover:text-foreground"
             >
               {mode === "login" ? t("auth.switchToSignup") : t("auth.switchToLogin")}
