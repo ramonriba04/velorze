@@ -40,6 +40,15 @@ export function CookieBanner() {
   const decide = (prefs: Omit<CookiePrefs, "essential" | "decidedAt">) => {
     savePrefs({ essential: true, decidedAt: new Date().toISOString(), ...prefs });
     setOpen(false);
+    if (typeof window !== "undefined" && typeof (window as Window & { gtag?: (...args: unknown[]) => void }).gtag === "function") {
+      (window as Window & { gtag: (...args: unknown[]) => void }).gtag("consent", "update", {
+        analytics_storage: prefs.analytics ? "granted" : "denied",
+        ad_storage: prefs.marketing ? "granted" : "denied",
+      });
+      if (prefs.analytics) {
+        (window as Window & { gtag: (...args: unknown[]) => void }).gtag("event", "page_view");
+      }
+    }
   };
 
   if (!open) return null;

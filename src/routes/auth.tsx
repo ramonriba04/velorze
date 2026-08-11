@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
 import { assignMyRole, recordConsent } from "@/lib/profiles.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { Header, Footer } from "@/components/layout/Header";
@@ -203,17 +202,16 @@ function AuthPage() {
       // get a role auto-assigned in /app instead of hitting the role-picker with no context.
       // Existing users are unaffected: app.tsx only assigns from localStorage when !role.
       localStorage.setItem("capora_pending_role", role);
-      const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: `${window.location.origin}/app`,
+      // Native Supabase OAuth — goes directly through Supabase → Google, never through Lovable.
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: `${window.location.origin}/app` },
       });
-      if (result.error) throw result.error;
-      if (!result.redirected) {
-        await afterAuth();
-      }
+      if (error) throw error;
+      // Supabase handles the browser redirect; nothing else to do here.
     } catch (err) {
-      toast.error(mapAuthError(err)); // #8
-    } finally {
-      setLoading(false);
+      toast.error(mapAuthError(err));
+      setLoading(false); // only reset if we're NOT redirecting
     }
   };
 

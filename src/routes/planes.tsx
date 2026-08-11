@@ -17,9 +17,9 @@ export const Route = createFileRoute("/planes")({
       { name: "description", content: "Explore Velorze Free, Pro and Business plans — visibility, active projects and advanced analytics." },
       { property: "og:title", content: "Plans | Velorze" },
       { property: "og:description", content: "Explore Velorze Free, Pro and Business plans — visibility, active projects and advanced analytics." },
-      { property: "og:url", content: "https://capora-ai-connect.lovable.app/planes" },
+      ...(import.meta.env.VITE_SITE_URL ? [{ property: "og:url", content: `${import.meta.env.VITE_SITE_URL}/planes` }] : []),
     ],
-    links: [{ rel: "canonical", href: "https://capora-ai-connect.lovable.app/planes" }],
+    links: import.meta.env.VITE_SITE_URL ? [{ rel: "canonical", href: `${import.meta.env.VITE_SITE_URL}/planes` }] : [],
   }),
   component: PlansPage,
 });

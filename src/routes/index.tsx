@@ -37,9 +37,9 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Connect projects with the right investors through intelligent compatibility matching." },
       { property: "og:title", content: "Velorze — Intelligent investment marketplace" },
       { property: "og:description", content: "Connect projects with the right investors through intelligent compatibility matching." },
-      { property: "og:url", content: "https://capora-ai-connect.lovable.app/" },
+      ...(import.meta.env.VITE_SITE_URL ? [{ property: "og:url", content: `${import.meta.env.VITE_SITE_URL}/` }] : []),
     ],
-    links: [{ rel: "canonical", href: "https://capora-ai-connect.lovable.app/" }],
+    links: import.meta.env.VITE_SITE_URL ? [{ rel: "canonical", href: `${import.meta.env.VITE_SITE_URL}/` }] : [],
   }),
   component: Landing,
 });
