@@ -21,8 +21,9 @@ import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { CookieBanner } from "@/components/CookieBanner";
 
 
-const SITE_URL = "https://capora-ai-connect.lovable.app";
-const OG_IMAGE = `${SITE_URL}${ogImageUrl}`;
+// Set VITE_SITE_URL=https://your-domain.com in your .env file
+const SITE_URL = import.meta.env.VITE_SITE_URL ?? "";
+const OG_IMAGE = SITE_URL ? `${SITE_URL}${ogImageUrl}` : ogImageUrl;
 const DEFAULT_TITLE = "Velorze — Marketplace inteligente de inversión";
 const DEFAULT_DESC = "Conecta proyectos con los inversores adecuados mediante matching inteligente de compatibilidad.";
 
@@ -121,7 +122,26 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="es">
-      <head><HeadContent /></head>
+      <head>
+        <HeadContent />
+        {/* Google Analytics – consent mode v2 */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-PNS2S9RLP1" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());
+gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',wait_for_update:500});
+gtag('config','G-PNS2S9RLP1',{send_page_view:false});
+try{
+  var p=JSON.parse(localStorage.getItem('capora_cookie_consent_v1')||'null');
+  if(p)gtag('consent','update',{analytics_storage:p.analytics?'granted':'denied',ad_storage:p.marketing?'granted':'denied'});
+}catch(e){}
+`.trim(),
+          }}
+        />
+      </head>
       <body>{children}<Scripts /></body>
     </html>
   );
