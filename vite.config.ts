@@ -9,7 +9,6 @@ export default defineConfig({
     tanstackStart({
       target: "vercel",
       autoCodeSplitting: true,
-      server: { entry: "server" },
     }),
     react(),
     tailwindcss(),
