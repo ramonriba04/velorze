@@ -7,9 +7,8 @@ import tsConfigPaths from "vite-tsconfig-paths";
 export default defineConfig({
   plugins: [
     tanstackStart({
-      target: "react",
+      target: "vercel",
       autoCodeSplitting: true,
-      // SSR entry — mirrors the previous config's server.entry: "server" (→ src/server.ts)
       server: { entry: "server" },
     }),
     react(),
