@@ -51,9 +51,7 @@ async function main() {
 
   execSync(
     [
-      "npx",
-      "--yes",
-      "esbuild",
+      `"${join(root, "node_modules/.bin/esbuild")}"`,
       `"${serverEntry}"`,
       "--bundle",
       "--platform=browser",
