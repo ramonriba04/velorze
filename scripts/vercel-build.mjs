@@ -45,13 +45,54 @@ async function main() {
   const funcDir = join(outputDir, "functions/index.func");
   await fs.mkdir(funcDir, { recursive: true });
 
-  // 3. Write a shim that adapts { fetch } export to a plain async function
-  //    Vercel Node.js serverless (with supportsResponseStreaming) calls the default
-  //    export as handler(request: Request): Promise<Response>
+  // 3. Write a shim that adapts the { fetch } export to a Node.js HTTP handler.
+  //    Vercel's Node.js launcher calls the default export as handler(req, res) and
+  //    expects res.end() to be called — returning a Response object is not enough.
   const shimPath = join(root, "dist/server/_vercel-shim.mjs");
   await fs.writeFile(
     shimPath,
-    'import _s from "./server.js";\nexport default (request) => _s.fetch(request);\n'
+    `import _s from "./server.js";
+
+export default async function handler(req, res) {
+  const proto = (req.headers["x-forwarded-proto"] ?? "https").split(",")[0].trim();
+  const host = req.headers["x-forwarded-host"] ?? req.headers.host ?? "localhost";
+  const url = new URL(req.url ?? "/", proto + "://" + host);
+
+  let body;
+  if (req.method !== "GET" && req.method !== "HEAD") {
+    const chunks = [];
+    for await (const chunk of req) chunks.push(chunk);
+    if (chunks.length > 0) body = Buffer.concat(chunks);
+  }
+
+  const webRequest = new Request(url.toString(), {
+    method: req.method,
+    headers: req.headers,
+    body,
+  });
+
+  const response = await _s.fetch(webRequest);
+
+  res.statusCode = response.status;
+  for (const [key, value] of response.headers.entries()) {
+    res.setHeader(key, value);
+  }
+
+  if (response.body) {
+    const reader = response.body.getReader();
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        res.write(value);
+      }
+    } finally {
+      reader.releaseLock();
+    }
+  }
+  res.end();
+}
+`
   );
 
   // 4. Bundle server into a single ESM file for Node.js Serverless
