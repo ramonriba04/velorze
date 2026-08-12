@@ -108,6 +108,8 @@ export default async function handler(req, res) {
       "--format=esm",
       "--minify",
       "--ignore-annotations", // prevent sideEffects:false from dropping needed imports
+      // Inject a require() shim so CJS dependencies work inside ESM output
+      `--banner:js="import{createRequire}from'module';const require=createRequire(import.meta.url);"`,
       `--outfile="${funcEntry}"`,
     ].join(" "),
     { cwd: root, stdio: "inherit" }
