@@ -74,7 +74,13 @@ async function main() {
 
   await fs.rm(shimPath, { force: true });
 
-  // 5. Function config: Node.js runtime with Web API support
+  // 5. Mark function directory as ESM so Node.js loads index.js with import support
+  await fs.writeFile(
+    join(funcDir, "package.json"),
+    JSON.stringify({ type: "module" })
+  );
+
+  // 6. Function config: Node.js runtime with Web API support
   await fs.writeFile(
     join(funcDir, ".vc-config.json"),
     JSON.stringify(
@@ -89,7 +95,7 @@ async function main() {
     )
   );
 
-  // 6. Routing config: serve static files first, then fall through to the Serverless Function
+  // 7. Routing config: serve static files first, then fall through to the Serverless Function
   const config = {
     version: 3,
     routes: [
