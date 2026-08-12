@@ -3,8 +3,9 @@
  * from the TanStack Start build artifacts (dist/client/ and dist/server/).
  *
  * TanStack Start's `target: "vercel"` does not generate .vercel/output/ automatically,
- * so we create it here. The server entry (dist/server/server.js) uses the Web Standard
- * fetch API, which is compatible with Vercel Edge Functions.
+ * so we create it here. The server entry (dist/server/server.js) exports a Cloudflare
+ * Worker-style { fetch } handler, which we wrap for Vercel Node.js serverless.
+ * Node.js runtime is required because the Nitro SSR bundle uses node:stream internally.
  */
 import { execSync } from "child_process";
 import { promises as fs } from "fs";
@@ -40,38 +41,55 @@ async function main() {
   console.log("  Copying static assets...");
   await copyDir(join(root, "dist/client"), join(outputDir, "static"));
 
-  // 2. Create Edge Function directory
+  // 2. Create Serverless Function directory
   const funcDir = join(outputDir, "functions/index.func");
   await fs.mkdir(funcDir, { recursive: true });
 
-  // 3. Bundle server into a single ESM file for Edge Functions
-  console.log("  Bundling server for Edge...");
-  const serverEntry = join(root, "dist/server/server.js");
+  // 3. Write a shim that adapts { fetch } export to a plain async function
+  //    Vercel Node.js serverless (with supportsResponseStreaming) calls the default
+  //    export as handler(request: Request): Promise<Response>
+  const shimPath = join(root, "dist/server/_vercel-shim.mjs");
+  await fs.writeFile(
+    shimPath,
+    'import _s from "./server.js";\nexport default (request) => _s.fetch(request);\n'
+  );
+
+  // 4. Bundle server into a single ESM file for Node.js Serverless
+  console.log("  Bundling server for Node.js...");
   const funcEntry = join(funcDir, "index.js");
 
   execSync(
     [
       `"${join(root, "node_modules/.bin/esbuild")}"`,
-      `"${serverEntry}"`,
+      `"${shimPath}"`,
       "--bundle",
-      "--platform=browser",
+      "--platform=node",
       "--format=esm",
       "--minify",
       "--ignore-annotations", // prevent sideEffects:false from dropping needed imports
       `--outfile="${funcEntry}"`,
-      // Externalize Node built-ins that the edge runtime provides natively
-      "--external:node:*",
     ].join(" "),
     { cwd: root, stdio: "inherit" }
   );
 
-  // 4. Function config: tell Vercel to use Edge runtime
+  await fs.rm(shimPath, { force: true });
+
+  // 5. Function config: Node.js runtime with Web API support
   await fs.writeFile(
     join(funcDir, ".vc-config.json"),
-    JSON.stringify({ runtime: "edge", entrypoint: "index.js" }, null, 2)
+    JSON.stringify(
+      {
+        runtime: "nodejs22.x",
+        handler: "index.js",
+        launcherType: "Nodejs",
+        supportsResponseStreaming: true,
+      },
+      null,
+      2
+    )
   );
 
-  // 5. Routing config: serve static files first, then fall through to the Edge Function
+  // 6. Routing config: serve static files first, then fall through to the Serverless Function
   const config = {
     version: 3,
     routes: [
